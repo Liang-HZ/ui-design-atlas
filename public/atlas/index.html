@@ -31,20 +31,20 @@
 .sitenav{position:sticky;top:0;z-index:99;
   background:color-mix(in srgb,var(--paper) 85%,transparent);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.sn-in{max-width:1180px;margin:0 auto;padding:14px 28px;
+.sn-in{max-width:1180px;margin:0 auto;padding:12px 24px;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
   border-bottom:1px solid var(--rule)}
-.sn-logo{font-family:var(--f-display);font-size:19px;font-weight:700;letter-spacing:-.02em;
+.sn-logo{font-family:var(--f-display);font-size: 20px;font-weight:700;letter-spacing:-.02em;
   color:var(--ink);border-bottom:0;text-decoration:none}
 .sn-logo span{color:var(--accent)}
-.sitenav nav{display:flex;align-items:center;gap:22px;font-size:13.5px}
+.sitenav nav{display:flex;align-items:center;gap:24px;font-size: 14px}
 .sitenav nav a{color:var(--muted);border-bottom:0;text-decoration:none;transition:color .15s}
 .sitenav nav a:hover{color:var(--ink)}
-@media(max-width:640px){.sn-in{padding:12px 16px}.sitenav nav{gap:14px;font-size:12.5px}}
+@media(max-width:640px){.sn-in{padding:12px 16px}.sitenav nav{gap:12px;font-size: 12px}}
 /* sticky 顶栏约 54px 高。不加这条，90+ 个交叉引用跳过去会被顶栏盖住。
-   用 html[id] 而不是 [id]：后者与下面的 .atom{scroll-margin-top:20px} 特异性相同，
+   用 html[id] 而不是 [id]：后者与下面的 .atom{scroll-margin-top} 特异性相同，
    而 .atom 在源码里更靠后会赢。 */
-html [id]{scroll-margin-top:74px}
+html [id]{scroll-margin-top:80px}
 </style>
 <style>
 /* ============================================================
@@ -80,9 +80,10 @@ html [id]{scroll-margin-top:74px}
             "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --f-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-  --r-1: 3px;
-  --r-2: 6px;
-  --r-3: 14px;
+  --r-1: 2px;
+  --r-2: 4px;
+  --r-3: 8px;
+  --r-4: 12px;
 }
 
 @media (prefers-color-scheme: dark){
@@ -133,20 +134,20 @@ body, .atlas{
   background: var(--paper);
   color: var(--ink);
   font-family: var(--f-body);
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
 
 .atlas{
   max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 28px 96px;
+  margin:0 auto;
+  padding:0 24px 96px;
 }
 
 .atlas a{ color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-line); }
 .atlas a:hover{ border-bottom-color: var(--accent); }
-.atlas :focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-1); }
+.atlas :focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; border-radius:var(--r-1); }
 
 .mono{ font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 
@@ -154,25 +155,25 @@ body, .atlas{
    MASTHEAD
    ============================================================ */
 .mast{
-  padding: 64px 0 0;
+  padding:64px 0 0;
   border-bottom: 1px solid var(--ink);
-  margin-bottom: 4px;
+  margin-bottom:4px;
 }
 .mast-tag{
   font-family: var(--f-mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 20px;
+  margin-bottom:16px;
 }
 .mast h1{
   font-family: var(--f-display);
   font-weight: 700;
-  font-size: clamp(34px, 6.2vw, 62px);
+  font-size: 31px;
   line-height: 1.02;
   letter-spacing: -.035em;
-  margin: 0 0 20px;
+  margin:0 0 16px;
   text-wrap: balance;
 }
 .mast h1 em{
@@ -183,50 +184,50 @@ body, .atlas{
   max-width: 60ch;
   font-size: 16px;
   color: var(--ink-2);
-  margin: 0 0 34px;
+  margin:0 0 32px;
 }
 .mast-meta{
   display: flex;
   flex-wrap: wrap;
-  gap: 0;
+  gap:0;
   border-top: 1px solid var(--rule);
   font-family: var(--f-mono);
-  font-size: 11.5px;
+  font-size: 12px;
   letter-spacing: .04em;
   color: var(--muted);
 }
 .mast-meta > div{
   flex: 1 1 150px;
-  padding: 12px 16px 12px 0;
+  padding:12px 16px 12px 0;
 }
 .mast-meta b{
   display: block;
   color: var(--ink);
   font-weight: 500;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0;
 }
-.mast-rule{ height: 3px; background: var(--ink); margin-bottom: 40px; }
+.mast-rule{ height: 3px; background: var(--ink); margin-bottom:32px; }
 
 /* how to use */
 .howto{
   background: var(--accent-soft);
   border: 1px solid var(--accent-line);
-  border-radius: var(--r-2);
-  padding: 20px 22px;
-  margin: 0 0 56px;
+  border-radius:var(--r-2);
+  padding:16px 24px;
+  margin:0 0 48px;
   max-width: 78ch;
 }
 .howto h3{
   font-family: var(--f-mono);
-  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--accent); margin: 0 0 10px; font-weight: 600;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin:0 0 8px; font-weight: 500;
 }
-.howto p{ margin: 0 0 8px; font-size: 14.5px; color: var(--ink-2); }
-.howto p:last-child{ margin-bottom: 0; }
+.howto p{ margin:0 0 8px; font-size: 14px; color: var(--ink-2); }
+.howto p:last-child{ margin-bottom:0; }
 .howto code{
-  font-family: var(--f-mono); font-size: 12.5px;
-  background: var(--panel); padding: 1px 5px; border-radius: var(--r-1);
+  font-family: var(--f-mono); font-size: 12px;
+  background: var(--panel); padding:0px 4px; border-radius:var(--r-1);
   border: 1px solid var(--accent-line); color: var(--ink);
 }
 
@@ -234,49 +235,49 @@ body, .atlas{
    PART / GROUP HEADINGS
    ============================================================ */
 .part{
-  margin: 0 0 12px;
-  padding-top: 56px;
+  margin:0 0 12px;
+  padding-top:48px;
 }
 .part-no{
   font-family: var(--f-mono);
-  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
   color: var(--muted);
-  padding-bottom: 8px;
+  padding-bottom:8px;
   border-bottom: 1px solid var(--rule);
-  margin-bottom: 18px;
+  margin-bottom:16px;
 }
 .part h2{
   font-family: var(--f-display);
-  font-size: clamp(26px, 3.6vw, 38px);
+  font-size: 25px;
   font-weight: 700; letter-spacing: -.03em; line-height: 1.1;
-  margin: 0 0 10px;
+  margin:0 0 8px;
 }
-.part p{ max-width: 66ch; color: var(--ink-2); margin: 0 0 4px; font-size: 15px; }
+.part p{ max-width: 66ch; color: var(--ink-2); margin:0 0 4px; font-size: 14px; }
 
 .group{
   display: grid;
   grid-template-columns: 72px 1fr;
-  gap: 0 24px;
+  gap:0 24px;
   align-items: baseline;
-  margin: 48px 0 22px;
-  padding-top: 14px;
+  margin:48px 0 24px;
+  padding-top:12px;
   border-top: 2px solid var(--ink);
 }
 .group-key{
   font-family: var(--f-mono);
-  font-size: 11px; letter-spacing: .12em;
+  font-size: 12px; letter-spacing: .12em;
   color: var(--accent);
-  padding-top: 5px;
+  padding-top:4px;
 }
 .group h3{
   font-family: var(--f-display);
-  font-size: 19px; font-weight: 700; letter-spacing: -.015em;
-  margin: 0;
+  font-size: 20px; font-weight: 700; letter-spacing: -.015em;
+  margin:0;
 }
 .group h3 span{
   font-family: var(--f-mono);
-  font-size: 11.5px; font-weight: 400; letter-spacing: .04em;
-  color: var(--muted); margin-left: 10px;
+  font-size: 12px; font-weight: 400; letter-spacing: .04em;
+  color: var(--muted); margin-left:8px;
 }
 
 /* ============================================================
@@ -285,39 +286,39 @@ body, .atlas{
 .atom{
   display: grid;
   grid-template-columns: 72px 1fr;
-  gap: 0 24px;
-  padding: 26px 0;
+  gap:0 24px;
+  padding:24px 0;
   border-top: 1px solid var(--rule);
-  scroll-margin-top: 20px;
+  scroll-margin-top:16px;
 }
 .atom-id{
   font-family: var(--f-mono);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 500;
   letter-spacing: -.02em;
   color: var(--muted);
   line-height: 1;
-  padding-top: 3px;
+  padding-top:2px;
   font-variant-numeric: tabular-nums;
 }
 .atom:hover .atom-id{ color: var(--accent); }
 .atom-name{
   font-family: var(--f-display);
-  font-size: 17px; font-weight: 700; letter-spacing: -.012em;
-  margin: 0 0 6px;
+  font-size: 16px; font-weight: 700; letter-spacing: -.012em;
+  margin:0 0 4px;
 }
 .atom-name .en{
   font-family: var(--f-mono);
-  font-size: 11.5px; font-weight: 400; letter-spacing: .04em;
-  color: var(--muted); margin-left: 9px;
+  font-size: 12px; font-weight: 400; letter-spacing: .04em;
+  color: var(--muted); margin-left:8px;
 }
 .atom-def{
-  margin: 0 0 16px;
+  margin:0 0 16px;
   max-width: 66ch;
   color: var(--ink-2);
-  font-size: 14.5px;
+  font-size: 14px;
 }
-.atom-def b{ color: var(--ink); font-weight: 600; }
+.atom-def b{ color: var(--ink); font-weight: 500; }
 /* grid 子项默认 min-width:auto，会被 demo 的 min-width 顶宽从而撑破整页；
    置 0 才能让 .demo 自己的 overflow-x:auto 真正生效（24 号响应式） */
 .atom-body{ min-width: 0; }
@@ -326,24 +327,24 @@ body, .atlas{
 .say{
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 10px;
+  gap:8px;
   align-items: start;
-  margin: 14px 0 0;
-  padding-top: 11px;
+  margin:12px 0 0;
+  padding-top:12px;
   border-top: 1px dashed var(--rule-2);
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--ink-2);
   max-width: 78ch;
 }
 .say-k{
   font-family: var(--f-mono);
-  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
   color: var(--accent);
   border: 1px solid var(--accent-line);
-  border-radius: var(--r-1);
-  padding: 2px 6px;
+  border-radius:var(--r-1);
+  padding:2px 4px;
   white-space: nowrap;
-  margin-top: 2px;
+  margin-top:2px;
 }
 .say q{ quotes: "「" "」"; font-style: normal; color: var(--ink); }
 
@@ -353,20 +354,20 @@ body, .atlas{
 .demo{
   background: var(--panel);
   border: 1px solid var(--rule);
-  border-radius: var(--r-2);
-  padding: 20px;
+  border-radius:var(--r-2);
+  padding:16px;
   overflow-x: auto;
 }
 .demo-2{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1px;
+  gap:0px;
   background: var(--rule);
   border: 1px solid var(--rule);
-  border-radius: var(--r-2);
+  border-radius:var(--r-2);
   overflow: hidden;
 }
-.demo-2 > div{ background: var(--panel); padding: 18px; }
+.demo-2 > div{ background: var(--panel); padding:16px; }
 
 /* 内联写死白底的演示面板 = 一块局部浅色区域，令其内部 token 回到浅色，
    否则暗色主题下浅色文字会落在白底上（实测 2.14–3.04:1）。 */
@@ -379,8 +380,8 @@ body, .atlas{
 }
 .tag{
   font-family: var(--f-mono);
-  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
-  display: inline-block; margin-bottom: 12px; font-weight: 600;
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  display: inline-block; margin-bottom:12px; font-weight: 500;
 }
 .tag-bad{ color: var(--flag); }
 .tag-ok{ color: var(--ok); }
@@ -388,30 +389,30 @@ body, .atlas{
 
 .note{
   font-family: var(--f-mono);
-  font-size: 11px; color: var(--muted); margin-top: 12px; letter-spacing: .02em;
+  font-size: 12px; color: var(--muted); margin-top:12px; letter-spacing: .02em;
 }
 
 /* generic control */
 .ctl{
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  font-family: var(--f-mono); font-size: 11.5px; color: var(--muted);
-  margin-bottom: 16px; letter-spacing: .04em;
+  display: flex; align-items: center; gap:12px; flex-wrap: wrap;
+  font-family: var(--f-mono); font-size: 12px; color: var(--muted);
+  margin-bottom:16px; letter-spacing: .04em;
 }
 .ctl input[type=range]{
   -webkit-appearance: none; appearance: none;
-  height: 2px; background: var(--rule-2); border-radius: 2px;
+  height: 2px; background: var(--rule-2); border-radius:2px;
   flex: 1 1 140px; max-width: 240px;
 }
 .ctl input[type=range]::-webkit-slider-thumb{
   -webkit-appearance: none; appearance: none;
-  width: 14px; height: 14px; border-radius: 50%;
+  width: 14px; height: 14px; border-radius:50%;
   background: var(--accent); cursor: grab; border: 0;
 }
 .ctl input[type=range]::-moz-range-thumb{
-  width: 14px; height: 14px; border-radius: 50%;
+  width: 14px; height: 14px; border-radius:50%;
   background: var(--accent); cursor: grab; border: 0;
 }
-.ctl output{ color: var(--accent); font-weight: 600; min-width: 62px; }
+.ctl output{ color: var(--accent); font-weight: 500; min-width: 62px; }
 
 /* dimension annotation (drafting style) */
 .dim{
@@ -423,8 +424,8 @@ body, .atlas{
 }
 
 /* boxes used across demos */
-.blk{ background: var(--rule); border-radius: var(--r-1); }
-.blk-a{ background: var(--accent); border-radius: var(--r-1); }
+.blk{ background: var(--rule); border-radius:var(--r-1); }
+.blk-a{ background: var(--accent); border-radius:var(--r-1); }
 
 /* ============================================================
    D01 spacing ruler
@@ -472,7 +473,7 @@ body, .atlas{
 /* ============================================================
    D05 / D06 text demos
    ============================================================ */
-.d05-p, .d06-p{ margin: 0; color: var(--ink-2); font-size: 14.5px; }
+.d05-p, .d06-p{ margin: 0; color: var(--ink-2); font-size: 14px; }
 
 /* ============================================================
    D08 radius nesting
@@ -503,8 +504,8 @@ body, .atlas{
 .d12 .chip{ background: #FFFFFF; border: 1px solid var(--rule); border-radius: var(--r-2); padding: 14px; }
 .d12 .chip p{ margin: 0 0 10px; font-size: 14px; font-weight: 500; }
 .d12 .r{ font-family: var(--f-mono); font-size: 10.5px; display: flex; justify-content: space-between; color: #767676; }
-.d12 .pass{ color: #1F6B44; font-weight: 600; }
-.d12 .fail{ color: #A8352D; font-weight: 600; }
+.d12 .pass{ color: #1F6B44; font-weight: 500; }
+.d12 .fail{ color: #A8352D; font-weight: 500; }
 
 /* ============================================================
    D13 elevation
@@ -580,7 +581,7 @@ body, .atlas{
 }
 .d24-card{ display: grid; grid-template-columns: 1fr; gap: 12px; }
 .d24-card .thumb{ height: 64px; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: var(--r-1); }
-.d24-card h5{ margin: 0 0 5px; font-size: 15px; font-family: var(--f-display); letter-spacing: -.01em; }
+.d24-card h5{ margin: 0 0 5px; font-size: 16px; font-family: var(--f-display); letter-spacing: -.01em; }
 .d24-card p{ margin: 0; font-size: 13px; color: var(--muted); }
 .d24-state{ font-family: var(--f-mono); font-size: 10px; color: var(--accent); letter-spacing: .08em; margin-bottom: 10px; }
 .d24-state::after{ content: "窄 · 单列堆叠"; }
@@ -625,7 +626,7 @@ body, .atlas{
 }
 .d26-row .lead{ width: 30px; height: 30px; border-radius: 50%; background: var(--accent-soft); border: 1px solid var(--accent-line); flex: none; }
 .d26-row .lab{ flex: 1; }
-.d26-row .lab b{ display: block; font-size: 14px; font-weight: 600; }
+.d26-row .lab b{ display: block; font-size: 14px; font-weight: 500; }
 .d26-row .lab span{ font-size: 12.5px; color: var(--muted); }
 .d26-row .trail{ font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
 .d26-pins{ display: flex; margin-top: 6px; font-family: var(--f-mono); font-size: 10px; color: var(--accent); letter-spacing: .04em; gap: 12px; }
@@ -653,9 +654,9 @@ body, .atlas{
 .btn:hover{ filter: brightness(1.12); }
 .btn:active{ transform: translateY(1px); }
 .spin{
-  display: inline-block; width: 11px; height: 11px; margin-right: 6px;
+  display: inline-block; width: 11px; height: 11px; margin-right:4px;
   border: 2px solid currentColor; border-right-color: transparent;
-  border-radius: 50%; vertical-align: -1px;
+  border-radius:50%; vertical-align: -1px;
   animation: spin .7s linear infinite;
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
@@ -673,7 +674,7 @@ body, .atlas{
 .d28 th:first-child, .d28 td:first-child{ padding-left: 0; }
 .btn-sm{ font-size: 12px; padding: 5px 10px; }
 .btn-md{ font-size: 13.5px; padding: 8px 15px; }
-.btn-lg{ font-size: 15px; padding: 11px 20px; }
+.btn-lg{ font-size: 16px; padding: 11px 20px; }
 .d28 .btn{ width: auto; }
 
 /* ============================================================
@@ -694,7 +695,7 @@ body, .atlas{
   width: 40px; height: 40px; margin: 0 auto 14px; border-radius: var(--r-2);
   border: 1.5px dashed var(--rule-2);
 }
-.d29-empty b{ display: block; font-size: 14.5px; margin-bottom: 5px; }
+.d29-empty b{ display: block; font-size: 14px; margin-bottom: 5px; }
 .d29-empty span{ font-size: 13px; color: var(--muted); display: block; margin-bottom: 14px; }
 .sk{ background: var(--rule); border-radius: var(--r-1); animation: pulse 1.5s ease-in-out infinite; }
 @keyframes pulse{ 0%,100%{ opacity: 1 } 50%{ opacity: .45 } }
@@ -709,7 +710,7 @@ body, .atlas{
 .d29-item .gr b{ display: block; font-weight: 500; }
 .d29-item .gr span{ font-size: 12px; color: var(--muted); }
 .d29-err{ color: var(--flag); }
-.d29-err b{ display: block; font-size: 14.5px; margin-bottom: 5px; }
+.d29-err b{ display: block; font-size: 14px; margin-bottom: 5px; }
 .d29-err span{ font-size: 13px; color: var(--ink-2); display: block; margin-bottom: 14px; }
 
 /* ============================================================
@@ -726,51 +727,51 @@ body, .atlas{
    ============================================================ */
 .combo{
   border: 1px solid var(--rule);
-  border-radius: var(--r-2);
+  border-radius:var(--r-2);
   background: var(--panel);
   overflow: hidden;
   display: flex; flex-direction: column;
 }
 .combo-hd{
-  padding: 14px 16px 12px;
+  padding:12px 16px 12px;
   border-bottom: 1px solid var(--rule);
   background: var(--panel-2);
 }
 .combo-hd h4{
-  font-family: var(--f-display); font-size: 15px; font-weight: 700;
-  letter-spacing: -.01em; margin: 0 0 3px;
+  font-family: var(--f-display); font-size: 14px; font-weight: 700;
+  letter-spacing: -.01em; margin:0 0 2px;
 }
 .combo-hd h4 span{
-  font-family: var(--f-mono); font-size: 10.5px; font-weight: 400;
-  color: var(--muted); margin-left: 8px; letter-spacing: .04em;
+  font-family: var(--f-mono); font-size: 12px; font-weight: 400;
+  color: var(--muted); margin-left:8px; letter-spacing: .04em;
 }
-.combo-hd p{ margin: 0; font-size: 12.5px; color: var(--muted); }
+.combo-hd p{ margin:0; font-size: 12px; color: var(--muted); }
 .combo-body{ padding: 20px 16px; flex: 1; display: flex; align-items: center; }
 .combo-body > *{ width: 100%; }
 .combo-ft{
-  padding: 10px 16px 12px;
+  padding:8px 16px 12px;
   border-top: 1px dashed var(--rule-2);
-  display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+  display: flex; flex-wrap: wrap; gap:4px; align-items: center;
 }
 .ref{
-  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .04em;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .04em;
   color: var(--accent); background: var(--accent-soft);
-  border: 1px solid var(--accent-line); border-radius: 2px;
-  padding: 1px 5px; text-decoration: none;
+  border: 1px solid var(--accent-line); border-radius:2px;
+  padding:0px 4px; text-decoration: none;
 }
 .ref:hover{ background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
 .atlas .ref{ border-bottom: 1px solid var(--accent-line); }
 .combo-ft .k{
-  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--muted); margin-right: 5px;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); margin-right:4px;
 }
 .grid-combo{
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(310px,1fr)); gap: 16px;
-  margin-top: 26px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(310px,1fr)); gap:16px;
+  margin-top:24px;
 }
 
 /* real component styles inside combos */
-.fld label{ display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; }
+.fld label{ display: block; font-size: 12.5px; font-weight: 500; margin-bottom: 6px; }
 .fld input{
   width: 100%; font-family: var(--f-body); font-size: 13.5px;
   padding: 8px 11px; border: 1px solid var(--rule-2); border-radius: var(--r-2);
@@ -787,7 +788,7 @@ body, .atlas{
   padding: 16px; background: var(--panel-2);
 }
 .card-x .th{ height: 74px; border-radius: var(--r-2); background: var(--accent-soft); border: 1px solid var(--accent-line); margin-bottom: 14px; }
-.card-x h5{ font-family: var(--f-display); font-size: 15px; margin: 0 0 5px; letter-spacing: -.01em; }
+.card-x h5{ font-family: var(--f-display); font-size: 16px; margin: 0 0 5px; letter-spacing: -.01em; }
 .card-x p{ font-size: 12.5px; color: var(--muted); margin: 0 0 14px; }
 .card-x .foot{ display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 
@@ -834,7 +835,7 @@ body, .atlas{
   background: var(--panel); padding: 18px;
   box-shadow: 0 12px 32px -8px rgba(0,0,0,.22);
 }
-.modal-mock h5{ font-family: var(--f-display); font-size: 15px; margin: 0 0 6px; letter-spacing: -.01em; }
+.modal-mock h5{ font-family: var(--f-display); font-size: 16px; margin: 0 0 6px; letter-spacing: -.01em; }
 .modal-mock p{ font-size: 12.5px; color: var(--muted); margin: 0 0 16px; }
 .modal-mock .acts{ display: flex; gap: 8px; justify-content: flex-end; }
 .modal-mock .btn{ width: auto; }
@@ -861,15 +862,15 @@ body, .atlas{
    LAYOUT PLANS (wireframes)
    ============================================================ */
 .plan{
-  display: grid; gap: 5px; height: 152px;
+  display: grid; gap:4px; height: 152px;
   background: var(--panel-2); border: 1px solid var(--rule);
-  border-radius: var(--r-2); padding: 5px;
+  border-radius:var(--r-2); padding:4px;
 }
 .plan div{
-  background: var(--panel); border: 1px solid var(--rule-2); border-radius: 2px;
-  font-family: var(--f-mono); font-size: 9px; color: var(--muted);
+  background: var(--panel); border: 1px solid var(--rule-2); border-radius:2px;
+  font-family: var(--f-mono); font-size: 12px; color: var(--muted);
   display: flex; align-items: center; justify-content: center; letter-spacing: .04em;
-  text-align: center; padding: 3px; overflow: hidden;
+  text-align: center; padding:2px; overflow: hidden;
 }
 .plan .hl{ background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
 .plan .mut{ background: var(--panel-2); }
@@ -901,52 +902,52 @@ body, .atlas{
    ============================================================ */
 .tools{ width: 100%; border-collapse: collapse; min-width: 660px; font-size: 14px; }
 .tools th{
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
   color: var(--muted); font-weight: 500; text-align: left;
-  padding: 0 14px 10px 0; border-bottom: 1px solid var(--ink);
+  padding:0 12px 8px 0; border-bottom: 1px solid var(--ink);
 }
-.tools td{ padding: 14px 14px 14px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
-.tools td:first-child{ width: 116px; font-family: var(--f-mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; }
-.tools .nm{ font-weight: 600; font-size: 14.5px; display: block; margin-bottom: 3px; }
+.tools td{ padding:12px 12px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tools td:first-child{ width: 116px; font-family: var(--f-mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+.tools .nm{ font-weight: 500; font-size: 14px; display: block; margin-bottom:2px; }
 .tools .nm code{ font-family: var(--f-mono); font-size: 12px; color: var(--accent); font-weight: 400; }
-.tools .ds{ color: var(--ink-2); font-size: 13.5px; }
+.tools .ds{ color: var(--ink-2); font-size: 14px; }
 .scroll-x{ overflow-x: auto; }
 
 /* ============================================================
    PART 4 — DIAGNOSIS
    ============================================================ */
-.dx{ width: 100%; border-collapse: collapse; min-width: 720px; font-size: 13.5px; }
+.dx{ width: 100%; border-collapse: collapse; min-width: 720px; font-size: 14px; }
 .dx th{
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
   color: var(--muted); font-weight: 500; text-align: left;
-  padding: 0 16px 10px 0; border-bottom: 1px solid var(--ink);
+  padding:0 16px 8px 0; border-bottom: 1px solid var(--ink);
 }
-.dx td{ padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.dx td{ padding:12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 .dx td:first-child{ color: var(--flag); font-weight: 500; width: 132px; }
 .dx td:nth-child(2){ width: 210px; color: var(--ink-2); }
 .dx td:last-child{ color: var(--ink); }
-.dx .n{ font-family: var(--f-mono); font-size: 10px; color: var(--accent); }
+.dx .n{ font-family: var(--f-mono); font-size: 12px; color: var(--accent); }
 
 .prompt-card{
-  border: 1px solid var(--rule); border-radius: var(--r-2);
-  background: var(--panel); overflow: hidden; margin-top: 22px;
+  border: 1px solid var(--rule); border-radius:var(--r-2);
+  background: var(--panel); overflow: hidden; margin-top:24px;
 }
 .prompt-card .hd{
-  font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
-  padding: 11px 16px; border-bottom: 1px solid var(--rule); color: var(--accent);
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  padding:12px 16px; border-bottom: 1px solid var(--rule); color: var(--accent);
   background: var(--panel-2);
 }
 .prompt-card pre{
-  margin: 0; padding: 18px 16px; font-family: var(--f-mono); font-size: 12.5px;
+  margin:0; padding:16px 16px; font-family: var(--f-mono); font-size: 12px;
   line-height: 1.85; overflow-x: auto; color: var(--ink-2); white-space: pre-wrap;
 }
-.prompt-card pre b{ color: var(--ink); font-weight: 600; }
+.prompt-card pre b{ color: var(--ink); font-weight: 500; }
 
-.two-col{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 22px; margin-top: 24px; }
-.mini{ border-top: 2px solid var(--ink); padding-top: 14px; }
-.mini h4{ font-family: var(--f-display); font-size: 15px; font-weight: 700; margin: 0 0 10px; letter-spacing: -.01em; }
-.mini ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-2); }
-.mini li{ margin-bottom: 7px; }
+.two-col{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:24px; margin-top:24px; }
+.mini{ border-top: 2px solid var(--ink); padding-top:12px; }
+.mini h4{ font-family: var(--f-display); font-size: 14px; font-weight: 700; margin:0 0 8px; letter-spacing: -.01em; }
+.mini ul{ margin:0; padding-left:16px; font-size: 14px; color: var(--ink-2); }
+.mini li{ margin-bottom:8px; }
 .mini li b{ color: var(--ink); }
 
 /* ============================================================
@@ -954,12 +955,12 @@ body, .atlas{
    ============================================================ */
 .idx{
   display: grid; grid-template-columns: repeat(auto-fill, minmax(168px,1fr));
-  gap: 2px 18px; margin: 24px 0 8px;
-  border-top: 1px solid var(--rule); padding-top: 16px;
+  gap:2px 16px; margin:24px 0 8px;
+  border-top: 1px solid var(--rule); padding-top:16px;
 }
 .idx a{
-  font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-2);
-  border-bottom: 0; padding: 2px 0; display: flex; gap: 8px;
+  font-family: var(--f-mono); font-size: 12px; color: var(--ink-2);
+  border-bottom: 0; padding:2px 0; display: flex; gap:8px;
   letter-spacing: .01em;
 }
 .idx a:hover{ color: var(--accent); }
@@ -967,9 +968,9 @@ body, .atlas{
 .idx a:hover i{ color: var(--accent); }
 
 .foot{
-  margin-top: 72px; padding-top: 20px; border-top: 3px solid var(--ink);
-  font-family: var(--f-mono); font-size: 11px; color: var(--muted);
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  margin-top:64px; padding-top:16px; border-top: 3px solid var(--ink);
+  font-family: var(--f-mono); font-size: 12px; color: var(--muted);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap:12px;
   letter-spacing: .04em;
 }
 
@@ -977,13 +978,20 @@ body, .atlas{
    RESPONSIVE
    ============================================================ */
 @media (max-width: 700px){
-  .atlas{ padding: 0 18px 72px; }
-  .atom, .group{ grid-template-columns: 1fr; gap: 0; }
-  .atom-id{ font-size: 13px; margin-bottom: 6px; }
-  .group-key{ margin-bottom: 4px; padding-top: 0; }
-  .say{ grid-template-columns: 1fr; gap: 7px; }
+  .atlas{ padding:0 16px 64px; }
+  .atom, .group{ grid-template-columns: 1fr; gap:0; }
+  .atom-id{ font-size: 12px; margin-bottom:4px; }
+  .group-key{ margin-bottom:4px; padding-top:0; }
+  .say{ grid-template-columns: 1fr; gap:8px; }
   .say-k{ justify-self: start; }
-  .mast{ padding-top: 40px; }
+  .mast{ padding-top:32px; }
+}
+
+@media (min-width: 720px){
+  /* 升一档，值仍取自 12/14/16/20/25/31/49 这套标度，不用 clamp ——
+     clamp 在中间视口宽度上必然算出档位外的字号。 */
+  .mast h1{ font-size: 39px; }
+  .part h2{ font-size: 31px; }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -1053,43 +1061,57 @@ body, .atlas{
 
   <div class="toc-s">
     <a class="toc-sh" href="#part2">第二部 · 33 种组合</a>
+    <div class="toc-g">
+      <a href="#g-components"><i>21</i>组件组合</a>
+      <a href="#g-layouts"><i>12</i>页面布局</a>
+    </div>
   </div>
 
   <div class="toc-s">
     <a class="toc-sh" href="#part3">第三部 · 工具与规范</a>
+    <div class="toc-g">
+      <a href="#tools-libs"><i>库</i>按层选型</a>
+      <a href="#tools-docs"><i>文</i>规范与文档</a>
+    </div>
   </div>
 
   <div class="toc-s">
-    <a class="toc-sh" href="#part4">第四部 · 怎么说出口</a>
+    <a class="toc-sh" href="#part4">第四部 · 照抄这句</a>
+    <div class="toc-g">
+      <a href="#p4-open"><i>开</i>项目开场</a>
+      <a href="#p4-designmd"><i>md</i>写成 DESIGN.md</a>
+      <a href="#p4-dx"><i>诊</i>诊断表</a>
+      <a href="#p4-habits"><i>习</i>四条习惯</a>
+    </div>
   </div>
 </nav>
 
 <style>
 .toc{
-  position:fixed; top:0; left:0; bottom:0; width:248px; z-index:100;
+  position:fixed; top:0; left:0; bottom:0; width:256px; z-index:100;
   overflow-y:auto; overscroll-behavior:contain;
   background:var(--panel); border-right:1px solid var(--rule);
-  padding:18px 0 48px; display:none;
+  padding:16px 0 48px; display:none;
 }
 .toc-top{
-  display:block; padding:0 20px 14px; margin-bottom:6px;
+  display:block; padding:0 16px 12px; margin-bottom:4px;
   border-bottom:1px solid var(--rule);
-  font-family:var(--f-display); font-size:15px; font-weight:700;
+  font-family:var(--f-display); font-size: 14px; font-weight:700;
   letter-spacing:-.01em; color:var(--ink); border-left:0; text-decoration:none;
 }
 .atlas .toc a, .toc a{border-bottom:0; text-decoration:none}
-.toc-s{padding:10px 0 2px}
+.toc-s{padding:8px 0 2px}
 .toc-sh{
-  display:block; padding:6px 20px; font-size:13px; font-weight:600; color:var(--ink);
+  display:block; padding:4px 16px; font-size: 12px; font-weight: 500; color:var(--ink);
 }
 .toc-sh:hover{color:var(--accent)}
 .toc-g{padding:4px 0 8px}
 .toc-gh{
-  padding:8px 20px 4px; font-family:var(--f-mono); font-size:10.5px;
+  padding:8px 16px 4px; font-family:var(--f-mono); font-size: 12px;
   letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
 }
 .toc-g a{
-  display:flex; gap:9px; padding:4px 20px 4px 20px; font-size:12.5px; color:var(--ink-2);
+  display:flex; gap:8px; padding:4px 16px 4px 16px; font-size: 12px; color:var(--ink-2);
   border-left:2px solid transparent; transition:color .12s, border-color .12s, background .12s;
 }
 .toc-g a i{font-family:var(--f-mono); font-style:normal; color:var(--muted); font-variant-numeric:tabular-nums}
@@ -1101,7 +1123,8 @@ body, .atlas{
 
 @media (min-width:1280px){
   .toc{display:block}
-  body{padding-left:248px}
+  /* 侧栏偏移＝侧栏宽度；这是布局尺寸，不是间距档位 */
+  body{padding-left:256px}
 }
 </style>
 
@@ -1128,7 +1151,7 @@ body, .atlas{
 
 <div class="howto">
   <h3>怎么用这份表</h3>
-  <p>每张卡片底部那行 <code>怎么说出口</code>，是这个概念的专业表述，可以直接抄进 prompt。</p>
+  <p>每张卡片底部那行 <code>照抄这句</code>，是这个概念的专业表述，可以直接抄进 prompt。</p>
   <p><b>编号只是查阅用的</b>，相当于这份表的页码。模型不知道"02"指什么 —— 别把编号发给它，发那句具体的话。</p>
   <p>不用从头读。先看下面的分层图，再扫第二部分看实物，最后回来查具体概念。</p>
 </div>
@@ -1171,43 +1194,43 @@ body, .atlas{
      LAYER STACK — 骨架
      ============================================================ -->
 <style>
-.stack{ margin: 44px 0 8px; }
+.stack{ margin:48px 0 8px; }
 .stack-hd{
-  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
-  padding-bottom: 10px; border-bottom: 2px solid var(--ink); margin-bottom: 0;
+  display: flex; align-items: baseline; gap:12px; flex-wrap: wrap;
+  padding-bottom:8px; border-bottom: 2px solid var(--ink); margin-bottom:0;
 }
 .stack-hd h3{
-  font-family: var(--f-display); font-size: 19px; font-weight: 700;
-  letter-spacing: -.015em; margin: 0;
+  font-family: var(--f-display); font-size: 20px; font-weight: 700;
+  letter-spacing: -.015em; margin:0;
 }
 .stack-hd span{
-  font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .04em; color: var(--muted);
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted);
 }
-.stack-lede{ font-size: 14px; color: var(--ink-2); margin: 14px 0 20px; max-width: 70ch; }
+.stack-lede{ font-size: 14px; color: var(--ink-2); margin:12px 0 16px; max-width: 70ch; }
 .stack-lede b{ color: var(--ink); }
 
 .stk{
   display: grid;
   grid-template-columns: 116px minmax(0,1fr) minmax(0,258px);
-  gap: 0 22px;
+  gap:0 24px;
   align-items: start;
-  padding: 15px 0;
+  padding:16px 0;
   border-bottom: 1px solid var(--rule);
 }
 .stk:first-of-type{ border-top: 1px solid var(--rule); }
 .stk-l{
-  font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em;
-  color: var(--accent); padding-top: 3px;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em;
+  color: var(--accent); padding-top:2px;
 }
-.stk-l b{ display: block; font-family: var(--f-body); font-size: 14.5px; font-weight: 700; color: var(--ink); letter-spacing: 0; margin-top: 4px; }
-.stk-q{ font-size: 14px; color: var(--ink-2); padding-top: 2px; }
-.stk-q em{ font-style: normal; color: var(--ink); font-weight: 600; }
-.stk-n{ display: flex; flex-wrap: wrap; gap: 3px; align-content: flex-start; }
+.stk-l b{ display: block; font-family: var(--f-body); font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: 0; margin-top:4px; }
+.stk-q{ font-size: 14px; color: var(--ink-2); padding-top:2px; }
+.stk-q em{ font-style: normal; color: var(--ink); font-weight: 500; }
+.stk-n{ display: flex; flex-wrap: wrap; gap:2px; align-content: flex-start; }
 .stk-n a{
-  font-family: var(--f-mono); font-size: 10.5px;
+  font-family: var(--f-mono); font-size: 12px;
   color: var(--accent); background: var(--accent-soft);
-  border: 1px solid var(--accent-line); border-radius: 2px;
-  padding: 1px 5px; text-decoration: none; line-height: 1.6;
+  border: 1px solid var(--accent-line); border-radius:2px;
+  padding:0px 4px; text-decoration: none; line-height: 1.6;
 }
 .stk-n a:hover{ background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
 .atlas .stk-n a{ border-bottom: 1px solid var(--accent-line); }
@@ -1215,20 +1238,21 @@ body, .atlas{
 .stk-own{ border-style: dashed; }
 .stk-own .stk-l{ color: var(--muted); }
 .stk-own .stk-n span{
-  font-family: var(--f-mono); font-size: 10.5px; color: var(--muted);
-  border: 1px dashed var(--rule-2); border-radius: 2px; padding: 1px 6px;
+  font-family: var(--f-mono); font-size: 12px; color: var(--muted);
+  border: 1px dashed var(--rule-2); border-radius:2px; padding:0px 4px;
 }
 .stk-foot{
-  margin-top: 20px; padding: 14px 16px;
+  margin-top:16px; padding:12px 16px;
   background: var(--accent-soft); border: 1px solid var(--accent-line);
-  border-radius: var(--r-2); font-size: 13.5px; color: var(--ink-2); max-width: 76ch;
+  border-radius:var(--r-2); font-size: 14px; color: var(--ink-2); max-width: 76ch;
+  margin: 16px 0 0;
 }
 .stk-foot b{ color: var(--ink); }
 
 @media (max-width: 700px){
-  .stk{ grid-template-columns: 1fr; gap: 8px; }
-  .stk-l{ padding-top: 0; }
-  .stk-l b{ display: inline; margin-left: 8px; }
+  .stk{ grid-template-columns: 1fr; gap:8px; }
+  .stk-l{ padding-top:0; }
+  .stk-l b{ display: inline; margin-left:8px; }
 }
 </style>
 
@@ -1314,7 +1338,7 @@ body, .atlas{
   <div class="atom-id">01</div>
   <div class="atom-body">
     <h4 class="atom-name">间距标度 <span class="en">Spacing Scale</span></h4>
-    <p class="atom-def">所有间距只能从一个<b>固定档位表</b>里挑，通常是 4 的倍数。界面里永远不该出现 13px、17px、23px —— 那是"随手调的"，眼睛看不出为什么，但整体会散。</p>
+    <p class="atom-def">所有间距只能从一个<b>固定档位表</b>里挑，通常是 4 的倍数。界面里永远不该出现 13px、17px、23px —— 那是"随手调的"，眼睛看不出为什么，但整体会散。<br>徽章、胶囊这类小元件常还需要一个 <b>2px 的半档</b>，页面级留白可以往上取 96；只要仍在同一张表上，就不算破例。</p>
     <div class="demo">
       <div class="d01">
         <figure><div class="bar" style="width:4px"></div><figcaption>4</figcaption></figure>
@@ -1329,7 +1353,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 这九档覆盖 95% 的场景。档位之间跨度越往上越大 —— 因为大尺寸上 4px 的差别人眼看不见。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>所有间距对齐到 4pt 标度，只允许 4/8/12/16/24/32/48/64，不要出现标度外的数值。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>所有间距对齐到 4pt 标度：常用 4/8/12/16/24/32/48/64，小元件内边距可用 2，页面级留白可用 96。不要出现这张表以外的数值。</q></p>
   </div>
 </article>
 
@@ -1359,7 +1383,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 拖到 26px 试试：组内 ≈ 组间时，三组会糊成一坨。规律是 <b>组间间距 ≥ 组内间距 × 2</b>。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>按亲密性重排间距：组内元素 8，组之间 24 或 32，保证组间至少是组内的两倍。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>按亲密性重排间距：组内元素 8，组之间 24 或 32，保证组间至少是组内的两倍。</q></p>
   </div>
 </article>
 
@@ -1371,17 +1395,17 @@ body, .atlas{
     <p class="atom-def">字号同样只能从档位挑，档位由一个<b>比例数</b>连乘生成（常用 1.2 / 1.25 / 1.333）。比例越大层级越戏剧化，越小越克制。整个界面通常只需要 5–7 档。</p>
     <div class="demo d03">
       <ul>
-        <li><span class="n mono">49 / display</span><span class="s" style="font-size:39px;font-weight:700">层级最高的数字</span></li>
+        <li><span class="n mono">39 / display</span><span class="s" style="font-size:39px;font-weight:700">层级最高的数字</span></li>
         <li><span class="n mono">31 / h1</span><span class="s" style="font-size:31px;font-weight:700">页面标题</span></li>
-        <li><span class="n mono">25 / h2</span><span class="s" style="font-size:25px;font-weight:600">区块标题</span></li>
-        <li><span class="n mono">20 / h3</span><span class="s" style="font-size:20px;font-weight:600">卡片标题</span></li>
+        <li><span class="n mono">25 / h2</span><span class="s" style="font-size:25px;font-weight: 500">区块标题</span></li>
+        <li><span class="n mono">20 / h3</span><span class="s" style="font-size:20px;font-weight: 500">卡片标题</span></li>
         <li><span class="n mono">16 / base</span><span class="s" style="font-size:16px;font-weight:400">正文，一切的基准</span></li>
         <li><span class="n mono">14 / sm</span><span class="s" style="font-size:14px;font-weight:400">辅助说明、表格</span></li>
         <li><span class="n mono">12 / xs</span><span class="s" style="font-size:12px;font-weight:400">标签、时间戳</span></li>
       </ul>
       <p class="note">↑ 基准 16，比例 1.25。相邻两档差别必须<b>一眼可辨</b> —— 15 和 16 并存是纯粹的噪音。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>字号收敛到 12/14/16/20/25/31 六档（基准 16、比例 1.25），去掉所有档位外的字号。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>字号收敛到 12/14/16/20/25/31/39 七档（基准 16、比例 1.25），去掉所有档位外的字号。</q></p>
   </div>
 </article>
 
@@ -1395,11 +1419,11 @@ body, .atlas{
       <div><div class="w" style="font-weight:300">字重</div><div class="l">300 Light</div></div>
       <div><div class="w" style="font-weight:400">字重</div><div class="l">400 Regular ←正文</div></div>
       <div><div class="w" style="font-weight:500">字重</div><div class="l">500 Medium ←强调</div></div>
-      <div><div class="w" style="font-weight:600">字重</div><div class="l">600 Semibold</div></div>
+      <div><div class="w" style="font-weight: 500">字重</div><div class="l">600 Semibold</div></div>
       <div><div class="w" style="font-weight:700">字重</div><div class="l">700 Bold ←标题</div></div>
       <div><div class="w" style="font-weight:900">字重</div><div class="l">900 Black</div></div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>字重只保留 400 / 500 / 700 三档，正文一律 400，不要用加粗来做层级。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>字重只保留 400 / 500 / 700 三档，正文一律 400，不要用加粗来做层级。</q></p>
   </div>
 </article>
 
@@ -1420,7 +1444,7 @@ body, .atlas{
       </p>
       <p class="note">↑ 拖到 1.2 感受窒息，拖到 2.2 感受散架。这段文字的合适值大约在 1.6–1.75。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>正文 line-height 1.65，标题 1.15，不要用统一行高。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>正文 line-height 1.65，标题 1.15，不要用统一行高。</q></p>
   </div>
 </article>
 
@@ -1441,7 +1465,7 @@ body, .atlas{
       </p>
       <p class="note">↑ 拖到 120ch 试试回扫。屏幕宽不是让正文变宽的理由，是让两侧留白变宽的理由。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>正文容器加 max-width: 65ch，不要让文字铺满整个屏幕宽度。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>正文容器加 max-width: 65ch，不要让文字铺满整个屏幕宽度。</q></p>
   </div>
 </article>
 
@@ -1460,7 +1484,7 @@ body, .atlas{
         </div>
         <div>
           <div class="tag tag-n">正文 · 不动</div>
-          <div style="font-size:15px">正常大小的正文，字距保持 0，不要画蛇添足。</div>
+          <div style="font-size:16px">正常大小的正文，字距保持 0，不要画蛇添足。</div>
           <div class="mono" style="font-size:10.5px;color:var(--muted);margin-top:4px">letter-spacing: 0</div>
         </div>
         <div>
@@ -1470,7 +1494,7 @@ body, .atlas{
         </div>
       </div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>28px 以上标题 letter-spacing -0.03em；小号大写标签 +0.14em；正文保持 0。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>28px 以上标题 letter-spacing -0.03em；小号大写标签 +0.14em；正文保持 0。</q></p>
   </div>
 </article>
 
@@ -1495,7 +1519,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 盯着两个图形的左上角看。右边那对弧线是同心的，左边不是。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>圆角用 2/4/8/12 四档；嵌套时外层圆角 = 内层圆角 + 内边距。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>圆角用 2/4/8/12 四档；嵌套时外层圆角 = 内层圆角 + 内边距。</q></p>
   </div>
 </article>
 
@@ -1528,7 +1552,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 常用分工：<b>50/100</b> 背景 · <b>200/300</b> 描边 · <b>500/600</b> 主色/按钮 · <b>700/800</b> 文字 · <b>900/950</b> 暗色底</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>用完整 50–950 色阶，不要临时凑色值：背景用 -50，描边用 -200，按钮用 -600，文字用 -800。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>用完整 50–950 色阶，不要临时凑色值：背景用 -50，描边用 -200，按钮用 -600，文字用 -800。</q></p>
   </div>
 </article>
 
@@ -1555,7 +1579,7 @@ body, .atlas{
         <div class="d">组件私有。只有当某个组件需要偏离通用规则时才建。</div>
       </div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>建立三层 token：primitive → semantic → component，组件里只准引用语义层，禁止硬编码色值。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>建立三层 token：primitive → semantic → component，组件里只准引用语义层，禁止硬编码色值。</q></p>
   </div>
 </article>
 
@@ -1568,16 +1592,16 @@ body, .atlas{
     <div class="demo demo-2" style="border:0">
       <div class="force-light" style="background:#FFFFFF">
         <div class="tag tag-bad">纯黑纯白 · 纯灰</div>
-        <p style="color:#000000;font-size:15px;margin:0 0 8px;font-weight:600">标题文字 #000</p>
+        <p style="color:#000000;font-size:16px;margin:0 0 8px;font-weight: 500">标题文字 #000</p>
         <p style="color:#808080;font-size:13.5px;margin:0">辅助文字 #808080，在 #FFFFFF 上。对比生硬，灰色发脏。</p>
       </div>
       <div style="background:#F7F8F7">
         <div class="tag tag-ok">选过的中性色</div>
-        <p style="color:#14181A;font-size:15px;margin:0 0 8px;font-weight:600">标题文字 #14181A</p>
+        <p style="color:#14181A;font-size:16px;margin:0 0 8px;font-weight: 500">标题文字 #14181A</p>
         <p style="color:#606A6E;font-size:13.5px;margin:0">辅助文字 #606A6E，带青绿偏向，和主色同族。整体更沉静。</p>
       </div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>不要用 #000 / #FFF；中性色向主色的色相偏 2–5 度，正文用 gray-800 而不是纯黑。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>不要用 #000 / #FFF；中性色向主色的色相偏 2–5 度，正文用 gray-800 而不是纯黑。</q></p>
   </div>
 </article>
 
@@ -1596,7 +1620,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 白底上的真实比值。<b>#767676 是白底正文的极限</b>，再浅一点就不及格。占位符、禁用态最容易翻车。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>所有文字对比度必须过 WCAG AA：正文 ≥4.5:1，大字和图标 ≥3:1，把每个色对的比值算给我看。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>所有文字对比度必须过 WCAG AA：正文 ≥4.5:1，大字和图标 ≥3:1，把每个色对的比值算给我看。</q></p>
   </div>
 </article>
 
@@ -1616,7 +1640,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 注意 y 偏移和模糊半径是<b>一起</b>增长的。只调 blur 不调 y，阴影会像雾而不像影。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>阴影用 5 档海拔阶梯，y 偏移和模糊半径同步增长；下拉用第 3 档，模态用第 4 档。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>阴影用 5 档海拔阶梯，y 偏移和模糊半径同步增长；下拉用第 3 档，模态用第 4 档。</q></p>
   </div>
 </article>
 
@@ -1631,21 +1655,21 @@ body, .atlas{
         <div style="background:#F7F8F7">
           <div class="tag tag-n">明色 · 层级靠阴影</div>
           <div class="force-light" style="background:#fff;border:1px solid #E3E4E0;border-radius:6px;padding:13px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
-            <div style="color:#14181A;font-weight:600;font-size:14px;margin-bottom:5px">浮起的卡片</div>
+            <div style="color:#14181A;font-weight: 500;font-size:14px;margin-bottom:5px">浮起的卡片</div>
             <div style="color:#606A6E;font-size:12.5px">白底 + 投影 = 离页面更近</div>
           </div>
         </div>
         <div style="background:#0C0F10">
           <div class="tag" style="color:#8B9599">暗色 · 层级靠提亮</div>
           <div style="background:#1B2124;border:1px solid #2A3134;border-radius:6px;padding:13px">
-            <div style="color:#E4E8E8;font-weight:600;font-size:14px;margin-bottom:5px">浮起的卡片</div>
+            <div style="color:#E4E8E8;font-weight: 500;font-size:14px;margin-bottom:5px">浮起的卡片</div>
             <div style="color:#8B9599;font-size:12.5px">比底色更亮 = 离页面更近</div>
           </div>
         </div>
       </div>
       <p class="note" style="padding:0 2px">↑ 右边那张卡没有任何阴影，"浮起来"完全靠比背景亮。这就是暗色下的海拔。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>做暗色时不要反转：降低饱和度，用背景提亮代替阴影表达层级，底色用近黑不用纯黑。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>做暗色时不要反转：降低饱和度，用背景提亮代替阴影表达层级，底色用近黑不用纯黑。</q></p>
   </div>
 </article>
 
@@ -1670,7 +1694,7 @@ body, .atlas{
       <div><div class="lv">⑤ 色彩</div><p class="t" style="color:var(--accent);font-weight:500">项目名称</p><p class="b">附加说明文字</p><div class="strength">中 · 有语义副作用</div></div>
       <div><div class="lv">⑥ 装饰</div><p class="t" style="border-left:3px solid var(--accent);padding-left:8px">项目名称</p><p class="b" style="padding-left:11px">附加说明文字</p><div class="strength">最弱 · 最被滥用</div></div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>层级优先用留白和明度对比来做，不要靠加大字号和加粗；每屏只允许一个视觉焦点。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>层级优先用留白和明度对比来做，不要靠加大字号和加粗；每屏只允许一个视觉焦点。</q></p>
   </div>
 </article>
 
@@ -1684,7 +1708,7 @@ body, .atlas{
       <div>
         <div class="tag tag-bad">内白不足</div>
         <div style="border:1px solid var(--rule-2);border-radius:6px;padding:6px">
-          <div style="font-weight:600;font-size:14px;margin-bottom:2px">本月账单</div>
+          <div style="font-weight: 500;font-size:14px;margin-bottom:2px">本月账单</div>
           <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px">2026 年 7 月 · 已出账</div>
           <div style="font-family:var(--f-display);font-size:26px;font-weight:700;letter-spacing:-.03em">¥ 1,284.00</div>
         </div>
@@ -1692,13 +1716,13 @@ body, .atlas{
       <div>
         <div class="tag tag-ok">内白 20 / 分组间距 14</div>
         <div style="border:1px solid var(--rule-2);border-radius:8px;padding:20px">
-          <div style="font-weight:600;font-size:14px;margin-bottom:3px">本月账单</div>
+          <div style="font-weight: 500;font-size:14px;margin-bottom:3px">本月账单</div>
           <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">2026 年 7 月 · 已出账</div>
           <div style="font-family:var(--f-display);font-size:26px;font-weight:700;letter-spacing:-.03em">¥ 1,284.00</div>
         </div>
       </div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>卡片内边距至少 20，区块之间至少 48；宁可减内容也不要减留白。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>卡片内边距至少 20，区块之间至少 48；宁可减内容也不要减留白。</q></p>
   </div>
 </article>
 
@@ -1728,7 +1752,7 @@ body, .atlas{
         </div>
       </div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>把左对齐轴收敛到两条：主轴和一条 30px 缩进轴，去掉所有零散缩进。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>把左对齐轴收敛到两条：主轴和一条 30px 缩进轴，去掉所有零散缩进。</q></p>
   </div>
 </article>
 
@@ -1746,7 +1770,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 这三张卡"内容一样、参数全不同"。看着别扭却说不出所以然 —— 这就是一致性缺失的典型症状。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>抽出一个统一的卡片组件，所有卡片共用同一套圆角/内边距/边框，不允许逐个微调。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>抽出一个统一的卡片组件，所有卡片共用同一套圆角/内边距/边框，不允许逐个微调。</q></p>
   </div>
 </article>
 
@@ -1765,7 +1789,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 面积差 5 倍，视觉重量却接近。推论：<b>整页只能有一个高饱和实色块</b>，那就是你要用户点的地方。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>整屏只允许一个高饱和实心按钮，其余动作用描边或纯文字按钮。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>整屏只允许一个高饱和实心按钮，其余动作用描边或纯文字按钮。</q></p>
   </div>
 </article>
 
@@ -1788,7 +1812,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 原理：三角形的<b>视觉重心</b>在几何中心偏左，因为右侧是个尖，面积在左边。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>播放三角、图标做光学居中补偿，不要只用 flex center。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>播放三角、图标做光学居中补偿，不要只用 flex center。</q></p>
   </div>
 </article>
 
@@ -1815,7 +1839,7 @@ body, .atlas{
         <div class="mono" style="font-size:11.5px;line-height:1.9;color:var(--muted)">.list {<br>&nbsp;&nbsp;display: flex;<br>&nbsp;&nbsp;flex-direction: column;<br>&nbsp;&nbsp;gap: 16px;<br>}<br><span style="color:var(--ok)">← 没有补丁，方向随便改</span></div>
       </div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>用 flex/grid + gap 布局，禁止子元素自带 margin，也不要写 :last-child 清间距的补丁。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>用 flex/grid + gap 布局，禁止子元素自带 margin，也不要写 :last-child 清间距的补丁。</q></p>
   </div>
 </article>
 
@@ -1839,7 +1863,7 @@ body, .atlas{
         </div>
       </div>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>页面骨架用 Grid，组件内部一行元素用 Flex，不要用 Flex 硬凑二维布局。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>页面骨架用 Grid，组件内部一行元素用 Flex，不要用 Flex 硬凑二维布局。</q></p>
   </div>
 </article>
 
@@ -1864,7 +1888,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 红色是栅格轨道。8+4、4+4+4、6+6 —— 常用组合就这几种，够用了。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>用 12 栏栅格，gutter 24，容器最大宽 1200；主内容 span 8、侧栏 span 4。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>用 12 栏栅格，gutter 24，容器最大宽 1200；主内容 span 8、侧栏 span 4。</q></p>
   </div>
 </article>
 
@@ -1888,7 +1912,7 @@ body, .atlas{
       </div>
       <p class="note">断点还是要的（页面骨架级），但组件级一律用 container query，复用性完全不同。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>页面骨架用媒体查询断点，组件内部改用 container query，让组件自适应容器而不是屏幕。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>页面骨架用媒体查询断点，组件内部改用 container query，让组件自适应容器而不是屏幕。</q></p>
   </div>
 </article>
 
@@ -1920,7 +1944,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 内容一个字没变，只改了行内边距（5 / 10 / 17）。密度是一个 token，不是逐处硬编码。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>把密度抽成 token（compact/cozy/roomy），全站统一用一档，不要逐个组件调 padding。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>把密度抽成 token（compact/cozy/roomy），全站统一用一档，不要逐个组件调 padding。</q></p>
   </div>
 </article>
 
@@ -1954,7 +1978,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 按钮、列表项、输入框、菜单项、卡片头 —— 全是这个结构。<b>container / leading / label / trailing</b>。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>在 trailing 区加一个计数 badge，leading 保持头像，label 两行不变。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>在 trailing 区加一个计数 badge，leading 保持头像，label 两行不变。</q></p>
   </div>
 </article>
 
@@ -1978,7 +2002,7 @@ body, .atlas{
       </div>
       <p class="note">↑ 上面第一个按钮是真的，可以 hover、点击、按 Tab 聚焦试试。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>给每个可交互元素补齐九态：default/hover/active/focus-visible/disabled/loading/selected/error/empty。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>给每个可交互元素补齐九态：default/hover/active/focus-visible/disabled/loading/selected/error/empty。</q></p>
   </div>
 </article>
 
@@ -2008,7 +2032,7 @@ body, .atlas{
       </table>
       <p class="note">↑ 再叠上 <a href="#a27">27 号</a>的九种状态，就是 3×3×9 = 81 个格子。<b>系统就是这么长出来的。</b></p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>按 variant×size 矩阵实现按钮：primary/secondary/ghost/danger × sm/md/lg，每格都要有完整九态。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>按 variant×size 矩阵实现按钮：primary/secondary/ghost/danger × sm/md/lg，每格都要有完整九态。</q></p>
   </div>
 </article>
 
@@ -2029,7 +2053,7 @@ body, .atlas{
       <div class="d29-stage" id="stage29"></div>
     </div>
     <p class="note" style="padding:0 2px">↑ 点标签切换。注意<b>空态不是一片空白</b> —— 它是引导用户迈出第一步的地方，是新手最重要的一屏。</p>
-    <p class="say"><span class="say-k">怎么说出口</span><q>这个模块把五态都做出来：空、加载、部分、错误、理想。空态要有引导文案和主行动按钮。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>这个模块把五态都做出来：空、加载、部分、错误、理想。空态要有引导文案和主行动按钮。</q></p>
   </div>
 </article>
 
@@ -2048,7 +2072,7 @@ body, .atlas{
       </div>
       <p class="note">↑ <b>点任意轨道重播</b>。第三条是 linear —— 匀速启动、匀速刹停，现实世界没有东西这么动。</p>
     </div>
-    <p class="say"><span class="say-k">怎么说出口</span><q>过渡统一 150ms ease-out，进场 ease-out、出场 ease-in，禁止 linear，并加 prefers-reduced-motion 兜底。</q></p>
+    <p class="say"><span class="say-k">照抄这句</span><q>过渡统一 150ms ease-out，进场 ease-out、出场 ease-in，禁止 linear，并加 prefers-reduced-motion 兜底。</q></p>
   </div>
 </article>
 
@@ -2064,7 +2088,7 @@ body, .atlas{
 
 <div class="group">
   <div class="group-key">组 F</div>
-  <h3>组件组合 <span>COMPONENTS · 21 种，覆盖 90% 的界面元素</span></h3>
+  <h3 id="g-components">组件组合 <span>COMPONENTS · 21 种，覆盖 90% 的界面元素</span></h3>
 </div>
 
 <div class="grid-combo">
@@ -2210,7 +2234,7 @@ body, .atlas{
         </div>
         <div class="stat">
           <div class="k">部署耗时</div>
-          <div class="v">38<span style="font-size:15px;font-weight:400;color:var(--muted)">s</span></div>
+          <div class="v">38<span style="font-size:16px;font-weight:400;color:var(--muted)">s</span></div>
           <div class="d" style="color:var(--flag)">↑ 6s</div>
         </div>
       </div>
@@ -2423,7 +2447,7 @@ body, .atlas{
     </div>
     <div class="combo-body">
       <div>
-        <label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">评测模型</label>
+        <label style="display:block;font-size:12.5px;font-weight: 500;margin-bottom:6px">评测模型</label>
         <div style="display:flex;align-items:center;gap:9px;border:1px solid var(--rule-2);border-radius:var(--r-2);padding:8px 11px;background:var(--panel)">
           <span style="flex:1;font-size:13.5px;color:var(--ink)">gpt-4o-mini</span>
           <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="var(--muted)" stroke-width="1.6" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5"/></svg>
@@ -2486,7 +2510,7 @@ body, .atlas{
         <span style="color:var(--muted)">/</span>
         <span style="color:var(--muted)">测试集</span>
         <span style="color:var(--muted)">/</span>
-        <span style="color:var(--ink);font-weight:600">回归集 v3</span>
+        <span style="color:var(--ink);font-weight: 500">回归集 v3</span>
       </div>
     </div>
     <div class="combo-ft"><span class="k">原子</span>
@@ -2504,7 +2528,7 @@ body, .atlas{
       <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
         <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">‹</span>
         <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">1</span>
-        <span class="mono" style="font-size:12px;color:var(--accent-on);background:var(--accent);padding:5px 9px;border:1px solid var(--accent);border-radius:var(--r-2);font-weight:600">2</span>
+        <span class="mono" style="font-size:12px;color:var(--accent-on);background:var(--accent);padding:5px 9px;border:1px solid var(--accent);border-radius:var(--r-2);font-weight: 500">2</span>
         <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">3</span>
         <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 4px">…</span>
         <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">12</span>
@@ -2543,10 +2567,10 @@ body, .atlas{
 <!-- ---------- LAYOUTS ---------- -->
 <div class="group">
   <div class="group-key">组 G</div>
-  <h3>页面布局 <span>LAYOUTS · 你需要的几乎都在这 12 种里</span></h3>
+  <h3 id="g-layouts">页面布局 <span>LAYOUTS · 你需要的几乎都在这 12 种里</span></h3>
 </div>
 
-<p style="max-width:66ch;color:var(--ink-2);margin:0 0 4px;font-size:14.5px">
+<p style="max-width:66ch;color:var(--ink-2);margin:0 0 4px;font-size:14px">
 下面是骨架平面图，青色块是<b>视觉焦点</b>所在。选布局的方法只有一条：<b>看用户来这一屏是要干什么</b>，不是看它好不好看。
 </p>
 
@@ -2632,11 +2656,11 @@ body, .atlas{
      ============================================================ -->
 <section class="part" id="part3">
   <div class="part-no">第三部 / PART THREE</div>
-  <h2>现成工具 —— 别造轮子</h2>
+  <h2 id="tools-libs">现成工具 —— 别造轮子</h2>
   <p>上面每一层都有成熟得不能再成熟的实现。你要做的不是造，是<b>选一套然后指名让模型用它</b>。下面按层给，每层选一个就够。</p>
 </section>
 
-<div class="scroll-x" style="margin-top:26px">
+<div class="scroll-x" style="margin-top:24px">
 <table class="tools">
   <thead><tr><th>负责哪层</th><th>工具</th><th>为什么是它</th></tr></thead>
   <tbody>
@@ -2710,8 +2734,8 @@ body, .atlas{
 </div>
 
 <!-- ---------- 资源地图 ---------- -->
-<div style="margin-top:44px">
-  <h4 style="font-family:var(--f-display);font-size:15px;font-weight:700;margin:0 0 8px;letter-spacing:-.01em;border-top:2px solid var(--ink);padding-top:14px">规范与文档 —— 什么时候该去读哪个</h4>
+<div style="margin-top:48px">
+  <h4 id="tools-docs" style="font-family:var(--f-display);font-size:16px;font-weight:700;margin:0 0 8px;letter-spacing:-.01em;border-top:2px solid var(--ink);padding-top:16px">规范与文档 —— 什么时候该去读哪个</h4>
   <p style="max-width:66ch;color:var(--ink-2);margin:0 0 16px;font-size:14px">上面那张表是<b>库和工具</b>（装进项目里跑的）。这张是<b>规范和文档</b>（拿来读、拿来抄的）—— 全部免费公开。你不需要通读任何一份，需要的是知道遇到什么问题该翻哪一本。</p>
   <div class="scroll-x">
     <table class="tools">
@@ -2763,7 +2787,7 @@ body, .atlas{
 </section>
 
 <div class="prompt-card">
-  <div class="hd">项目开场 · 一次性设定，之后不用重复</div>
+  <div class="hd" id="p4-open">项目开场 · 一次性设定，之后不用重复</div>
   <pre><b>技术栈</b>：Tailwind + shadcn/ui + Radix Colors + Lucide。不引入其他 UI 库。
 
 <b>标度约束</b>
@@ -2822,7 +2846,7 @@ body, .atlas{
 </div>
 
 <div class="prompt-card">
-  <div class="hd">写成 DESIGN.md · 开源格式，放进仓库就行</div>
+  <div class="hd" id="p4-designmd">写成 DESIGN.md · 开源格式，放进仓库就行</div>
   <pre>上一张卡说的「<b>② 文件约定</b>」，现在有标准答案了：<b>DESIGN.md</b> —— Google Labs
 维护的开源格式规范（Apache-2.0）。YAML 前言放<b>机器读的 token</b>，markdown 正文
 放<b>人读的理由</b>，文件丢在仓库根目录。
@@ -2934,12 +2958,12 @@ Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji �
    外圆角改成 20，让它等于内圆角加内边距。</b></pre>
 </div>
 
-<h3 style="font-family:var(--f-display);font-size:17px;font-weight:700;letter-spacing:-.01em;margin:44px 0 6px">诊断表 —— 从"感觉"查到"该说什么"</h3>
-<p style="font-size:14px;color:var(--muted);margin:0 0 18px">界面不对劲时从左边找，右边整句可以直接发给模型（中间那列的编号是给你查表用的）。</p>
+<h3 id="p4-dx" style="font-family:var(--f-display);font-size:20px;font-weight:700;letter-spacing:-.01em;margin:48px 0 8px">诊断表 —— 从"感觉"查到"该说什么"</h3>
+<p style="font-size:14px;color:var(--muted);margin:0 0 16px">界面不对劲时从左边找，右边整句可以直接发给模型（中间那列的编号是给你查表用的）。</p>
 
 <div class="scroll-x">
 <table class="dx">
-  <thead><tr><th>你的感觉</th><th>真实病因</th><th>怎么说出口</th></tr></thead>
+  <thead><tr><th>你的感觉</th><th>真实病因</th><th>照抄这句</th></tr></thead>
   <tbody>
     <tr><td>乱、挤成一坨</td><td>亲密性错误 <span class="n">02</span></td><td>按关系分组重排间距：组内 8，组间 24，保证组间是组内的两倍</td></tr>
     <tr><td>平、没有重点</td><td>层级只靠字号 <span class="n">15</span></td><td>改用留白和明度对比拉层级，字号收到 3 档，每屏只留一个焦点</td></tr>
@@ -2959,7 +2983,7 @@ Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji �
 
 <div class="two-col">
   <div class="mini">
-    <h4>四条能减少来回的习惯</h4>
+    <h4 id="p4-habits">四条能减少来回的习惯</h4>
     <ul>
       <li><b>给参照物，不给形容词。</b>"按 Linear 的密度和层级来"比"做得高级点"指向明确得多 —— 主流产品的视觉语言在训练数据里出现得足够多。</li>
       <li><b>先要决策清单，再要代码。</b>让它把"用了哪档间距、几级层级、对比度多少"讲出来，你在写代码前就能拦下分歧。</li>
@@ -2970,11 +2994,11 @@ Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji �
   <div class="mini">
     <h4>你其实只需要记住五条</h4>
     <ul>
-      <li><b>间距编码关系</b> —— 组间必须是组内的两倍 <span class="mono" style="color:var(--accent);font-size:11px">02</span></li>
-      <li><b>一切都要成档</b> —— 间距、字号、圆角、阴影 <span class="mono" style="color:var(--accent);font-size:11px">01 03 08 13</span></li>
-      <li><b>层级靠留白，不靠加粗</b> <span class="mono" style="color:var(--accent);font-size:11px">15</span></li>
-      <li><b>整屏只有一个焦点</b> <span class="mono" style="color:var(--accent);font-size:11px">19</span></li>
-      <li><b>永远问五态和九态</b> <span class="mono" style="color:var(--accent);font-size:11px">27 29</span></li>
+      <li><b>间距编码关系</b> —— 组间必须是组内的两倍 <span class="mono" style="color:var(--accent);font-size:12px">02</span></li>
+      <li><b>一切都要成档</b> —— 间距、字号、圆角、阴影 <span class="mono" style="color:var(--accent);font-size:12px">01 03 08 13</span></li>
+      <li><b>层级靠留白，不靠加粗</b> <span class="mono" style="color:var(--accent);font-size:12px">15</span></li>
+      <li><b>整屏只有一个焦点</b> <span class="mono" style="color:var(--accent);font-size:12px">19</span></li>
+      <li><b>永远问五态和九态</b> <span class="mono" style="color:var(--accent);font-size:12px">27 29</span></li>
     </ul>
   </div>
 </div>
