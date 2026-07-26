@@ -10,27 +10,41 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ui.liangai.org/atlas">
 <link rel="canonical" href="https://ui.liangai.org/atlas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap">
 <script defer src="https://analytics.liangai.org/script.js" data-website-id="f2d36098-547a-4112-8547-0cb9d9d49a77"></script>
 <style>:root{color-scheme:light dark}body{margin:0;padding:0}img{max-width:100%}</style>
 </head>
 <body>
-<div class="sitenav">
-  <a href="/" class="sn-home">← 前端设计原子表</a>
-  <span class="sn-sp"></span>
-  <a href="https://github.com/Liang-HZ/ui-design-atlas" class="sn-gh" target="_blank" rel="noopener">GitHub</a>
-</div>
+<header class="sitenav">
+  <div class="sn-in">
+    <a class="sn-logo" href="https://liangai.org">Liang<span>.</span></a>
+    <nav>
+      <a href="https://liangai.org">首页</a>
+      <a href="/">原子表</a>
+      <a href="https://github.com/Liang-HZ/ui-design-atlas" target="_blank" rel="noopener">GITHUB ↗</a>
+    </nav>
+  </div>
+</header>
 <style>
-.sitenav{position:sticky;top:0;z-index:99;display:flex;align-items:center;gap:12px;
-  padding:10px 28px;background:var(--panel);border-bottom:1px solid var(--rule);
-  font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em}
-.sitenav a{color:var(--muted);border-bottom:0;text-decoration:none}
-.sitenav a:hover{color:var(--accent)}
-.sn-sp{flex:1}
-@media(max-width:640px){.sitenav{padding:9px 16px}}
-/* sticky 导航约 37px 高。不加这条，94 个交叉引用跳过去会被导航栏盖住顶部。
+.sitenav{position:sticky;top:0;z-index:99;
+  background:color-mix(in srgb,var(--paper) 85%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.sn-in{max-width:1180px;margin:0 auto;padding:14px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  border-bottom:1px solid var(--rule)}
+.sn-logo{font-family:var(--f-display);font-size:19px;font-weight:700;letter-spacing:-.02em;
+  color:var(--ink);border-bottom:0;text-decoration:none}
+.sn-logo span{color:var(--accent)}
+.sitenav nav{display:flex;align-items:center;gap:22px;font-size:13.5px}
+.sitenav nav a{color:var(--muted);border-bottom:0;text-decoration:none;transition:color .15s}
+.sitenav nav a:hover{color:var(--ink)}
+@media(max-width:640px){.sn-in{padding:12px 16px}.sitenav nav{gap:14px;font-size:12.5px}}
+/* sticky 顶栏约 54px 高。不加这条，90+ 个交叉引用跳过去会被顶栏盖住。
    用 html[id] 而不是 [id]：后者与下面的 .atom{scroll-margin-top:20px} 特异性相同，
    而 .atom 在源码里更靠后会赢。 */
-html [id]{scroll-margin-top:52px}
+html [id]{scroll-margin-top:74px}
 </style>
 <style>
 /* ============================================================
@@ -39,71 +53,75 @@ html [id]{scroll-margin-top:52px}
 :root{
   color-scheme: light dark;
 
-  --paper:      #F5F5F2;
+  /* 与 liangai.org 同一套：品牌蓝 #0a5cff、中性色 #101013/#68686f/#e8eaef */
+  --paper:      #F7F8FB;
   --panel:      #FFFFFF;
-  --panel-2:    #FAFAF8;
-  --ink:        #14181A;
-  --ink-2:      #3D4649;
-  --muted:      #606A6E;
-  --rule:       #DFE0DB;
-  --rule-2:     #C6C8C2;
+  --panel-2:    #F4F6FA;
+  --ink:        #101013;
+  --ink-2:      #3A3A42;
+  --muted:      #68686F;
+  --rule:       #E8EAEF;
+  --rule-2:     #D5D9E0;
 
-  --accent:     #0C6A72;
+  --accent:     #0A5CFF;
   --accent-on:  #FFFFFF;
-  --accent-soft:#E1EFEF;
-  --accent-line:#9AC6C8;
+  --accent-soft:#E9F0FF;
+  --accent-line:#B9D0FF;
 
-  --ok:         #2C7A52;
-  --ok-soft:    #E4F0E8;
-  --flag:       #B4433B;
-  --flag-soft:  #F7E5E3;
+  --ok:         #0F7A52;
+  --ok-soft:    #E3F3EC;
+  --flag:       #C41C29;
+  --flag-on:    #FFFFFF;
+  --flag-soft:  #FDE9EA;
 
-  --f-display: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
-  --f-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI",
-            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --f-display: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+               "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --f-body: ui-sans-serif, system-ui, -apple-system,
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --f-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-  --r-1: 2px;
-  --r-2: 4px;
-  --r-3: 8px;
+  --r-1: 3px;
+  --r-2: 6px;
+  --r-3: 14px;
 }
 
 @media (prefers-color-scheme: dark){
   :root{
-    --paper:      #0C0F10;
-    --panel:      #14181A;
-    --panel-2:    #191E20;
-    --ink:        #E4E8E8;
-    --ink-2:      #B4BCBE;
-    --muted:      #8B9599;
-    --rule:       #232A2C;
-    --rule-2:     #363E41;
+    --paper:      #0B0D12;
+    --panel:      #14161C;
+    --panel-2:    #191C23;
+    --ink:        #E9EAEE;
+    --ink-2:      #B9BCC5;
+    --muted:      #8B8F9A;
+    --rule:       #262A33;
+    --rule-2:     #383D48;
 
-    --accent:     #52CBD5;
-    --accent-on:  #062629;
-    --accent-soft:#0F2F32;
-    --accent-line:#2C6E73;
+    --accent:     #6D9CFF;
+    --accent-on:  #08142E;
+    --accent-soft:#141E33;
+    --accent-line:#2E4573;
 
-    --ok:         #5FBE88;
-    --ok-soft:    #12261B;
-    --flag:       #E5776E;
-    --flag-soft:  #2B1614;
+    --ok:         #5CBE8C;
+    --ok-soft:    #10241B;
+    --flag:       #F0827F;
+    --flag-on:    #3A0A0C;
+    --flag-soft:  #2C1618;
   }
 }
 
 :root[data-theme="dark"]{
-  --paper:#0C0F10; --panel:#14181A; --panel-2:#191E20;
-  --ink:#E4E8E8; --ink-2:#B4BCBE; --muted:#8B9599;
-  --rule:#232A2C; --rule-2:#363E41;
-  --accent:#52CBD5; --accent-on:#062629; --accent-soft:#0F2F32; --accent-line:#2C6E73;
-  --ok:#5FBE88; --ok-soft:#12261B; --flag:#E5776E; --flag-soft:#2B1614;
+  --paper:#0B0D12; --panel:#14161C; --panel-2:#191C23;
+  --ink:#E9EAEE; --ink-2:#B9BCC5; --muted:#8B8F9A;
+  --rule:#262A33; --rule-2:#383D48;
+  --accent:#6D9CFF; --accent-on:#08142E; --accent-soft:#141E33; --accent-line:#2E4573;
+  --ok:#5CBE8C; --ok-soft:#10241B; --flag:#F0827F; --flag-on:#3A0A0C; --flag-soft:#2C1618;
 }
 :root[data-theme="light"]{
-  --paper:#F5F5F2; --panel:#FFFFFF; --panel-2:#FAFAF8;
-  --ink:#14181A; --ink-2:#3D4649; --muted:#606A6E;
-  --rule:#DFE0DB; --rule-2:#C6C8C2;
-  --accent:#0C6A72; --accent-on:#FFFFFF; --accent-soft:#E1EFEF; --accent-line:#9AC6C8;
-  --ok:#2C7A52; --ok-soft:#E4F0E8; --flag:#B4433B; --flag-soft:#F7E5E3;
+  --paper:#F7F8FB; --panel:#FFFFFF; --panel-2:#F4F6FA;
+  --ink:#101013; --ink-2:#3A3A42; --muted:#68686F;
+  --rule:#E8EAEF; --rule-2:#D5D9E0;
+  --accent:#0A5CFF; --accent-on:#FFFFFF; --accent-soft:#E9F0FF; --accent-line:#B9D0FF;
+  --ok:#0F7A52; --ok-soft:#E3F3EC; --flag:#C41C29; --flag-on:#FFFFFF; --flag-soft:#FDE9EA;
 }
 
 /* ============================================================
@@ -277,7 +295,7 @@ body, .atlas{
   font-size: 22px;
   font-weight: 500;
   letter-spacing: -.02em;
-  color: var(--rule-2);
+  color: var(--muted);
   line-height: 1;
   padding-top: 3px;
   font-variant-numeric: tabular-nums;
@@ -349,6 +367,16 @@ body, .atlas{
   overflow: hidden;
 }
 .demo-2 > div{ background: var(--panel); padding: 18px; }
+
+/* 内联写死白底的演示面板 = 一块局部浅色区域，令其内部 token 回到浅色，
+   否则暗色主题下浅色文字会落在白底上（实测 2.14–3.04:1）。 */
+.force-light{
+  --paper:#F7F8FB; --panel:#FFFFFF; --panel-2:#F4F6FA;
+  --ink:#101013; --ink-2:#3A3A42; --muted:#68686F;
+  --rule:#E8EAEF; --rule-2:#D5D9E0;
+  --accent:#0A5CFF; --accent-on:#FFFFFF; --accent-soft:#E9F0FF; --accent-line:#B9D0FF;
+  --ok:#0F7A52; --ok-soft:#E3F3EC; --flag:#C41C29; --flag-on:#FFFFFF; --flag-soft:#FDE9EA;
+}
 .tag{
   font-family: var(--f-mono);
   font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
@@ -621,7 +649,7 @@ body, .atlas{
 .btn-disabled{ opacity: .38; cursor: not-allowed; }
 .btn-load{ opacity: .8; }
 .btn-ghost{ background: transparent; color: var(--accent); border-color: var(--rule-2); }
-.btn-danger{ background: var(--flag); color: #fff; }
+.btn-danger{ background: var(--flag); color: var(--flag-on); }
 .btn:hover{ filter: brightness(1.12); }
 .btn:active{ transform: translateY(1px); }
 .spin{
@@ -935,7 +963,7 @@ body, .atlas{
   letter-spacing: .01em;
 }
 .idx a:hover{ color: var(--accent); }
-.idx a i{ color: var(--rule-2); font-style: normal; font-variant-numeric: tabular-nums; }
+.idx a i{ color: var(--muted); font-style: normal; font-variant-numeric: tabular-nums; }
 .idx a:hover i{ color: var(--accent); }
 
 .foot{
@@ -963,6 +991,120 @@ body, .atlas{
 }
 </style>
 
+
+<!-- ============================================================
+     左侧目录
+     ============================================================ -->
+<nav class="toc" id="toc" aria-label="目录">
+  <a class="toc-top" href="#stack">前端设计原子表</a>
+
+  <div class="toc-s">
+    <a class="toc-sh" href="#stack">骨架 · 6 层</a>
+  </div>
+
+  <div class="toc-s">
+    <a class="toc-sh" href="#part1">第一部 · 30 个概念</a>
+    <div class="toc-g">
+      <div class="toc-gh">A · 度量与排版</div>
+      <a href="#a01"><i>01</i>间距标度</a>
+      <a href="#a02"><i>02</i>亲密性</a>
+      <a href="#a03"><i>03</i>字号标度</a>
+      <a href="#a04"><i>04</i>字重</a>
+      <a href="#a05"><i>05</i>行高</a>
+      <a href="#a06"><i>06</i>行长</a>
+      <a href="#a07"><i>07</i>字距</a>
+      <a href="#a08"><i>08</i>圆角标度</a>
+    </div>
+    <div class="toc-g">
+      <div class="toc-gh">B · 色彩与深度</div>
+      <a href="#a09"><i>09</i>色阶</a>
+      <a href="#a10"><i>10</i>语义色 / Token 三层</a>
+      <a href="#a11"><i>11</i>中性色</a>
+      <a href="#a12"><i>12</i>对比度</a>
+      <a href="#a13"><i>13</i>海拔 / 阴影阶梯</a>
+      <a href="#a14"><i>14</i>暗色模式</a>
+    </div>
+    <div class="toc-g">
+      <div class="toc-gh">C · 视觉原则</div>
+      <a href="#a15"><i>15</i>视觉层级</a>
+      <a href="#a16"><i>16</i>留白</a>
+      <a href="#a17"><i>17</i>对齐</a>
+      <a href="#a18"><i>18</i>一致性 / 重复</a>
+      <a href="#a19"><i>19</i>视觉重量与平衡</a>
+      <a href="#a20"><i>20</i>光学修正</a>
+    </div>
+    <div class="toc-g">
+      <div class="toc-gh">D · 布局</div>
+      <a href="#a21"><i>21</i>gap 而非 margin</a>
+      <a href="#a22"><i>22</i>Flex 还是 Grid</a>
+      <a href="#a23"><i>23</i>栅格</a>
+      <a href="#a24"><i>24</i>响应式</a>
+      <a href="#a25"><i>25</i>密度</a>
+    </div>
+    <div class="toc-g">
+      <div class="toc-gh">E · 组件与交互</div>
+      <a href="#a26"><i>26</i>组件解剖</a>
+      <a href="#a27"><i>27</i>状态</a>
+      <a href="#a28"><i>28</i>变体矩阵</a>
+      <a href="#a29"><i>29</i>界面的五种状态</a>
+      <a href="#a30"><i>30</i>动效</a>
+    </div>
+  </div>
+
+  <div class="toc-s">
+    <a class="toc-sh" href="#part2">第二部 · 33 种组合</a>
+  </div>
+
+  <div class="toc-s">
+    <a class="toc-sh" href="#part3">第三部 · 工具与规范</a>
+  </div>
+
+  <div class="toc-s">
+    <a class="toc-sh" href="#part4">第四部 · 怎么说出口</a>
+  </div>
+</nav>
+
+<style>
+.toc{
+  position:fixed; top:0; left:0; bottom:0; width:248px; z-index:100;
+  overflow-y:auto; overscroll-behavior:contain;
+  background:var(--panel); border-right:1px solid var(--rule);
+  padding:18px 0 48px; display:none;
+}
+.toc-top{
+  display:block; padding:0 20px 14px; margin-bottom:6px;
+  border-bottom:1px solid var(--rule);
+  font-family:var(--f-display); font-size:15px; font-weight:700;
+  letter-spacing:-.01em; color:var(--ink); border-left:0; text-decoration:none;
+}
+.atlas .toc a, .toc a{border-bottom:0; text-decoration:none}
+.toc-s{padding:10px 0 2px}
+.toc-sh{
+  display:block; padding:6px 20px; font-size:13px; font-weight:600; color:var(--ink);
+}
+.toc-sh:hover{color:var(--accent)}
+.toc-g{padding:4px 0 8px}
+.toc-gh{
+  padding:8px 20px 4px; font-family:var(--f-mono); font-size:10.5px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+}
+.toc-g a{
+  display:flex; gap:9px; padding:4px 20px 4px 20px; font-size:12.5px; color:var(--ink-2);
+  border-left:2px solid transparent; transition:color .12s, border-color .12s, background .12s;
+}
+.toc-g a i{font-family:var(--f-mono); font-style:normal; color:var(--muted); font-variant-numeric:tabular-nums}
+.toc-g a:hover{color:var(--accent); background:var(--accent-soft)}
+.toc-g a:hover i{color:var(--accent)}
+.toc a.on{color:var(--accent); border-left-color:var(--accent); background:var(--accent-soft); font-weight:500}
+.toc a.on i{color:var(--accent)}
+.toc-sh.on{color:var(--accent); background:var(--accent-soft)}
+
+@media (min-width:1280px){
+  .toc{display:block}
+  body{padding-left:248px}
+}
+</style>
+
 <div class="atlas">
 
 <!-- ============================================================
@@ -972,24 +1114,23 @@ body, .atlas{
   <div class="mast-tag">前端设计原子表 / UI DESIGN ATLAS · 2026</div>
   <h1>30 个原子，<br>和它们<em>拼出来的东西</em></h1>
   <p class="mast-sub">
-    你不需要成为设计师。你需要的是一套能指认的名字 —— 当界面不对劲时，能说出<b>哪一号</b>不对，而不是说"感觉不够精致"。
-    这份表把每个概念画出来给你看，然后展示它们最常见的几十种组合。
+    界面不对劲的时候，你需要说得出<b>具体是哪里</b>不对，而不是"感觉不够精致"。
+    这份表把每个概念画出来给你看，再展示它们最常见的几十种组合。
   </p>
   <div class="mast-meta">
     <div><b>30</b> 个原子概念</div>
     <div><b>21</b> 种组件组合</div>
     <div><b>12</b> 种页面布局</div>
     <div><b>24</b> 份工具与规范</div>
-    <div><b>0</b> 个需要你自己造的轮子</div>
   </div>
 </header>
 <div class="mast-rule"></div>
 
 <div class="howto">
   <h3>怎么用这份表</h3>
-  <p>这份表只做一件事：<b>给你一套能指认的名字</b>。它不教你成为设计师，也不保证你照着说模型就会照做 —— 那取决于模型和上下文。它保证的是：你能说出"哪一号"，而不是"感觉不对"。</p>
-  <p>每个原子有一个两位编号。<b>编号就是你的把手</b>。每张卡片底部有一行 <code>怎么说出口</code>，那是这个概念的专业表述长什么样，可以直接抄。第二部分的每个组合都标注了它用到哪几号，点编号可以跳回定义。</p>
-  <p>不用从头读。<b>先看下面那张分层图</b>搞清楚各层的关系，再扫第二部分（组合）看实物，最后回来查具体原子。</p>
+  <p>每张卡片底部那行 <code>怎么说出口</code>，是这个概念的专业表述，可以直接抄进 prompt。</p>
+  <p><b>编号只是查阅用的</b>，相当于这份表的页码。模型不知道"02"指什么 —— 别把编号发给它，发那句具体的话。</p>
+  <p>不用从头读。先看下面的分层图，再扫第二部分看实物，最后回来查具体概念。</p>
 </div>
 
 <div class="idx" id="index">
@@ -1091,7 +1232,7 @@ body, .atlas{
 }
 </style>
 
-<div class="stack">
+<div class="stack" id="stack">
   <div class="stack-hd">
     <h3>先看这张：30 个原子分在哪几层</h3>
     <span>THE STACK · 从上到下 = 先决定到后决定</span>
@@ -1148,8 +1289,7 @@ body, .atlas{
   </div>
 
   <p class="stk-foot">
-    <b>这张图本身就是最有用的那部分。</b>30 个名字记不住没关系，记住"<b>先定给谁看，再定谁主谁次，再定怎么排，最后才轮到几像素</b>"这条顺序，
-    你已经比"感觉不够精致"精确得多了。下面每一部都是这张图的展开。
+    30 个名字记不住没关系。记住<b>先定给谁看，再定谁主谁次，再定怎么排，最后才轮到几像素</b>这条顺序就够了。
   </p>
 </div>
 
@@ -1426,7 +1566,7 @@ body, .atlas{
     <h4 class="atom-name">中性色 <span class="en">Neutrals</span></h4>
     <p class="atom-def">界面 90% 的面积是中性色。两条规则：<b>不要用纯黑纯白</b>（#000 在屏幕上过刺，像挖了个洞）；<b>中性色要带一点点色相偏向</b>，偏向主色的方向 —— 纯灰读起来像"没选过"。</p>
     <div class="demo demo-2" style="border:0">
-      <div style="background:#FFFFFF">
+      <div class="force-light" style="background:#FFFFFF">
         <div class="tag tag-bad">纯黑纯白 · 纯灰</div>
         <p style="color:#000000;font-size:15px;margin:0 0 8px;font-weight:600">标题文字 #000</p>
         <p style="color:#808080;font-size:13.5px;margin:0">辅助文字 #808080，在 #FFFFFF 上。对比生硬，灰色发脏。</p>
@@ -1490,7 +1630,7 @@ body, .atlas{
       <div class="demo-2">
         <div style="background:#F7F8F7">
           <div class="tag tag-n">明色 · 层级靠阴影</div>
-          <div style="background:#fff;border:1px solid #E3E4E0;border-radius:6px;padding:13px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+          <div class="force-light" style="background:#fff;border:1px solid #E3E4E0;border-radius:6px;padding:13px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
             <div style="color:#14181A;font-weight:600;font-size:14px;margin-bottom:5px">浮起的卡片</div>
             <div style="color:#606A6E;font-size:12.5px">白底 + 投影 = 离页面更近</div>
           </div>
@@ -1524,7 +1664,7 @@ body, .atlas{
     <p class="atom-def">让人一眼知道先看哪儿。你手上有六种手段，<b>按有效强度排序如下</b>。新手只会用「尺寸」和「字重」，于是所有元素同时在喊；老手先用「留白」和「明度」，安静得多也有效得多。</p>
     <div class="demo d15">
       <div><div class="lv">① 留白</div><p class="t" style="margin-bottom:14px">项目名称</p><p class="b">附加说明文字</p><div class="strength">最强 · 最被低估</div></div>
-      <div><div class="lv">② 明度对比</div><p class="t" style="color:var(--ink)">项目名称</p><p class="b" style="color:var(--rule-2)">附加说明文字</p><div class="strength">很强 · 安静</div></div>
+      <div><div class="lv">② 明度对比</div><p class="t" style="color:var(--ink)">项目名称</p><p class="b" style="color:var(--muted)">附加说明文字</p><div class="strength">很强 · 安静</div></div>
       <div><div class="lv">③ 尺寸</div><p class="t" style="font-size:20px">项目名称</p><p class="b" style="font-size:12px">附加说明文字</p><div class="strength">强 · 占空间</div></div>
       <div><div class="lv">④ 字重</div><p class="t" style="font-weight:700">项目名称</p><p class="b">附加说明文字</p><div class="strength">中 · 容易滥用</div></div>
       <div><div class="lv">⑤ 色彩</div><p class="t" style="color:var(--accent);font-weight:500">项目名称</p><p class="b">附加说明文字</p><div class="strength">中 · 有语义副作用</div></div>
@@ -2341,11 +2481,11 @@ body, .atlas{
     <div class="combo-body">
       <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px">
         <span style="color:var(--muted)">空间</span>
-        <span style="color:var(--rule-2)">/</span>
+        <span style="color:var(--muted)">/</span>
         <span style="color:var(--muted)">skills-hub</span>
-        <span style="color:var(--rule-2)">/</span>
+        <span style="color:var(--muted)">/</span>
         <span style="color:var(--muted)">测试集</span>
-        <span style="color:var(--rule-2)">/</span>
+        <span style="color:var(--muted)">/</span>
         <span style="color:var(--ink);font-weight:600">回归集 v3</span>
       </div>
     </div>
@@ -2362,7 +2502,7 @@ body, .atlas{
     </div>
     <div class="combo-body">
       <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
-        <span class="mono" style="font-size:12px;color:var(--rule-2);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">‹</span>
+        <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">‹</span>
         <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">1</span>
         <span class="mono" style="font-size:12px;color:var(--accent-on);background:var(--accent);padding:5px 9px;border:1px solid var(--accent);border-radius:var(--r-2);font-weight:600">2</span>
         <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">3</span>
@@ -2789,14 +2929,13 @@ Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji �
   <div class="hd">日常返工 · 把感觉翻译成指令</div>
   <pre><span style="color:var(--flag)">✗ 这个卡片看起来不够精致，你再改改</span>
 
-<b>✓ 按 02 亲密性重排：标题和描述之间 8，卡片之间 24。
-   内边距提到 20（16 号留白）。标题字重 700 降到 500，
-   靠 15 号的留白和明度对比拉层级，不要靠加粗。
-   外圆角改 20 满足 08 号嵌套公式。</b></pre>
+<b>✓ 按关系重排间距：标题和描述之间 8，卡片之间 24，内边距 20。
+   标题字重从 700 降到 500，改用留白和明度对比拉层级，不要靠加粗。
+   外圆角改成 20，让它等于内圆角加内边距。</b></pre>
 </div>
 
-<h3 style="font-family:var(--f-display);font-size:17px;font-weight:700;letter-spacing:-.01em;margin:44px 0 6px">诊断表 —— 从"感觉"查到"编号"</h3>
-<p style="font-size:14px;color:var(--muted);margin:0 0 18px">界面不对劲时从左边找，右边就是可以直接发给模型的话。</p>
+<h3 style="font-family:var(--f-display);font-size:17px;font-weight:700;letter-spacing:-.01em;margin:44px 0 6px">诊断表 —— 从"感觉"查到"该说什么"</h3>
+<p style="font-size:14px;color:var(--muted);margin:0 0 18px">界面不对劲时从左边找，右边整句可以直接发给模型（中间那列的编号是给你查表用的）。</p>
 
 <div class="scroll-x">
 <table class="dx">
@@ -2824,7 +2963,7 @@ Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji �
     <ul>
       <li><b>给参照物，不给形容词。</b>"按 Linear 的密度和层级来"比"做得高级点"指向明确得多 —— 主流产品的视觉语言在训练数据里出现得足够多。</li>
       <li><b>先要决策清单，再要代码。</b>让它把"用了哪档间距、几级层级、对比度多少"讲出来，你在写代码前就能拦下分歧。</li>
-      <li><b>用编号复盘。</b>"12 号没过、29 号只做了理想态" —— 具体到可执行。</li>
+      <li><b>复盘时说具体项，不说编号。</b>"正文对比度没到 4.5:1、空态没做" —— 编号是你查表用的，模型不认。</li>
       <li><b>一次只改一层。</b>让它单独改间距，别同时改颜色和布局，否则你分不清是哪一处让它变好或变坏。</li>
     </ul>
   </div>
@@ -2842,7 +2981,7 @@ Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji �
 
 <footer class="foot">
   <span>前端设计原子表 · 6 层 / 30 原子 / 21 组件 / 12 布局 / 24 工具与规范 / 1 份可抄的 DESIGN.md</span>
-  <span>本页自身即是一份样本：它遵守它讲的每一条</span>
+  <span>MIT · github.com/Liang-HZ/ui-design-atlas</span>
 </footer>
 
 </div>
@@ -3012,5 +3151,74 @@ Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji �
 })();
 </script>
 
+
+<script>
+(function(){
+  "use strict";
+  var toc=document.getElementById('toc');
+  if(!toc) return;
+
+  var entries=[];              // {id, el, link}
+  var as=toc.querySelectorAll('a[href^="#"]');
+  for(var i=0;i<as.length;i++){
+    var id=as[i].getAttribute('href').slice(1);
+    if(!id) continue;
+    var el=document.getElementById(id);
+    if(!el) continue;
+    entries.push({id:id, el:el, link:as[i]});
+  }
+  if(!entries.length) return;
+
+  var current=null;
+
+  // 当前区块 = 顶部已越过判定线、且最靠下的那个；都没越过则取第一个
+  function activeId(){
+    var line=90, best=null;
+    for(var i=0;i<entries.length;i++){
+      if(entries[i].el.getBoundingClientRect().top<=line) best=entries[i].id;
+    }
+    // 滚到底时强制点亮最后一个，否则末尾区块永远高亮不了
+    if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)
+      best=entries[entries.length-1].id;
+    return best||entries[0].id;
+  }
+
+  function apply(id){
+    if(id===current) return;
+    for(var i=0;i<entries.length;i++){
+      if(entries[i].id===current) entries[i].link.classList.remove('on');
+    }
+    current=id;
+    for(var j=0;j<entries.length;j++){
+      if(entries[j].id!==id) continue;
+      var a=entries[j].link;
+      a.classList.add('on');
+      var r=a.getBoundingClientRect(), t=toc.getBoundingClientRect();
+      if(r.top<t.top+40||r.bottom>t.bottom-40){
+        toc.scrollTop += (r.top-t.top) - toc.clientHeight/2 + r.height/2;
+      }
+      break;
+    }
+  }
+
+  function update(){ apply(activeId()); }
+
+  var ticking=false;
+  function onScroll(){
+    if(ticking) return;
+    ticking=true;
+    requestAnimationFrame(function(){ ticking=false; update(); });
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  window.addEventListener('hashchange', function(){ setTimeout(update,0); });
+  update();
+
+  // 供自动化验证调用；不影响正常使用
+  window.__tocUpdate = update;
+  window.__tocActive = function(){ return current; };
+})();
+</script>
 </body>
 </html>
