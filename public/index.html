@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>前端设计原子表 —— 把「感觉不对」换成「12 号没过」</title>
+<meta name="description" content="给完全不懂前端的人的一套心智地图：6 层决策骨架、30 个能指名道姓的概念、21 种组件、12 种页面布局，外加一份可直接抄的 DESIGN.md。开源，MIT。">
+<meta property="og:title" content="前端设计原子表">
+<meta property="og:description" content="把「感觉不对」换成「12 号没过」。给完全不懂前端的人建立心智。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ui.liangai.org/">
+<link rel="canonical" href="https://ui.liangai.org/">
+<link rel="alternate" type="application/atom+xml" title="更新订阅" href="https://github.com/Liang-HZ/ui-design-atlas/releases.atom">
+<script defer src="https://analytics.liangai.org/script.js" data-website-id="f2d36098-547a-4112-8547-0cb9d9d49a77"></script>
+<style>
+:root{
+  color-scheme: light dark;
+  --paper:#F5F5F2; --panel:#FFFFFF; --panel-2:#FAFAF8;
+  --ink:#14181A; --ink-2:#3D4649; --muted:#606A6E;
+  --rule:#DFE0DB; --rule-2:#C6C8C2;
+  --accent:#0C6A72; --accent-on:#FFFFFF; --accent-soft:#E1EFEF; --accent-line:#9AC6C8;
+  --f-display:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --f-body:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --f-mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --r-1:2px; --r-2:4px; --r-3:8px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0C0F10; --panel:#14181A; --panel-2:#191E20;
+    --ink:#E4E8E8; --ink-2:#B4BCBE; --muted:#8B9599;
+    --rule:#232A2C; --rule-2:#363E41;
+    --accent:#52CBD5; --accent-on:#062629; --accent-soft:#0F2F32; --accent-line:#2C6E73;
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px; margin:0 auto; padding:0 28px}
+a{color:var(--accent); text-decoration:none}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:var(--r-1)}
+
+/* ---------- nav ---------- */
+.nav{
+  display:flex; align-items:center; gap:12px; padding:14px 0;
+  font-family:var(--f-mono); font-size:11.5px; letter-spacing:.04em; color:var(--muted);
+}
+.nav .sp{flex:1}
+.nav a{color:var(--muted)}
+.nav a:hover{color:var(--accent)}
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 0; border-top:1px solid var(--ink)}
+.hero-tag{
+  font-family:var(--f-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); margin:20px 0 18px;
+}
+.hero h1{
+  font-family:var(--f-display); font-weight:700;
+  font-size:clamp(32px,6vw,58px); line-height:1.04; letter-spacing:-.035em;
+  margin:0 0 22px; text-wrap:balance; max-width:16ch;
+}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero p{max-width:58ch; font-size:16px; color:var(--ink-2); margin:0 0 32px}
+.cta{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:48px}
+.btn{
+  font-family:var(--f-body); font-size:14px; font-weight:500;
+  padding:11px 22px; border-radius:var(--r-2); border:1px solid transparent;
+  background:var(--accent); color:var(--accent-on); cursor:pointer;
+  display:inline-flex; align-items:center; gap:8px; transition:filter .14s ease-out;
+}
+.btn:hover{filter:brightness(1.12)}
+.btn-2{background:transparent; color:var(--ink); border-color:var(--rule-2)}
+.btn-2:hover{border-color:var(--muted); filter:none}
+.meta{
+  display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--rule);
+  font-family:var(--f-mono); font-size:11.5px; letter-spacing:.04em; color:var(--muted);
+}
+.meta > div{flex:1 1 130px; padding:12px 16px 12px 0}
+.meta b{display:block; color:var(--ink); font-weight:500; font-size:13px; letter-spacing:0}
+.rule{height:3px; background:var(--ink); margin-bottom:0}
+
+/* ---------- section ---------- */
+.sec{padding:64px 0 0}
+.sec-no{
+  font-family:var(--f-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--muted); padding-bottom:8px; border-bottom:1px solid var(--rule); margin-bottom:20px;
+}
+.sec h2{
+  font-family:var(--f-display); font-size:clamp(24px,3.4vw,32px); font-weight:700;
+  letter-spacing:-.03em; line-height:1.12; margin:0 0 12px;
+}
+.sec p.lede{max-width:64ch; color:var(--ink-2); margin:0 0 28px}
+
+/* ---------- layer stack teaser ---------- */
+.stk{
+  display:grid; grid-template-columns:104px minmax(0,1fr) minmax(0,168px);
+  gap:0 20px; align-items:start; padding:14px 0; border-bottom:1px solid var(--rule);
+}
+.stk:first-of-type{border-top:1px solid var(--rule)}
+.stk-l{font-family:var(--f-mono); font-size:11px; letter-spacing:.1em; color:var(--accent); padding-top:2px}
+.stk-l b{display:block; font-family:var(--f-body); font-size:14px; font-weight:700; color:var(--ink); letter-spacing:0; margin-top:3px}
+.stk-q{font-size:14px; color:var(--ink-2)}
+.stk-q em{font-style:normal; color:var(--ink); font-weight:600}
+.stk-n{font-family:var(--f-mono); font-size:11px; color:var(--muted); padding-top:3px}
+.stk-own{border-style:dashed}
+.stk-own .stk-l{color:var(--muted)}
+@media (max-width:700px){
+  .stk{grid-template-columns:1fr; gap:6px}
+  .stk-l b{display:inline; margin-left:8px}
+}
+
+/* ---------- cards ---------- */
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:var(--r-2); overflow:hidden}
+.cards > div{background:var(--panel); padding:20px}
+.cards h3{font-family:var(--f-display); font-size:15px; font-weight:700; margin:0 0 6px; letter-spacing:-.01em}
+.cards .n{font-family:var(--f-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:10px}
+.cards p{margin:0; font-size:13px; color:var(--ink-2); line-height:1.6}
+
+/* ---------- update box ---------- */
+.upd{
+  background:var(--accent-soft); border:1px solid var(--accent-line);
+  border-radius:var(--r-2); padding:22px; margin-top:24px; max-width:74ch;
+}
+.upd h3{font-family:var(--f-display); font-size:16px; margin:0 0 10px; font-weight:700}
+.upd p{margin:0 0 10px; font-size:14px; color:var(--ink-2)}
+.upd p:last-child{margin-bottom:0}
+.upd code{font-family:var(--f-mono); font-size:12.5px; background:var(--panel); padding:1px 5px; border-radius:var(--r-1); border:1px solid var(--accent-line)}
+
+/* ---------- foot ---------- */
+.foot{
+  margin-top:72px; padding:20px 0 64px; border-top:3px solid var(--ink);
+  font-family:var(--f-mono); font-size:11.5px; color:var(--muted);
+  display:flex; gap:16px; flex-wrap:wrap; align-items:center;
+}
+.foot .sp{flex:1}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.001ms !important}}
+@media (max-width:640px){.wrap{padding:0 18px}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<nav class="nav">
+  <span>前端设计原子表 / UI DESIGN ATLAS</span>
+  <span class="sp"></span>
+  <a href="https://github.com/Liang-HZ/ui-design-atlas" target="_blank" rel="noopener">GitHub</a>
+</nav>
+
+<header class="hero">
+  <div class="hero-tag">开源 · MIT · 无需注册</div>
+  <h1>把「感觉不对」<br>换成 <em>「12 号没过」</em></h1>
+  <p>
+    你在指挥模型做界面，但只能描述感觉——它改，你再看，你再说"还是不太对"。
+    问题不在模型，在于<b>你手里没有一套能指名道姓的词</b>。这份表就是那套词。
+  </p>
+  <div class="cta">
+    <a class="btn" href="/atlas" data-umami-event="open-atlas">打开图表 →</a>
+    <a class="btn btn-2" href="https://github.com/Liang-HZ/ui-design-atlas" target="_blank" rel="noopener" data-umami-event="open-github">在 GitHub 上看</a>
+  </div>
+  <div class="meta">
+    <div><b>6</b> 层决策骨架</div>
+    <div><b>30</b> 个原子概念</div>
+    <div><b>21</b> 种组件组合</div>
+    <div><b>12</b> 种页面布局</div>
+    <div><b>1</b> 份可抄的 DESIGN.md</div>
+  </div>
+</header>
+<div class="rule"></div>
+
+<section class="sec">
+  <div class="sec-no">先看这个 / THE STACK</div>
+  <h2>做界面是自上而下的一串决定</h2>
+  <p class="lede">
+    新手最常见的卡点是<b>从最底层开始纠结</b>——一上来就问"圆角该用几像素"，
+    而那一层恰恰是最不需要你操心的。30 个概念全部挂在这 6 层上。
+  </p>
+
+  <div class="stk stk-own">
+    <div class="stk-l">L0<b>意图</b></div>
+    <div class="stk-q">这一屏给<em>谁</em>看？他要<em>完成什么</em>？</div>
+    <div class="stk-n">这层没有原子</div>
+  </div>
+  <div class="stk">
+    <div class="stk-l">L1<b>信息层级</b></div>
+    <div class="stk-q">哪个最重要、哪些是<em>一组</em>的？</div>
+    <div class="stk-n">4 个原子</div>
+  </div>
+  <div class="stk">
+    <div class="stk-l">L2<b>骨架布局</b></div>
+    <div class="stk-q">怎么排？屏幕变窄怎么办？<em>多密</em>合适？</div>
+    <div class="stk-n">6 个原子</div>
+  </div>
+  <div class="stk">
+    <div class="stk-l">L3<b>组件与状态</b></div>
+    <div class="stk-q">用什么<em>零件</em>？没数据、出错了长什么样？</div>
+    <div class="stk-n">5 个原子</div>
+  </div>
+  <div class="stk">
+    <div class="stk-l">L4<b>数值标度</b></div>
+    <div class="stk-q">具体<em>几像素</em>、<em>什么颜色</em>？</div>
+    <div class="stk-n">11 个原子</div>
+  </div>
+  <div class="stk">
+    <div class="stk-l">L5<b>校验</b></div>
+    <div class="stk-q">看得清吗？暗色下还成立吗？</div>
+    <div class="stk-n">4 个原子</div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-no">里面有什么 / CONTENTS</div>
+  <h2>四部分</h2>
+  <p class="lede">每个概念都<b>画出来给你看</b>，不是一段文字解释。滑杆能拖，标签页能切，容器能拉。</p>
+  <div class="cards">
+    <div>
+      <div class="n">Part One</div>
+      <h3>30 个原子</h3>
+      <p>间距、亲密性、字阶、对比度、五态、变体矩阵……每个配一个能上手拨弄的演示，底部一行「怎么说出口」是可以直接抄进 prompt 的句子。</p>
+    </div>
+    <div>
+      <div class="n">Part Two</div>
+      <h3>33 种组合</h3>
+      <p>21 个组件 + 12 种页面布局，全是真渲染不是截图。每张标注它由哪几号原子拼成，点编号跳回定义。</p>
+    </div>
+    <div>
+      <div class="n">Part Three</div>
+      <h3>工具与规范</h3>
+      <p>每层选一个就够：Tailwind、shadcn/ui、Radix、Lucide。外加一张「什么时候该去读哪份文档」的地图。</p>
+    </div>
+    <div>
+      <div class="n">Part Four</div>
+      <h3>怎么说出口</h3>
+      <p>项目开场的约束、12 行诊断表（左边是你的感觉，右边是能直接发出去的话），以及一份可直接抄的 DESIGN.md。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="sec-no">它不承诺什么 / SCOPE</div>
+  <h2>它给你词汇，不给你保证</h2>
+  <p class="lede">
+    这份表不教你成为设计师，也<b>不保证</b>你照着说模型就会照做——那取决于模型、上下文和你提的其他要求。
+    它保证的是：界面不对劲的时候，你能说出<b>哪一号</b>不对，而不是"感觉不够精致"。
+  </p>
+
+  <div class="upd">
+    <h3>它会持续更新，而且你不用记得回来看</h3>
+    <p>
+      <code>DESIGN.md</code> 规范还在 alpha、工具在迭代、参照物半年就过期——这份表天然需要维护。
+      更新走 GitHub Release，<b>点一下 Watch → Releases only 就会收到邮件</b>，或者订阅
+      <a href="https://github.com/Liang-HZ/ui-design-atlas/releases.atom">RSS</a>。
+    </p>
+    <p>不做邮件列表，不做社群，也不承诺更新频率——只在真的有东西改的时候发一次 Release。</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>MIT License</span>
+  <span>© 2026 Liang-HZ</span>
+  <span class="sp"></span>
+  <a href="https://github.com/Liang-HZ/ui-design-atlas" target="_blank" rel="noopener">GitHub</a>
+  <a href="https://github.com/Liang-HZ/ui-design-atlas/releases.atom">RSS</a>
+</footer>
+
+</div>
+</body>
+</html>

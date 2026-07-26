@@ -1,0 +1,3016 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>前端设计原子表 · 30 个概念与它们的组合</title>
+<meta name="description" content="给完全不懂前端的人建立心智：6 层决策骨架、30 个可指认的概念、21 种组件与 12 种页面布局，以及一份可直接抄的 DESIGN.md。">
+<meta property="og:title" content="前端设计原子表 · 30 个概念与它们的组合">
+<meta property="og:description" content="给完全不懂前端的人建立心智：能指认的名字，而不是「感觉不对」。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ui.liangai.org/atlas">
+<link rel="canonical" href="https://ui.liangai.org/atlas">
+<script defer src="https://analytics.liangai.org/script.js" data-website-id="f2d36098-547a-4112-8547-0cb9d9d49a77"></script>
+<style>:root{color-scheme:light dark}body{margin:0;padding:0}img{max-width:100%}</style>
+</head>
+<body>
+<div class="sitenav">
+  <a href="/" class="sn-home">← 前端设计原子表</a>
+  <span class="sn-sp"></span>
+  <a href="https://github.com/Liang-HZ/ui-design-atlas" class="sn-gh" target="_blank" rel="noopener">GitHub</a>
+</div>
+<style>
+.sitenav{position:sticky;top:0;z-index:99;display:flex;align-items:center;gap:12px;
+  padding:10px 28px;background:var(--panel);border-bottom:1px solid var(--rule);
+  font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em}
+.sitenav a{color:var(--muted);border-bottom:0;text-decoration:none}
+.sitenav a:hover{color:var(--accent)}
+.sn-sp{flex:1}
+@media(max-width:640px){.sitenav{padding:9px 16px}}
+/* sticky 导航约 37px 高。不加这条，94 个交叉引用跳过去会被导航栏盖住顶部。
+   用 html[id] 而不是 [id]：后者与下面的 .atom{scroll-margin-top:20px} 特异性相同，
+   而 .atom 在源码里更靠后会赢。 */
+html [id]{scroll-margin-top:52px}
+</style>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  color-scheme: light dark;
+
+  --paper:      #F5F5F2;
+  --panel:      #FFFFFF;
+  --panel-2:    #FAFAF8;
+  --ink:        #14181A;
+  --ink-2:      #3D4649;
+  --muted:      #606A6E;
+  --rule:       #DFE0DB;
+  --rule-2:     #C6C8C2;
+
+  --accent:     #0C6A72;
+  --accent-on:  #FFFFFF;
+  --accent-soft:#E1EFEF;
+  --accent-line:#9AC6C8;
+
+  --ok:         #2C7A52;
+  --ok-soft:    #E4F0E8;
+  --flag:       #B4433B;
+  --flag-soft:  #F7E5E3;
+
+  --f-display: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --f-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI",
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --f-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --r-1: 2px;
+  --r-2: 4px;
+  --r-3: 8px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:      #0C0F10;
+    --panel:      #14181A;
+    --panel-2:    #191E20;
+    --ink:        #E4E8E8;
+    --ink-2:      #B4BCBE;
+    --muted:      #8B9599;
+    --rule:       #232A2C;
+    --rule-2:     #363E41;
+
+    --accent:     #52CBD5;
+    --accent-on:  #062629;
+    --accent-soft:#0F2F32;
+    --accent-line:#2C6E73;
+
+    --ok:         #5FBE88;
+    --ok-soft:    #12261B;
+    --flag:       #E5776E;
+    --flag-soft:  #2B1614;
+  }
+}
+
+:root[data-theme="dark"]{
+  --paper:#0C0F10; --panel:#14181A; --panel-2:#191E20;
+  --ink:#E4E8E8; --ink-2:#B4BCBE; --muted:#8B9599;
+  --rule:#232A2C; --rule-2:#363E41;
+  --accent:#52CBD5; --accent-on:#062629; --accent-soft:#0F2F32; --accent-line:#2C6E73;
+  --ok:#5FBE88; --ok-soft:#12261B; --flag:#E5776E; --flag-soft:#2B1614;
+}
+:root[data-theme="light"]{
+  --paper:#F5F5F2; --panel:#FFFFFF; --panel-2:#FAFAF8;
+  --ink:#14181A; --ink-2:#3D4649; --muted:#606A6E;
+  --rule:#DFE0DB; --rule-2:#C6C8C2;
+  --accent:#0C6A72; --accent-on:#FFFFFF; --accent-soft:#E1EFEF; --accent-line:#9AC6C8;
+  --ok:#2C7A52; --ok-soft:#E4F0E8; --flag:#B4433B; --flag-soft:#F7E5E3;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{ box-sizing: border-box; }
+
+body, .atlas{
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.atlas{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 28px 96px;
+}
+
+.atlas a{ color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-line); }
+.atlas a:hover{ border-bottom-color: var(--accent); }
+.atlas :focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-1); }
+
+.mono{ font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   MASTHEAD
+   ============================================================ */
+.mast{
+  padding: 64px 0 0;
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: 4px;
+}
+.mast-tag{
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.mast h1{
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(34px, 6.2vw, 62px);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  margin: 0 0 20px;
+  text-wrap: balance;
+}
+.mast h1 em{
+  font-style: normal;
+  color: var(--accent);
+}
+.mast-sub{
+  max-width: 60ch;
+  font-size: 16px;
+  color: var(--ink-2);
+  margin: 0 0 34px;
+}
+.mast-meta{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+.mast-meta > div{
+  flex: 1 1 150px;
+  padding: 12px 16px 12px 0;
+}
+.mast-meta b{
+  display: block;
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+.mast-rule{ height: 3px; background: var(--ink); margin-bottom: 40px; }
+
+/* how to use */
+.howto{
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-2);
+  padding: 20px 22px;
+  margin: 0 0 56px;
+  max-width: 78ch;
+}
+.howto h3{
+  font-family: var(--f-mono);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 10px; font-weight: 600;
+}
+.howto p{ margin: 0 0 8px; font-size: 14.5px; color: var(--ink-2); }
+.howto p:last-child{ margin-bottom: 0; }
+.howto code{
+  font-family: var(--f-mono); font-size: 12.5px;
+  background: var(--panel); padding: 1px 5px; border-radius: var(--r-1);
+  border: 1px solid var(--accent-line); color: var(--ink);
+}
+
+/* ============================================================
+   PART / GROUP HEADINGS
+   ============================================================ */
+.part{
+  margin: 0 0 12px;
+  padding-top: 56px;
+}
+.part-no{
+  font-family: var(--f-mono);
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 18px;
+}
+.part h2{
+  font-family: var(--f-display);
+  font-size: clamp(26px, 3.6vw, 38px);
+  font-weight: 700; letter-spacing: -.03em; line-height: 1.1;
+  margin: 0 0 10px;
+}
+.part p{ max-width: 66ch; color: var(--ink-2); margin: 0 0 4px; font-size: 15px; }
+
+.group{
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0 24px;
+  align-items: baseline;
+  margin: 48px 0 22px;
+  padding-top: 14px;
+  border-top: 2px solid var(--ink);
+}
+.group-key{
+  font-family: var(--f-mono);
+  font-size: 11px; letter-spacing: .12em;
+  color: var(--accent);
+  padding-top: 5px;
+}
+.group h3{
+  font-family: var(--f-display);
+  font-size: 19px; font-weight: 700; letter-spacing: -.015em;
+  margin: 0;
+}
+.group h3 span{
+  font-family: var(--f-mono);
+  font-size: 11.5px; font-weight: 400; letter-spacing: .04em;
+  color: var(--muted); margin-left: 10px;
+}
+
+/* ============================================================
+   ATOM CARD
+   ============================================================ */
+.atom{
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0 24px;
+  padding: 26px 0;
+  border-top: 1px solid var(--rule);
+  scroll-margin-top: 20px;
+}
+.atom-id{
+  font-family: var(--f-mono);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  color: var(--rule-2);
+  line-height: 1;
+  padding-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.atom:hover .atom-id{ color: var(--accent); }
+.atom-name{
+  font-family: var(--f-display);
+  font-size: 17px; font-weight: 700; letter-spacing: -.012em;
+  margin: 0 0 6px;
+}
+.atom-name .en{
+  font-family: var(--f-mono);
+  font-size: 11.5px; font-weight: 400; letter-spacing: .04em;
+  color: var(--muted); margin-left: 9px;
+}
+.atom-def{
+  margin: 0 0 16px;
+  max-width: 66ch;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+.atom-def b{ color: var(--ink); font-weight: 600; }
+/* grid 子项默认 min-width:auto，会被 demo 的 min-width 顶宽从而撑破整页；
+   置 0 才能让 .demo 自己的 overflow-x:auto 真正生效（24 号响应式） */
+.atom-body{ min-width: 0; }
+
+/* say-to-model line */
+.say{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  margin: 14px 0 0;
+  padding-top: 11px;
+  border-top: 1px dashed var(--rule-2);
+  font-size: 13.5px;
+  color: var(--ink-2);
+  max-width: 78ch;
+}
+.say-k{
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-1);
+  padding: 2px 6px;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.say q{ quotes: "「" "」"; font-style: normal; color: var(--ink); }
+
+/* ============================================================
+   DEMO SHELL
+   ============================================================ */
+.demo{
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-2);
+  padding: 20px;
+  overflow-x: auto;
+}
+.demo-2{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-2);
+  overflow: hidden;
+}
+.demo-2 > div{ background: var(--panel); padding: 18px; }
+.tag{
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  display: inline-block; margin-bottom: 12px; font-weight: 600;
+}
+.tag-bad{ color: var(--flag); }
+.tag-ok{ color: var(--ok); }
+.tag-n{ color: var(--muted); }
+
+.note{
+  font-family: var(--f-mono);
+  font-size: 11px; color: var(--muted); margin-top: 12px; letter-spacing: .02em;
+}
+
+/* generic control */
+.ctl{
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  font-family: var(--f-mono); font-size: 11.5px; color: var(--muted);
+  margin-bottom: 16px; letter-spacing: .04em;
+}
+.ctl input[type=range]{
+  -webkit-appearance: none; appearance: none;
+  height: 2px; background: var(--rule-2); border-radius: 2px;
+  flex: 1 1 140px; max-width: 240px;
+}
+.ctl input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); cursor: grab; border: 0;
+}
+.ctl input[type=range]::-moz-range-thumb{
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); cursor: grab; border: 0;
+}
+.ctl output{ color: var(--accent); font-weight: 600; min-width: 62px; }
+
+/* dimension annotation (drafting style) */
+.dim{
+  position: relative;
+  background: var(--accent-soft);
+  border-left: 1px solid var(--accent);
+  border-right: 1px solid var(--accent);
+  height: 100%;
+}
+
+/* boxes used across demos */
+.blk{ background: var(--rule); border-radius: var(--r-1); }
+.blk-a{ background: var(--accent); border-radius: var(--r-1); }
+
+/* ============================================================
+   D01 spacing ruler
+   ============================================================ */
+.d01{ display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+.d01 figure{ margin: 0; text-align: center; }
+.d01 .bar{ background: var(--accent); border-radius: 1px 1px 0 0; height: 30px; }
+.d01 figcaption{
+  font-family: var(--f-mono); font-size: 10.5px; color: var(--muted);
+  border-top: 1px solid var(--rule-2); padding-top: 5px; margin-top: 4px;
+}
+.d01-off .bar{ background: var(--flag); }
+
+/* ============================================================
+   D02 proximity
+   ============================================================ */
+.d02-stack{ display: flex; flex-direction: column; }
+.d02-line{ height: 9px; background: var(--rule); border-radius: 1px; }
+.d02-line.h{ height: 13px; background: var(--ink-2); width: 46%; }
+.d02-line.m{ width: 84%; }
+.d02-line.s{ width: 66%; }
+
+/* ============================================================
+   D03 type scale
+   ============================================================ */
+.d03 li{
+  list-style: none; display: flex; align-items: baseline; gap: 16px;
+  border-bottom: 1px dotted var(--rule); padding: 5px 0;
+}
+.d03 ul{ margin: 0; padding: 0; }
+.d03 .n{
+  font-family: var(--f-mono); font-size: 10.5px; color: var(--muted);
+  width: 88px; flex: none; letter-spacing: .03em;
+}
+.d03 .s{ font-family: var(--f-display); letter-spacing: -.02em; line-height: 1.1; }
+
+/* ============================================================
+   D04 weight
+   ============================================================ */
+.d04{ display: grid; grid-template-columns: repeat(auto-fit, minmax(96px,1fr)); gap: 4px 14px; }
+.d04 div{ border-top: 1px solid var(--rule); padding-top: 7px; }
+.d04 .w{ font-family: var(--f-display); font-size: 24px; letter-spacing: -.02em; }
+.d04 .l{ font-family: var(--f-mono); font-size: 10px; color: var(--muted); }
+
+/* ============================================================
+   D05 / D06 text demos
+   ============================================================ */
+.d05-p, .d06-p{ margin: 0; color: var(--ink-2); font-size: 14.5px; }
+
+/* ============================================================
+   D08 radius nesting
+   ============================================================ */
+.d08-out{ padding: 12px; background: var(--rule); display: inline-block; }
+.d08-in{ width: 132px; height: 62px; background: var(--accent); }
+
+/* ============================================================
+   D09 ramp
+   ============================================================ */
+.d09{ display: grid; grid-template-columns: repeat(11, 1fr); gap: 2px; min-width: 460px; }
+.d09 .sw{ height: 46px; border-radius: var(--r-1); }
+.d09 .lb{ font-family: var(--f-mono); font-size: 9.5px; color: var(--muted); text-align: center; margin-top: 5px; }
+
+/* ============================================================
+   D10 token tiers
+   ============================================================ */
+.d10{ display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--r-2); overflow: hidden; }
+.d10 > div{ background: var(--panel); padding: 14px; }
+.d10 .k{ font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.d10 .v{ font-family: var(--f-mono); font-size: 12.5px; color: var(--ink); line-height: 1.9; }
+.d10 .d{ font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+
+/* ============================================================
+   D12 contrast
+   ============================================================ */
+.d12{ display: grid; grid-template-columns: repeat(auto-fit, minmax(158px,1fr)); gap: 10px; }
+.d12 .chip{ background: #FFFFFF; border: 1px solid var(--rule); border-radius: var(--r-2); padding: 14px; }
+.d12 .chip p{ margin: 0 0 10px; font-size: 14px; font-weight: 500; }
+.d12 .r{ font-family: var(--f-mono); font-size: 10.5px; display: flex; justify-content: space-between; color: #767676; }
+.d12 .pass{ color: #1F6B44; font-weight: 600; }
+.d12 .fail{ color: #A8352D; font-weight: 600; }
+
+/* ============================================================
+   D13 elevation
+   ============================================================ */
+.d13{ display: flex; gap: 18px; flex-wrap: wrap; padding: 8px 0 4px; }
+.d13 figure{ margin: 0; }
+.d13 .e{ width: 92px; height: 58px; background: var(--panel); border: 1px solid var(--rule); border-radius: var(--r-2); }
+.d13 figcaption{ font-family: var(--f-mono); font-size: 10px; color: var(--muted); margin-top: 9px; }
+
+/* ============================================================
+   D15 hierarchy levers
+   ============================================================ */
+.d15{ display: grid; grid-template-columns: repeat(auto-fit, minmax(168px,1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--r-2); overflow: hidden; }
+.d15 > div{ background: var(--panel); padding: 16px; }
+.d15 .lv{ font-family: var(--f-mono); font-size: 10px; letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+.d15 .t{ font-size: 14px; margin: 0 0 3px; font-weight: 400; color: var(--ink); }
+.d15 .b{ font-size: 13px; margin: 0; color: var(--ink-2); }
+.d15 .strength{ font-family: var(--f-mono); font-size: 9.5px; color: var(--muted); margin-top: 12px; letter-spacing: .06em; }
+
+/* ============================================================
+   D17 alignment
+   ============================================================ */
+.d17 .row{ display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.d17 .dot{ width: 18px; height: 18px; border-radius: 50%; background: var(--rule); flex: none; }
+.d17 .t{ height: 9px; background: var(--rule); border-radius: 1px; }
+.d17 .axis{ border-left: 1px dashed var(--flag); }
+
+/* ============================================================
+   D20 optical
+   ============================================================ */
+.d20{ display: flex; gap: 26px; flex-wrap: wrap; }
+.d20 .circ{
+  width: 62px; height: 62px; border-radius: 50%;
+  background: var(--accent-soft); border: 1px solid var(--accent-line);
+  display: flex; align-items: center; justify-content: center;
+}
+.d20 .tri{
+  width: 0; height: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 18px solid var(--accent);
+}
+.d20 figcaption{ font-family: var(--f-mono); font-size: 10px; color: var(--muted); margin-top: 9px; text-align: center; }
+.d20 figure{ margin: 0; }
+
+/* ============================================================
+   D22 flex/grid
+   ============================================================ */
+.d22 .f{ display: flex; gap: 6px; }
+.d22 .f > div{ height: 34px; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: var(--r-1); flex: 1; }
+.d22 .g{ display: grid; grid-template-columns: repeat(4,1fr); grid-template-rows: 34px 34px; gap: 6px; }
+.d22 .g > div{ background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: var(--r-1); }
+.d22 .g .span2{ grid-column: span 2; }
+
+/* ============================================================
+   D23 grid overlay
+   ============================================================ */
+.d23{ position: relative; min-width: 420px; }
+.d23 .cols{ position: absolute; inset: 0; display: grid; grid-template-columns: repeat(12,1fr); gap: 12px; pointer-events: none; }
+.d23 .cols i{ background: var(--flag-soft); border-left: 1px solid var(--flag); border-right: 1px solid var(--flag); opacity: .55; }
+.d23 .content{ position: relative; display: grid; grid-template-columns: repeat(12,1fr); gap: 12px; }
+.d23 .content > div{ background: var(--panel-2); border: 1px solid var(--rule-2); border-radius: var(--r-1); height: 42px; }
+
+/* ============================================================
+   D24 container query
+   ============================================================ */
+.d24-wrap{
+  resize: horizontal; overflow: auto;
+  min-width: 240px; max-width: 100%; width: 100%;
+  border: 1px dashed var(--accent); border-radius: var(--r-2);
+  padding: 12px; background: var(--panel-2);
+  container-type: inline-size;
+}
+.d24-card{ display: grid; grid-template-columns: 1fr; gap: 12px; }
+.d24-card .thumb{ height: 64px; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: var(--r-1); }
+.d24-card h5{ margin: 0 0 5px; font-size: 15px; font-family: var(--f-display); letter-spacing: -.01em; }
+.d24-card p{ margin: 0; font-size: 13px; color: var(--muted); }
+.d24-state{ font-family: var(--f-mono); font-size: 10px; color: var(--accent); letter-spacing: .08em; margin-bottom: 10px; }
+.d24-state::after{ content: "窄 · 单列堆叠"; }
+@container (min-width: 420px){
+  .d24-card{ grid-template-columns: 128px 1fr; align-items: center; }
+  .d24-card .thumb{ height: 76px; }
+  .d24-state::after{ content: "宽 · 双列并排"; }
+}
+
+/* ============================================================
+   D25 density
+   ============================================================ */
+.d25 table{ width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.d25 th{
+  text-align: left; font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500;
+  border-bottom: 1px solid var(--rule-2);
+}
+.d25 td{ border-bottom: 1px solid var(--rule); color: var(--ink-2); }
+.d25 td:first-child{ color: var(--ink); }
+.d25 td:last-child, .d25 th:last-child{ text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.d25[data-den="compact"] :is(td,th){ padding: 5px 8px; }
+.d25[data-den="cozy"]    :is(td,th){ padding: 10px 8px; }
+.d25[data-den="roomy"]   :is(td,th){ padding: 17px 8px; }
+.seg{ display: inline-flex; border: 1px solid var(--rule-2); border-radius: var(--r-2); overflow: hidden; }
+.seg button{
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .05em;
+  padding: 6px 12px; border: 0; background: var(--panel); color: var(--muted);
+  cursor: pointer; border-right: 1px solid var(--rule-2);
+}
+.seg button:last-child{ border-right: 0; }
+.seg button[aria-pressed="true"]{ background: var(--accent); color: var(--accent-on); }
+
+/* ============================================================
+   D26 anatomy
+   ============================================================ */
+.d26{ min-width: 430px; }
+.d26-row{
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid var(--rule-2); border-radius: var(--r-2);
+  padding: 12px 14px; background: var(--panel-2);
+}
+.d26-row .lead{ width: 30px; height: 30px; border-radius: 50%; background: var(--accent-soft); border: 1px solid var(--accent-line); flex: none; }
+.d26-row .lab{ flex: 1; }
+.d26-row .lab b{ display: block; font-size: 14px; font-weight: 600; }
+.d26-row .lab span{ font-size: 12.5px; color: var(--muted); }
+.d26-row .trail{ font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.d26-pins{ display: flex; margin-top: 6px; font-family: var(--f-mono); font-size: 10px; color: var(--accent); letter-spacing: .04em; gap: 12px; }
+.d26-pins span{ border-top: 1px solid var(--accent-line); padding-top: 5px; }
+
+/* ============================================================
+   D27 states
+   ============================================================ */
+.d27{ display: grid; grid-template-columns: repeat(auto-fit, minmax(118px,1fr)); gap: 10px; }
+.d27 figure{ margin: 0; }
+.d27 figcaption{ font-family: var(--f-mono); font-size: 9.5px; color: var(--muted); margin-top: 7px; letter-spacing: .04em; }
+.btn{
+  font-family: var(--f-body); font-size: 13.5px; font-weight: 500;
+  padding: 8px 15px; border-radius: var(--r-2); border: 1px solid transparent;
+  background: var(--accent); color: var(--accent-on); cursor: pointer;
+  width: 100%; transition: background .14s ease-out, transform .1s ease-out;
+}
+.btn-hover{ filter: brightness(1.14); }
+.btn-active{ filter: brightness(.86); transform: translateY(1px); }
+.btn-focus{ outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-disabled{ opacity: .38; cursor: not-allowed; }
+.btn-load{ opacity: .8; }
+.btn-ghost{ background: transparent; color: var(--accent); border-color: var(--rule-2); }
+.btn-danger{ background: var(--flag); color: #fff; }
+.btn:hover{ filter: brightness(1.12); }
+.btn:active{ transform: translateY(1px); }
+.spin{
+  display: inline-block; width: 11px; height: 11px; margin-right: 6px;
+  border: 2px solid currentColor; border-right-color: transparent;
+  border-radius: 50%; vertical-align: -1px;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+/* ============================================================
+   D28 variant matrix
+   ============================================================ */
+.d28{ min-width: 430px; border-collapse: collapse; width: 100%; }
+.d28 th{
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .08em;
+  color: var(--muted); font-weight: 500; text-transform: uppercase;
+  padding: 0 10px 10px; text-align: left;
+}
+.d28 td{ padding: 7px 10px; border-top: 1px solid var(--rule); }
+.d28 th:first-child, .d28 td:first-child{ padding-left: 0; }
+.btn-sm{ font-size: 12px; padding: 5px 10px; }
+.btn-md{ font-size: 13.5px; padding: 8px 15px; }
+.btn-lg{ font-size: 15px; padding: 11px 20px; }
+.d28 .btn{ width: auto; }
+
+/* ============================================================
+   D29 five states
+   ============================================================ */
+.tabs{ display: flex; gap: 0; border-bottom: 1px solid var(--rule); margin-bottom: 0; flex-wrap: wrap; }
+.tabs button{
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .05em;
+  background: none; border: 0; border-bottom: 2px solid transparent;
+  padding: 9px 13px; color: var(--muted); cursor: pointer; margin-bottom: -1px;
+}
+.tabs button[aria-selected="true"]{ color: var(--accent); border-bottom-color: var(--accent); }
+.d29-stage{
+  min-height: 176px; display: flex; align-items: center; justify-content: center;
+  padding: 22px; text-align: center;
+}
+.d29-empty .ic{
+  width: 40px; height: 40px; margin: 0 auto 14px; border-radius: var(--r-2);
+  border: 1.5px dashed var(--rule-2);
+}
+.d29-empty b{ display: block; font-size: 14.5px; margin-bottom: 5px; }
+.d29-empty span{ font-size: 13px; color: var(--muted); display: block; margin-bottom: 14px; }
+.sk{ background: var(--rule); border-radius: var(--r-1); animation: pulse 1.5s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ opacity: 1 } 50%{ opacity: .45 } }
+.d29-list{ width: 100%; text-align: left; }
+.d29-item{
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 13.5px;
+}
+.d29-item:last-child{ border-bottom: 0; }
+.d29-item .av{ width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); border: 1px solid var(--accent-line); flex: none; }
+.d29-item .gr{ flex: 1; }
+.d29-item .gr b{ display: block; font-weight: 500; }
+.d29-item .gr span{ font-size: 12px; color: var(--muted); }
+.d29-err{ color: var(--flag); }
+.d29-err b{ display: block; font-size: 14.5px; margin-bottom: 5px; }
+.d29-err span{ font-size: 13px; color: var(--ink-2); display: block; margin-bottom: 14px; }
+
+/* ============================================================
+   D30 motion
+   ============================================================ */
+.d30{ display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 16px; }
+.d30 .track{ height: 30px; background: var(--panel-2); border: 1px solid var(--rule); border-radius: var(--r-1); position: relative; overflow: hidden; }
+.d30 .ball{ position: absolute; top: 5px; left: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); }
+.d30 .ball.go{ transform: translateX(calc(100% * 0 + var(--travel, 120px))); }
+.d30 .lb{ font-family: var(--f-mono); font-size: 10px; color: var(--muted); margin-bottom: 7px; letter-spacing: .04em; }
+
+/* ============================================================
+   PART 2 — COMBO GALLERY
+   ============================================================ */
+.combo{
+  border: 1px solid var(--rule);
+  border-radius: var(--r-2);
+  background: var(--panel);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.combo-hd{
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--panel-2);
+}
+.combo-hd h4{
+  font-family: var(--f-display); font-size: 15px; font-weight: 700;
+  letter-spacing: -.01em; margin: 0 0 3px;
+}
+.combo-hd h4 span{
+  font-family: var(--f-mono); font-size: 10.5px; font-weight: 400;
+  color: var(--muted); margin-left: 8px; letter-spacing: .04em;
+}
+.combo-hd p{ margin: 0; font-size: 12.5px; color: var(--muted); }
+.combo-body{ padding: 20px 16px; flex: 1; display: flex; align-items: center; }
+.combo-body > *{ width: 100%; }
+.combo-ft{
+  padding: 10px 16px 12px;
+  border-top: 1px dashed var(--rule-2);
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+}
+.ref{
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .04em;
+  color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent-line); border-radius: 2px;
+  padding: 1px 5px; text-decoration: none;
+}
+.ref:hover{ background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
+.atlas .ref{ border-bottom: 1px solid var(--accent-line); }
+.combo-ft .k{
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); margin-right: 5px;
+}
+.grid-combo{
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(310px,1fr)); gap: 16px;
+  margin-top: 26px;
+}
+
+/* real component styles inside combos */
+.fld label{ display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; }
+.fld input{
+  width: 100%; font-family: var(--f-body); font-size: 13.5px;
+  padding: 8px 11px; border: 1px solid var(--rule-2); border-radius: var(--r-2);
+  background: var(--panel); color: var(--ink);
+}
+.fld input:focus{ outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.fld .help{ font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+.fld .err{ font-size: 11.5px; color: var(--flag); margin-top: 5px; }
+.fld.bad input{ border-color: var(--flag); }
+.fld + .fld{ margin-top: 16px; }
+
+.card-x{
+  border: 1px solid var(--rule); border-radius: var(--r-3);
+  padding: 16px; background: var(--panel-2);
+}
+.card-x .th{ height: 74px; border-radius: var(--r-2); background: var(--accent-soft); border: 1px solid var(--accent-line); margin-bottom: 14px; }
+.card-x h5{ font-family: var(--f-display); font-size: 15px; margin: 0 0 5px; letter-spacing: -.01em; }
+.card-x p{ font-size: 12.5px; color: var(--muted); margin: 0 0 14px; }
+.card-x .foot{ display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
+.badge{
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .05em;
+  padding: 2px 7px; border-radius: 999px; display: inline-block;
+  border: 1px solid;
+}
+.badge-n{ color: var(--muted); border-color: var(--rule-2); background: var(--panel); }
+.badge-a{ color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+.badge-o{ color: var(--ok); border-color: var(--ok); background: var(--ok-soft); }
+.badge-f{ color: var(--flag); border-color: var(--flag); background: var(--flag-soft); }
+
+.stat{ border-left: 2px solid var(--accent); padding-left: 12px; }
+.stat .k{ font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.stat .v{ font-family: var(--f-display); font-size: 30px; font-weight: 700; letter-spacing: -.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat .d{ font-size: 11.5px; color: var(--ok); font-family: var(--f-mono); }
+.stat-row{ display: grid; grid-template-columns: repeat(auto-fit,minmax(110px,1fr)); gap: 18px; }
+
+.spark{ display: block; width: 100%; height: 38px; margin-top: 8px; }
+
+.tbl{ width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.tbl th{
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500; text-align: left;
+  padding: 0 8px 8px; border-bottom: 1px solid var(--rule-2);
+}
+.tbl td{ padding: 9px 8px; border-bottom: 1px solid var(--rule); }
+.tbl th:first-child, .tbl td:first-child{ padding-left: 0; }
+.tbl th:last-child, .tbl td:last-child{ padding-right: 0; text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+.toast{
+  display: flex; gap: 11px; align-items: flex-start;
+  border: 1px solid var(--rule-2); border-radius: var(--r-2);
+  padding: 12px 13px; background: var(--panel-2); font-size: 13px;
+}
+.toast .ic{ width: 16px; height: 16px; border-radius: 50%; flex: none; margin-top: 1px; }
+.toast b{ display: block; font-size: 13px; margin-bottom: 2px; }
+.toast span{ color: var(--muted); font-size: 12px; }
+.toast + .toast{ margin-top: 9px; }
+
+.modal-mock{
+  border: 1px solid var(--rule-2); border-radius: var(--r-3);
+  background: var(--panel); padding: 18px;
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,.22);
+}
+.modal-mock h5{ font-family: var(--f-display); font-size: 15px; margin: 0 0 6px; letter-spacing: -.01em; }
+.modal-mock p{ font-size: 12.5px; color: var(--muted); margin: 0 0 16px; }
+.modal-mock .acts{ display: flex; gap: 8px; justify-content: flex-end; }
+.modal-mock .btn{ width: auto; }
+
+.avg{ display: flex; }
+.avg span{
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--panel); background: var(--accent-soft);
+  display: grid; place-items: center;
+  font-family: var(--f-mono); font-size: 10px; color: var(--accent);
+  margin-left: -8px;
+}
+.avg span:first-child{ margin-left: 0; }
+.avg .more{ background: var(--panel-2); color: var(--muted); }
+
+.navx{ display: flex; gap: 2px; border-bottom: 1px solid var(--rule); }
+.navx a{
+  font-size: 13px; padding: 8px 12px; color: var(--muted);
+  border-bottom: 2px solid transparent; margin-bottom: -1px; border-top: 0; border-left: 0; border-right: 0;
+}
+.navx a.on{ color: var(--ink); border-bottom-color: var(--accent); font-weight: 500; }
+
+/* ============================================================
+   LAYOUT PLANS (wireframes)
+   ============================================================ */
+.plan{
+  display: grid; gap: 5px; height: 152px;
+  background: var(--panel-2); border: 1px solid var(--rule);
+  border-radius: var(--r-2); padding: 5px;
+}
+.plan div{
+  background: var(--panel); border: 1px solid var(--rule-2); border-radius: 2px;
+  font-family: var(--f-mono); font-size: 9px; color: var(--muted);
+  display: flex; align-items: center; justify-content: center; letter-spacing: .04em;
+  text-align: center; padding: 3px; overflow: hidden;
+}
+.plan .hl{ background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent); }
+.plan .mut{ background: var(--panel-2); }
+
+.p-shell{ grid-template-columns: 46px 1fr; grid-template-rows: 26px 1fr; }
+.p-shell .side{ grid-row: 1 / -1; }
+.p-dash{ grid-template-columns: repeat(4,1fr); grid-template-rows: 22px 44px 1fr; }
+.p-dash .top{ grid-column: 1 / -1; }
+.p-dash .wide{ grid-column: 1 / 4; }
+.p-detail{ grid-template-columns: 96px 1fr; grid-template-rows: 24px 1fr; }
+.p-detail .top{ grid-column: 1 / -1; }
+.p-settings{ grid-template-columns: 78px 1fr; grid-template-rows: repeat(3, 1fr); }
+.p-settings .nav{ grid-row: 1 / -1; }
+.p-table{ grid-template-rows: 24px 26px 1fr 22px; }
+.p-landing{ grid-template-rows: 20px 56px 1fr 26px; grid-template-columns: repeat(3,1fr); }
+.p-landing .full{ grid-column: 1 / -1; }
+.p-auth{ grid-template-columns: 1fr 148px 1fr; grid-template-rows: 1fr; }
+.p-docs{ grid-template-columns: 74px 1fr 60px; grid-template-rows: 22px 1fr; }
+.p-docs .top{ grid-column: 1 / -1; }
+.p-feed{ grid-template-columns: 1fr 92px; grid-template-rows: 22px repeat(2,1fr); }
+.p-feed .top{ grid-column: 1 / -1; }
+.p-feed .side{ grid-row: 2 / -1; }
+.p-split{ grid-template-columns: 1fr 1fr; grid-template-rows: 24px 1fr; }
+.p-split .top{ grid-column: 1 / -1; }
+.p-wizard{ grid-template-rows: 30px 1fr 30px; }
+
+/* ============================================================
+   PART 3 — TOOLS TABLE
+   ============================================================ */
+.tools{ width: 100%; border-collapse: collapse; min-width: 660px; font-size: 14px; }
+.tools th{
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500; text-align: left;
+  padding: 0 14px 10px 0; border-bottom: 1px solid var(--ink);
+}
+.tools td{ padding: 14px 14px 14px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tools td:first-child{ width: 116px; font-family: var(--f-mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+.tools .nm{ font-weight: 600; font-size: 14.5px; display: block; margin-bottom: 3px; }
+.tools .nm code{ font-family: var(--f-mono); font-size: 12px; color: var(--accent); font-weight: 400; }
+.tools .ds{ color: var(--ink-2); font-size: 13.5px; }
+.scroll-x{ overflow-x: auto; }
+
+/* ============================================================
+   PART 4 — DIAGNOSIS
+   ============================================================ */
+.dx{ width: 100%; border-collapse: collapse; min-width: 720px; font-size: 13.5px; }
+.dx th{
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500; text-align: left;
+  padding: 0 16px 10px 0; border-bottom: 1px solid var(--ink);
+}
+.dx td{ padding: 12px 16px 12px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.dx td:first-child{ color: var(--flag); font-weight: 500; width: 132px; }
+.dx td:nth-child(2){ width: 210px; color: var(--ink-2); }
+.dx td:last-child{ color: var(--ink); }
+.dx .n{ font-family: var(--f-mono); font-size: 10px; color: var(--accent); }
+
+.prompt-card{
+  border: 1px solid var(--rule); border-radius: var(--r-2);
+  background: var(--panel); overflow: hidden; margin-top: 22px;
+}
+.prompt-card .hd{
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  padding: 11px 16px; border-bottom: 1px solid var(--rule); color: var(--accent);
+  background: var(--panel-2);
+}
+.prompt-card pre{
+  margin: 0; padding: 18px 16px; font-family: var(--f-mono); font-size: 12.5px;
+  line-height: 1.85; overflow-x: auto; color: var(--ink-2); white-space: pre-wrap;
+}
+.prompt-card pre b{ color: var(--ink); font-weight: 600; }
+
+.two-col{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 22px; margin-top: 24px; }
+.mini{ border-top: 2px solid var(--ink); padding-top: 14px; }
+.mini h4{ font-family: var(--f-display); font-size: 15px; font-weight: 700; margin: 0 0 10px; letter-spacing: -.01em; }
+.mini ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-2); }
+.mini li{ margin-bottom: 7px; }
+.mini li b{ color: var(--ink); }
+
+/* ============================================================
+   INDEX + FOOTER
+   ============================================================ */
+.idx{
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(168px,1fr));
+  gap: 2px 18px; margin: 24px 0 8px;
+  border-top: 1px solid var(--rule); padding-top: 16px;
+}
+.idx a{
+  font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-2);
+  border-bottom: 0; padding: 2px 0; display: flex; gap: 8px;
+  letter-spacing: .01em;
+}
+.idx a:hover{ color: var(--accent); }
+.idx a i{ color: var(--rule-2); font-style: normal; font-variant-numeric: tabular-nums; }
+.idx a:hover i{ color: var(--accent); }
+
+.foot{
+  margin-top: 72px; padding-top: 20px; border-top: 3px solid var(--ink);
+  font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  letter-spacing: .04em;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 700px){
+  .atlas{ padding: 0 18px 72px; }
+  .atom, .group{ grid-template-columns: 1fr; gap: 0; }
+  .atom-id{ font-size: 13px; margin-bottom: 6px; }
+  .group-key{ margin-bottom: 4px; padding-top: 0; }
+  .say{ grid-template-columns: 1fr; gap: 7px; }
+  .say-k{ justify-self: start; }
+  .mast{ padding-top: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+</style>
+
+<div class="atlas">
+
+<!-- ============================================================
+     MASTHEAD
+     ============================================================ -->
+<header class="mast">
+  <div class="mast-tag">前端设计原子表 / UI DESIGN ATLAS · 2026</div>
+  <h1>30 个原子，<br>和它们<em>拼出来的东西</em></h1>
+  <p class="mast-sub">
+    你不需要成为设计师。你需要的是一套能指认的名字 —— 当界面不对劲时，能说出<b>哪一号</b>不对，而不是说"感觉不够精致"。
+    这份表把每个概念画出来给你看，然后展示它们最常见的几十种组合。
+  </p>
+  <div class="mast-meta">
+    <div><b>30</b> 个原子概念</div>
+    <div><b>21</b> 种组件组合</div>
+    <div><b>12</b> 种页面布局</div>
+    <div><b>24</b> 份工具与规范</div>
+    <div><b>0</b> 个需要你自己造的轮子</div>
+  </div>
+</header>
+<div class="mast-rule"></div>
+
+<div class="howto">
+  <h3>怎么用这份表</h3>
+  <p>这份表只做一件事：<b>给你一套能指认的名字</b>。它不教你成为设计师，也不保证你照着说模型就会照做 —— 那取决于模型和上下文。它保证的是：你能说出"哪一号"，而不是"感觉不对"。</p>
+  <p>每个原子有一个两位编号。<b>编号就是你的把手</b>。每张卡片底部有一行 <code>怎么说出口</code>，那是这个概念的专业表述长什么样，可以直接抄。第二部分的每个组合都标注了它用到哪几号，点编号可以跳回定义。</p>
+  <p>不用从头读。<b>先看下面那张分层图</b>搞清楚各层的关系，再扫第二部分（组合）看实物，最后回来查具体原子。</p>
+</div>
+
+<div class="idx" id="index">
+  <a href="#a01"><i>01</i>间距标度</a>
+  <a href="#a02"><i>02</i>亲密性</a>
+  <a href="#a03"><i>03</i>字号标度</a>
+  <a href="#a04"><i>04</i>字重</a>
+  <a href="#a05"><i>05</i>行高</a>
+  <a href="#a06"><i>06</i>行长</a>
+  <a href="#a07"><i>07</i>字距</a>
+  <a href="#a08"><i>08</i>圆角标度</a>
+  <a href="#a09"><i>09</i>色阶</a>
+  <a href="#a10"><i>10</i>语义色</a>
+  <a href="#a11"><i>11</i>中性色</a>
+  <a href="#a12"><i>12</i>对比度</a>
+  <a href="#a13"><i>13</i>海拔</a>
+  <a href="#a14"><i>14</i>暗色模式</a>
+  <a href="#a15"><i>15</i>视觉层级</a>
+  <a href="#a16"><i>16</i>留白</a>
+  <a href="#a17"><i>17</i>对齐</a>
+  <a href="#a18"><i>18</i>一致性</a>
+  <a href="#a19"><i>19</i>视觉重量</a>
+  <a href="#a20"><i>20</i>光学修正</a>
+  <a href="#a21"><i>21</i>gap 而非 margin</a>
+  <a href="#a22"><i>22</i>Flex / Grid</a>
+  <a href="#a23"><i>23</i>栅格</a>
+  <a href="#a24"><i>24</i>响应式</a>
+  <a href="#a25"><i>25</i>密度</a>
+  <a href="#a26"><i>26</i>组件解剖</a>
+  <a href="#a27"><i>27</i>状态</a>
+  <a href="#a28"><i>28</i>变体矩阵</a>
+  <a href="#a29"><i>29</i>五态</a>
+  <a href="#a30"><i>30</i>动效</a>
+</div>
+
+
+<!-- ============================================================
+     LAYER STACK — 骨架
+     ============================================================ -->
+<style>
+.stack{ margin: 44px 0 8px; }
+.stack-hd{
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  padding-bottom: 10px; border-bottom: 2px solid var(--ink); margin-bottom: 0;
+}
+.stack-hd h3{
+  font-family: var(--f-display); font-size: 19px; font-weight: 700;
+  letter-spacing: -.015em; margin: 0;
+}
+.stack-hd span{
+  font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .04em; color: var(--muted);
+}
+.stack-lede{ font-size: 14px; color: var(--ink-2); margin: 14px 0 20px; max-width: 70ch; }
+.stack-lede b{ color: var(--ink); }
+
+.stk{
+  display: grid;
+  grid-template-columns: 116px minmax(0,1fr) minmax(0,258px);
+  gap: 0 22px;
+  align-items: start;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.stk:first-of-type{ border-top: 1px solid var(--rule); }
+.stk-l{
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em;
+  color: var(--accent); padding-top: 3px;
+}
+.stk-l b{ display: block; font-family: var(--f-body); font-size: 14.5px; font-weight: 700; color: var(--ink); letter-spacing: 0; margin-top: 4px; }
+.stk-q{ font-size: 14px; color: var(--ink-2); padding-top: 2px; }
+.stk-q em{ font-style: normal; color: var(--ink); font-weight: 600; }
+.stk-n{ display: flex; flex-wrap: wrap; gap: 3px; align-content: flex-start; }
+.stk-n a{
+  font-family: var(--f-mono); font-size: 10.5px;
+  color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent-line); border-radius: 2px;
+  padding: 1px 5px; text-decoration: none; line-height: 1.6;
+}
+.stk-n a:hover{ background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
+.atlas .stk-n a{ border-bottom: 1px solid var(--accent-line); }
+
+.stk-own{ border-style: dashed; }
+.stk-own .stk-l{ color: var(--muted); }
+.stk-own .stk-n span{
+  font-family: var(--f-mono); font-size: 10.5px; color: var(--muted);
+  border: 1px dashed var(--rule-2); border-radius: 2px; padding: 1px 6px;
+}
+.stk-foot{
+  margin-top: 20px; padding: 14px 16px;
+  background: var(--accent-soft); border: 1px solid var(--accent-line);
+  border-radius: var(--r-2); font-size: 13.5px; color: var(--ink-2); max-width: 76ch;
+}
+.stk-foot b{ color: var(--ink); }
+
+@media (max-width: 700px){
+  .stk{ grid-template-columns: 1fr; gap: 8px; }
+  .stk-l{ padding-top: 0; }
+  .stk-l b{ display: inline; margin-left: 8px; }
+}
+</style>
+
+<div class="stack">
+  <div class="stack-hd">
+    <h3>先看这张：30 个原子分在哪几层</h3>
+    <span>THE STACK · 从上到下 = 先决定到后决定</span>
+  </div>
+  <p class="stack-lede">
+    做界面是<b>自上而下</b>的一串决定。上面几层决定"这东西对不对"，下面几层决定"这东西齐不齐"。
+    新手常见的卡点是<b>从最底层开始纠结</b> —— 一上来就问"圆角该用几像素"，而那一层恰恰是最不需要你操心的。
+  </p>
+
+  <div class="stk stk-own">
+    <div class="stk-l">L0<b>意图</b></div>
+    <div class="stk-q">这一屏给<em>谁</em>看？他来这儿要<em>完成什么</em>？完成了是什么样？</div>
+    <div class="stk-n"><span>这层没有原子</span><span>只能你自己定</span></div>
+  </div>
+
+  <div class="stk">
+    <div class="stk-l">L1<b>信息层级</b></div>
+    <div class="stk-q">哪个最重要、哪些是<em>一组</em>的？<br>这一层错了，下面做得再精细也白搭。</div>
+    <div class="stk-n">
+      <a href="#a15">15 视觉层级</a><a href="#a02">02 亲密性</a><a href="#a16">16 留白</a><a href="#a19">19 视觉重量</a>
+    </div>
+  </div>
+
+  <div class="stk">
+    <div class="stk-l">L2<b>骨架布局</b></div>
+    <div class="stk-q">内容怎么排？屏幕变窄怎么办？<em>多密</em>合适？</div>
+    <div class="stk-n">
+      <a href="#a23">23 栅格</a><a href="#a22">22 Flex / Grid</a><a href="#a24">24 响应式</a><a href="#a25">25 密度</a><a href="#a17">17 对齐</a><a href="#a21">21 gap</a>
+    </div>
+  </div>
+
+  <div class="stk">
+    <div class="stk-l">L3<b>组件与状态</b></div>
+    <div class="stk-q">用什么<em>零件</em>？每个零件有哪些"样子"？<br>没数据、加载中、出错了分别长什么样？</div>
+    <div class="stk-n">
+      <a href="#a26">26 解剖</a><a href="#a27">27 状态</a><a href="#a28">28 变体矩阵</a><a href="#a29">29 五态</a><a href="#a30">30 动效</a>
+    </div>
+  </div>
+
+  <div class="stk">
+    <div class="stk-l">L4<b>数值标度</b></div>
+    <div class="stk-q">具体<em>几像素</em>、<em>什么颜色</em>？<br>最厚的一层，但也是最该一次性写进配置文件、之后不用再想的一层。</div>
+    <div class="stk-n">
+      <a href="#a01">01 间距</a><a href="#a03">03 字号</a><a href="#a04">04 字重</a><a href="#a05">05 行高</a><a href="#a06">06 行长</a><a href="#a07">07 字距</a><a href="#a08">08 圆角</a><a href="#a09">09 色阶</a><a href="#a10">10 语义色</a><a href="#a11">11 中性色</a><a href="#a13">13 海拔</a>
+    </div>
+  </div>
+
+  <div class="stk">
+    <div class="stk-l">L5<b>校验</b></div>
+    <div class="stk-q">看得清吗？换暗色还成立吗？<em>前后一致吗</em>？</div>
+    <div class="stk-n">
+      <a href="#a12">12 对比度</a><a href="#a14">14 暗色模式</a><a href="#a18">18 一致性</a><a href="#a20">20 光学修正</a>
+    </div>
+  </div>
+
+  <p class="stk-foot">
+    <b>这张图本身就是最有用的那部分。</b>30 个名字记不住没关系，记住"<b>先定给谁看，再定谁主谁次，再定怎么排，最后才轮到几像素</b>"这条顺序，
+    你已经比"感觉不够精致"精确得多了。下面每一部都是这张图的展开。
+  </p>
+</div>
+
+
+<!-- ============================================================
+     PART 1 — ATOMS
+     ============================================================ -->
+<section class="part" id="part1">
+  <div class="part-no">第一部 / PART ONE</div>
+  <h2>原子 —— 30 个可以指名道姓的东西</h2>
+  <p>分五组。前两组是「度量」，决定界面是否一致；第三组是「原则」，决定界面是否好看；后两组是「结构」，决定界面是否好用。</p>
+</section>
+
+<!-- ---------- GROUP A ---------- -->
+<div class="group">
+  <div class="group-key">组 A</div>
+  <h3>度量与排版 <span>METRICS &amp; TYPE · 01—08</span></h3>
+</div>
+
+<!-- 01 -->
+<article class="atom" id="a01">
+  <div class="atom-id">01</div>
+  <div class="atom-body">
+    <h4 class="atom-name">间距标度 <span class="en">Spacing Scale</span></h4>
+    <p class="atom-def">所有间距只能从一个<b>固定档位表</b>里挑，通常是 4 的倍数。界面里永远不该出现 13px、17px、23px —— 那是"随手调的"，眼睛看不出为什么，但整体会散。</p>
+    <div class="demo">
+      <div class="d01">
+        <figure><div class="bar" style="width:4px"></div><figcaption>4</figcaption></figure>
+        <figure><div class="bar" style="width:8px"></div><figcaption>8</figcaption></figure>
+        <figure><div class="bar" style="width:12px"></div><figcaption>12</figcaption></figure>
+        <figure><div class="bar" style="width:16px"></div><figcaption>16</figcaption></figure>
+        <figure><div class="bar" style="width:24px"></div><figcaption>24</figcaption></figure>
+        <figure><div class="bar" style="width:32px"></div><figcaption>32</figcaption></figure>
+        <figure><div class="bar" style="width:48px"></div><figcaption>48</figcaption></figure>
+        <figure><div class="bar" style="width:64px"></div><figcaption>64</figcaption></figure>
+        <figure><div class="bar" style="width:96px"></div><figcaption>96</figcaption></figure>
+      </div>
+      <p class="note">↑ 这九档覆盖 95% 的场景。档位之间跨度越往上越大 —— 因为大尺寸上 4px 的差别人眼看不见。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>所有间距对齐到 4pt 标度，只允许 4/8/12/16/24/32/48/64，不要出现标度外的数值。</q></p>
+  </div>
+</article>
+
+<!-- 02 -->
+<article class="atom" id="a02">
+  <div class="atom-id">02</div>
+  <div class="atom-body">
+    <h4 class="atom-name">亲密性 <span class="en">Proximity</span></h4>
+    <p class="atom-def"><b>间距编码关系</b> —— 靠得近的元素，人眼自动认为是一伙的。这是整个 UI 设计里最重要的一条，也是"业余感"最大的来源：标题离自己的正文，比离上一段还远。</p>
+    <div class="demo">
+      <div class="ctl">
+        <label for="c02">组内间距</label>
+        <input type="range" id="c02" min="2" max="26" value="16" step="2">
+        <output id="o02">16px</output>
+        <span style="opacity:.6">（组间固定 32px）</span>
+      </div>
+      <div class="d02-stack" id="d02" style="gap:32px">
+        <div class="d02-stack" style="gap:16px">
+          <div class="d02-line h"></div><div class="d02-line m"></div><div class="d02-line s"></div>
+        </div>
+        <div class="d02-stack" style="gap:16px">
+          <div class="d02-line h"></div><div class="d02-line m"></div><div class="d02-line s"></div>
+        </div>
+        <div class="d02-stack" style="gap:16px">
+          <div class="d02-line h"></div><div class="d02-line m"></div><div class="d02-line s"></div>
+        </div>
+      </div>
+      <p class="note">↑ 拖到 26px 试试：组内 ≈ 组间时，三组会糊成一坨。规律是 <b>组间间距 ≥ 组内间距 × 2</b>。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>按亲密性重排间距：组内元素 8，组之间 24 或 32，保证组间至少是组内的两倍。</q></p>
+  </div>
+</article>
+
+<!-- 03 -->
+<article class="atom" id="a03">
+  <div class="atom-id">03</div>
+  <div class="atom-body">
+    <h4 class="atom-name">字号标度 <span class="en">Type Scale</span></h4>
+    <p class="atom-def">字号同样只能从档位挑，档位由一个<b>比例数</b>连乘生成（常用 1.2 / 1.25 / 1.333）。比例越大层级越戏剧化，越小越克制。整个界面通常只需要 5–7 档。</p>
+    <div class="demo d03">
+      <ul>
+        <li><span class="n mono">49 / display</span><span class="s" style="font-size:39px;font-weight:700">层级最高的数字</span></li>
+        <li><span class="n mono">31 / h1</span><span class="s" style="font-size:31px;font-weight:700">页面标题</span></li>
+        <li><span class="n mono">25 / h2</span><span class="s" style="font-size:25px;font-weight:600">区块标题</span></li>
+        <li><span class="n mono">20 / h3</span><span class="s" style="font-size:20px;font-weight:600">卡片标题</span></li>
+        <li><span class="n mono">16 / base</span><span class="s" style="font-size:16px;font-weight:400">正文，一切的基准</span></li>
+        <li><span class="n mono">14 / sm</span><span class="s" style="font-size:14px;font-weight:400">辅助说明、表格</span></li>
+        <li><span class="n mono">12 / xs</span><span class="s" style="font-size:12px;font-weight:400">标签、时间戳</span></li>
+      </ul>
+      <p class="note">↑ 基准 16，比例 1.25。相邻两档差别必须<b>一眼可辨</b> —— 15 和 16 并存是纯粹的噪音。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>字号收敛到 12/14/16/20/25/31 六档（基准 16、比例 1.25），去掉所有档位外的字号。</q></p>
+  </div>
+</article>
+
+<!-- 04 -->
+<article class="atom" id="a04">
+  <div class="atom-id">04</div>
+  <div class="atom-body">
+    <h4 class="atom-name">字重 <span class="en">Font Weight</span></h4>
+    <p class="atom-def">粗细。整个界面<b>最多用三档</b>（例如 400 正文 / 500 强调 / 700 标题）。新手的通病是靠加粗制造层级，结果满屏都是粗体 —— 全都在喊等于没人在喊。</p>
+    <div class="demo d04">
+      <div><div class="w" style="font-weight:300">字重</div><div class="l">300 Light</div></div>
+      <div><div class="w" style="font-weight:400">字重</div><div class="l">400 Regular ←正文</div></div>
+      <div><div class="w" style="font-weight:500">字重</div><div class="l">500 Medium ←强调</div></div>
+      <div><div class="w" style="font-weight:600">字重</div><div class="l">600 Semibold</div></div>
+      <div><div class="w" style="font-weight:700">字重</div><div class="l">700 Bold ←标题</div></div>
+      <div><div class="w" style="font-weight:900">字重</div><div class="l">900 Black</div></div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>字重只保留 400 / 500 / 700 三档，正文一律 400，不要用加粗来做层级。</q></p>
+  </div>
+</article>
+
+<!-- 05 -->
+<article class="atom" id="a05">
+  <div class="atom-id">05</div>
+  <div class="atom-body">
+    <h4 class="atom-name">行高 <span class="en">Line-height</span></h4>
+    <p class="atom-def">行与行的垂直距离，写成字号的倍数。规律：<b>字号越大，行高倍数越小</b>。正文 1.5–1.7，标题 1.1–1.25。行高不够读着窒息，行高过大句子会散架。</p>
+    <div class="demo">
+      <div class="ctl">
+        <label for="c05">行高</label>
+        <input type="range" id="c05" min="100" max="220" value="160" step="5">
+        <output id="o05">1.60</output>
+      </div>
+      <p class="d05-p" id="d05" style="line-height:1.6;max-width:62ch">
+        行高是排版里最容易被忽略、又最影响阅读体感的一项。它决定了眼睛从一行末尾跳回下一行开头时，是否会跳错行。中文因为字形方正、没有升降部，通常比英文再需要多一点行高 —— 正文给到 1.7 也不过分。
+      </p>
+      <p class="note">↑ 拖到 1.2 感受窒息，拖到 2.2 感受散架。这段文字的合适值大约在 1.6–1.75。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>正文 line-height 1.65，标题 1.15，不要用统一行高。</q></p>
+  </div>
+</article>
+
+<!-- 06 -->
+<article class="atom" id="a06">
+  <div class="atom-id">06</div>
+  <div class="atom-body">
+    <h4 class="atom-name">行长 <span class="en">Measure</span></h4>
+    <p class="atom-def">一行能放多少字符。英文 45–75 字符，中文 30–45 字。<b>超过就会跳错行</b>。CSS 里一个 <span class="mono">max-width: 65ch</span> 就搞定 —— 这是性价比最高的一条排版规则。</p>
+    <div class="demo">
+      <div class="ctl">
+        <label for="c06">行长上限</label>
+        <input type="range" id="c06" min="24" max="120" value="65" step="1">
+        <output id="o06">65ch</output>
+      </div>
+      <p class="d06-p" id="d06" style="max-width:65ch">
+        排版上唯一一条几乎不需要判断力的规则，就是限制行长。眼睛在一行结束后要做一次"回扫"动作，找到下一行的起点。行越长，这次回扫的落点误差越大，读者就越容易重复读同一行或者跳过一行。这个上限跟屏幕多宽没关系，只跟人眼有关系，所以再宽的显示器上，正文也不该铺满。
+      </p>
+      <p class="note">↑ 拖到 120ch 试试回扫。屏幕宽不是让正文变宽的理由，是让两侧留白变宽的理由。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>正文容器加 max-width: 65ch，不要让文字铺满整个屏幕宽度。</q></p>
+  </div>
+</article>
+
+<!-- 07 -->
+<article class="atom" id="a07">
+  <div class="atom-id">07</div>
+  <div class="atom-body">
+    <h4 class="atom-name">字距 <span class="en">Letter-spacing / Tracking</span></h4>
+    <p class="atom-def">字符间距。规律和行高一样反着来：<b>字越大越要收紧（负值），字越小越要放松（正值）</b>。全大写和小号标签一定要放松，否则糊成一团。这是"廉价"和"精致"之间最细微也最有效的一刀。</p>
+    <div class="demo">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div>
+          <div class="tag tag-n">大标题 · 收紧</div>
+          <div style="font-family:var(--f-display);font-size:34px;font-weight:700;letter-spacing:-.035em;line-height:1.05">收紧的大标题</div>
+          <div class="mono" style="font-size:10.5px;color:var(--muted);margin-top:4px">letter-spacing: -0.035em</div>
+        </div>
+        <div>
+          <div class="tag tag-n">正文 · 不动</div>
+          <div style="font-size:15px">正常大小的正文，字距保持 0，不要画蛇添足。</div>
+          <div class="mono" style="font-size:10.5px;color:var(--muted);margin-top:4px">letter-spacing: 0</div>
+        </div>
+        <div>
+          <div class="tag tag-n">小号大写标签 · 放松</div>
+          <div class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--accent)">SECTION LABEL · 区块标签</div>
+          <div class="mono" style="font-size:10.5px;color:var(--muted);margin-top:4px">letter-spacing: 0.16em</div>
+        </div>
+      </div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>28px 以上标题 letter-spacing -0.03em；小号大写标签 +0.14em；正文保持 0。</q></p>
+  </div>
+</article>
+
+<!-- 08 -->
+<article class="atom" id="a08">
+  <div class="atom-id">08</div>
+  <div class="atom-body">
+    <h4 class="atom-name">圆角标度 <span class="en">Radius Scale</span></h4>
+    <p class="atom-def">圆角也要成档（2 / 4 / 8 / 12 / 999）。而且有一条硬公式管嵌套：<b>外圆角 = 内圆角 + 内边距</b>。违反了会看到两条弧线不同心 —— 说不出哪不对，但就是别扭。</p>
+    <div class="demo">
+      <div style="display:flex;gap:36px;flex-wrap:wrap;align-items:flex-start">
+        <figure style="margin:0">
+          <div class="tag tag-bad">错 · 内外同圆角</div>
+          <div class="d08-out" style="border-radius:8px"><div class="d08-in" style="border-radius:8px"></div></div>
+          <figcaption class="mono" style="font-size:10px;color:var(--muted);margin-top:8px">外 8 · 内 8 · padding 12</figcaption>
+        </figure>
+        <figure style="margin:0">
+          <div class="tag tag-ok">对 · 外 = 内 + padding</div>
+          <div class="d08-out" style="border-radius:20px"><div class="d08-in" style="border-radius:8px"></div></div>
+          <figcaption class="mono" style="font-size:10px;color:var(--muted);margin-top:8px">外 20 · 内 8 · padding 12</figcaption>
+        </figure>
+      </div>
+      <p class="note">↑ 盯着两个图形的左上角看。右边那对弧线是同心的，左边不是。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>圆角用 2/4/8/12 四档；嵌套时外层圆角 = 内层圆角 + 内边距。</q></p>
+  </div>
+</article>
+
+
+<!-- ---------- GROUP B ---------- -->
+<div class="group">
+  <div class="group-key">组 B</div>
+  <h3>色彩与深度 <span>COLOR &amp; DEPTH · 09—14</span></h3>
+</div>
+
+<!-- 09 -->
+<article class="atom" id="a09">
+  <div class="atom-id">09</div>
+  <div class="atom-body">
+    <h4 class="atom-name">色阶 <span class="en">Color Ramp</span></h4>
+    <p class="atom-def">一个颜色不是一个色值，是<b>一条从 50 到 950 的梯度</b>。你要的从来不是"蓝色"，而是"蓝-600 做按钮、蓝-50 做背景、蓝-800 做文字"。现代做法用 OKLCH 生成，保证每一档的<b>感知亮度</b>均匀。</p>
+    <div class="demo">
+      <div class="d09">
+        <div><div class="sw" style="background:#EFF7F7"></div><div class="lb">50</div></div>
+        <div><div class="sw" style="background:#D5EBEC"></div><div class="lb">100</div></div>
+        <div><div class="sw" style="background:#ADD9DC"></div><div class="lb">200</div></div>
+        <div><div class="sw" style="background:#7CC2C7"></div><div class="lb">300</div></div>
+        <div><div class="sw" style="background:#4AA5AC"></div><div class="lb">400</div></div>
+        <div><div class="sw" style="background:#2A888F"></div><div class="lb">500</div></div>
+        <div><div class="sw" style="background:#196E76"></div><div class="lb">600</div></div>
+        <div><div class="sw" style="background:#14585F"></div><div class="lb">700</div></div>
+        <div><div class="sw" style="background:#12474C"></div><div class="lb">800</div></div>
+        <div><div class="sw" style="background:#113A3E"></div><div class="lb">900</div></div>
+        <div><div class="sw" style="background:#0A2427"></div><div class="lb">950</div></div>
+      </div>
+      <p class="note">↑ 常用分工：<b>50/100</b> 背景 · <b>200/300</b> 描边 · <b>500/600</b> 主色/按钮 · <b>700/800</b> 文字 · <b>900/950</b> 暗色底</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>用完整 50–950 色阶，不要临时凑色值：背景用 -50，描边用 -200，按钮用 -600，文字用 -800。</q></p>
+  </div>
+</article>
+
+<!-- 10 -->
+<article class="atom" id="a10">
+  <div class="atom-id">10</div>
+  <div class="atom-body">
+    <h4 class="atom-name">语义色 / Token 三层 <span class="en">Semantic Tokens</span></h4>
+    <p class="atom-def">Token 是三级的，这才是它真正的价值所在。<b>改主题只动第二层</b>，第一层永远不动。有了这层结构，"把危险色调一下"是一次改动，没有它就是全局搜索替换。</p>
+    <div class="demo d10">
+      <div>
+        <div class="k">Tier 1 · 原始</div>
+        <div class="v">teal-600<br>red-600<br>gray-800<br>space-4</div>
+        <div class="d">只是色值和数值，不带任何含义。永不直接使用。</div>
+      </div>
+      <div>
+        <div class="k">Tier 2 · 语义 ←改这层</div>
+        <div class="v">color-primary<br>color-danger<br>text-body<br>space-inline</div>
+        <div class="d">带含义。换主题、做暗色、改品牌色，只改这一层的指向。</div>
+      </div>
+      <div>
+        <div class="k">Tier 3 · 组件</div>
+        <div class="v">button-bg<br>alert-border<br>card-padding<br>input-radius</div>
+        <div class="d">组件私有。只有当某个组件需要偏离通用规则时才建。</div>
+      </div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>建立三层 token：primitive → semantic → component，组件里只准引用语义层，禁止硬编码色值。</q></p>
+  </div>
+</article>
+
+<!-- 11 -->
+<article class="atom" id="a11">
+  <div class="atom-id">11</div>
+  <div class="atom-body">
+    <h4 class="atom-name">中性色 <span class="en">Neutrals</span></h4>
+    <p class="atom-def">界面 90% 的面积是中性色。两条规则：<b>不要用纯黑纯白</b>（#000 在屏幕上过刺，像挖了个洞）；<b>中性色要带一点点色相偏向</b>，偏向主色的方向 —— 纯灰读起来像"没选过"。</p>
+    <div class="demo demo-2" style="border:0">
+      <div style="background:#FFFFFF">
+        <div class="tag tag-bad">纯黑纯白 · 纯灰</div>
+        <p style="color:#000000;font-size:15px;margin:0 0 8px;font-weight:600">标题文字 #000</p>
+        <p style="color:#808080;font-size:13.5px;margin:0">辅助文字 #808080，在 #FFFFFF 上。对比生硬，灰色发脏。</p>
+      </div>
+      <div style="background:#F7F8F7">
+        <div class="tag tag-ok">选过的中性色</div>
+        <p style="color:#14181A;font-size:15px;margin:0 0 8px;font-weight:600">标题文字 #14181A</p>
+        <p style="color:#606A6E;font-size:13.5px;margin:0">辅助文字 #606A6E，带青绿偏向，和主色同族。整体更沉静。</p>
+      </div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>不要用 #000 / #FFF；中性色向主色的色相偏 2–5 度，正文用 gray-800 而不是纯黑。</q></p>
+  </div>
+</article>
+
+<!-- 12 -->
+<article class="atom" id="a12">
+  <div class="atom-id">12</div>
+  <div class="atom-body">
+    <h4 class="atom-name">对比度 <span class="en">Contrast Ratio</span></h4>
+    <p class="atom-def">前景色和背景色的亮度比值，有客观数值可算。及格线（WCAG AA）：<b>正文 4.5:1，大字和 UI 元件 3:1</b>。这不是加分项，是及格线 —— 而"字太浅看不清"是 AI 生成界面最高频的毛病。</p>
+    <div class="demo">
+      <div class="d12">
+        <div class="chip"><p style="color:#000000">正文示例文字</p><div class="r"><span class="mono">#000</span><span class="pass mono">21.0:1 ✓</span></div></div>
+        <div class="chip"><p style="color:#595959">正文示例文字</p><div class="r"><span class="mono">#595959</span><span class="pass mono">7.0:1 AAA</span></div></div>
+        <div class="chip"><p style="color:#767676">正文示例文字</p><div class="r"><span class="mono">#767676</span><span class="pass mono">4.54:1 AA</span></div></div>
+        <div class="chip"><p style="color:#999999">正文示例文字</p><div class="r"><span class="mono">#999999</span><span class="fail mono">2.85:1 ✗</span></div></div>
+      </div>
+      <p class="note">↑ 白底上的真实比值。<b>#767676 是白底正文的极限</b>，再浅一点就不及格。占位符、禁用态最容易翻车。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>所有文字对比度必须过 WCAG AA：正文 ≥4.5:1，大字和图标 ≥3:1，把每个色对的比值算给我看。</q></p>
+  </div>
+</article>
+
+<!-- 13 -->
+<article class="atom" id="a13">
+  <div class="atom-id">13</div>
+  <div class="atom-body">
+    <h4 class="atom-name">海拔 / 阴影阶梯 <span class="en">Elevation</span></h4>
+    <p class="atom-def">阴影不是装饰，是<b>"这东西离页面多远"的编码</b>。要成阶梯（4–5 档），越高的层阴影越大越散。而且真实的阴影是<b>向下偏移</b>的（光从上来），不是四面均匀发光。</p>
+    <div class="demo">
+      <div class="d13">
+        <figure><div class="e" style="box-shadow:none"></div><figcaption>0 · 贴地<br>表格行、分割区</figcaption></figure>
+        <figure><div class="e" style="box-shadow:0 1px 2px rgba(0,0,0,.07)"></div><figcaption>1 · 卡片<br>列表卡</figcaption></figure>
+        <figure><div class="e" style="box-shadow:0 2px 6px rgba(0,0,0,.09)"></div><figcaption>2 · 悬浮<br>hover 抬起</figcaption></figure>
+        <figure><div class="e" style="box-shadow:0 6px 16px -2px rgba(0,0,0,.13)"></div><figcaption>3 · 浮层<br>下拉、气泡</figcaption></figure>
+        <figure><div class="e" style="box-shadow:0 16px 40px -8px rgba(0,0,0,.22)"></div><figcaption>4 · 模态<br>对话框</figcaption></figure>
+      </div>
+      <p class="note">↑ 注意 y 偏移和模糊半径是<b>一起</b>增长的。只调 blur 不调 y，阴影会像雾而不像影。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>阴影用 5 档海拔阶梯，y 偏移和模糊半径同步增长；下拉用第 3 档，模态用第 4 档。</q></p>
+  </div>
+</article>
+
+<!-- 14 -->
+<article class="atom" id="a14">
+  <div class="atom-id">14</div>
+  <div class="atom-body">
+    <h4 class="atom-name">暗色模式 <span class="en">Dark Mode</span></h4>
+    <p class="atom-def">暗色<b>不是把颜色反转</b>。三条独立规则：① 降饱和 —— 亮色在暗底上会刺眼振动；② 用「提亮」代替「投影」表达层级 —— 黑底上的黑影是看不见的；③ 底色不要纯黑，用 #0C0F10 这类近黑。</p>
+    <div class="demo" style="padding:0;border:0;overflow:visible">
+      <div class="demo-2">
+        <div style="background:#F7F8F7">
+          <div class="tag tag-n">明色 · 层级靠阴影</div>
+          <div style="background:#fff;border:1px solid #E3E4E0;border-radius:6px;padding:13px;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+            <div style="color:#14181A;font-weight:600;font-size:14px;margin-bottom:5px">浮起的卡片</div>
+            <div style="color:#606A6E;font-size:12.5px">白底 + 投影 = 离页面更近</div>
+          </div>
+        </div>
+        <div style="background:#0C0F10">
+          <div class="tag" style="color:#8B9599">暗色 · 层级靠提亮</div>
+          <div style="background:#1B2124;border:1px solid #2A3134;border-radius:6px;padding:13px">
+            <div style="color:#E4E8E8;font-weight:600;font-size:14px;margin-bottom:5px">浮起的卡片</div>
+            <div style="color:#8B9599;font-size:12.5px">比底色更亮 = 离页面更近</div>
+          </div>
+        </div>
+      </div>
+      <p class="note" style="padding:0 2px">↑ 右边那张卡没有任何阴影，"浮起来"完全靠比背景亮。这就是暗色下的海拔。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>做暗色时不要反转：降低饱和度，用背景提亮代替阴影表达层级，底色用近黑不用纯黑。</q></p>
+  </div>
+</article>
+
+
+<!-- ---------- GROUP C ---------- -->
+<div class="group">
+  <div class="group-key">组 C</div>
+  <h3>视觉原则 <span>PRINCIPLES · 15—20 · 这组回答"说不出哪不对"</span></h3>
+</div>
+
+<!-- 15 -->
+<article class="atom" id="a15">
+  <div class="atom-id">15</div>
+  <div class="atom-body">
+    <h4 class="atom-name">视觉层级 <span class="en">Visual Hierarchy</span></h4>
+    <p class="atom-def">让人一眼知道先看哪儿。你手上有六种手段，<b>按有效强度排序如下</b>。新手只会用「尺寸」和「字重」，于是所有元素同时在喊；老手先用「留白」和「明度」，安静得多也有效得多。</p>
+    <div class="demo d15">
+      <div><div class="lv">① 留白</div><p class="t" style="margin-bottom:14px">项目名称</p><p class="b">附加说明文字</p><div class="strength">最强 · 最被低估</div></div>
+      <div><div class="lv">② 明度对比</div><p class="t" style="color:var(--ink)">项目名称</p><p class="b" style="color:var(--rule-2)">附加说明文字</p><div class="strength">很强 · 安静</div></div>
+      <div><div class="lv">③ 尺寸</div><p class="t" style="font-size:20px">项目名称</p><p class="b" style="font-size:12px">附加说明文字</p><div class="strength">强 · 占空间</div></div>
+      <div><div class="lv">④ 字重</div><p class="t" style="font-weight:700">项目名称</p><p class="b">附加说明文字</p><div class="strength">中 · 容易滥用</div></div>
+      <div><div class="lv">⑤ 色彩</div><p class="t" style="color:var(--accent);font-weight:500">项目名称</p><p class="b">附加说明文字</p><div class="strength">中 · 有语义副作用</div></div>
+      <div><div class="lv">⑥ 装饰</div><p class="t" style="border-left:3px solid var(--accent);padding-left:8px">项目名称</p><p class="b" style="padding-left:11px">附加说明文字</p><div class="strength">最弱 · 最被滥用</div></div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>层级优先用留白和明度对比来做，不要靠加大字号和加粗；每屏只允许一个视觉焦点。</q></p>
+  </div>
+</article>
+
+<!-- 16 -->
+<article class="atom" id="a16">
+  <div class="atom-id">16</div>
+  <div class="atom-body">
+    <h4 class="atom-name">留白 <span class="en">White Space</span></h4>
+    <p class="atom-def">留白不是"还没填的地方"，是<b>主动划出的呼吸区</b>。分外白（区块之间）和内白（元素内部 padding）。密的界面显得廉价而焦虑，不是因为元素丑，是因为没给它们空间。</p>
+    <div class="demo demo-2" style="border:0">
+      <div>
+        <div class="tag tag-bad">内白不足</div>
+        <div style="border:1px solid var(--rule-2);border-radius:6px;padding:6px">
+          <div style="font-weight:600;font-size:14px;margin-bottom:2px">本月账单</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:6px">2026 年 7 月 · 已出账</div>
+          <div style="font-family:var(--f-display);font-size:26px;font-weight:700;letter-spacing:-.03em">¥ 1,284.00</div>
+        </div>
+      </div>
+      <div>
+        <div class="tag tag-ok">内白 20 / 分组间距 14</div>
+        <div style="border:1px solid var(--rule-2);border-radius:8px;padding:20px">
+          <div style="font-weight:600;font-size:14px;margin-bottom:3px">本月账单</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">2026 年 7 月 · 已出账</div>
+          <div style="font-family:var(--f-display);font-size:26px;font-weight:700;letter-spacing:-.03em">¥ 1,284.00</div>
+        </div>
+      </div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>卡片内边距至少 20，区块之间至少 48；宁可减内容也不要减留白。</q></p>
+  </div>
+</article>
+
+<!-- 17 -->
+<article class="atom" id="a17">
+  <div class="atom-id">17</div>
+  <div class="atom-body">
+    <h4 class="atom-name">对齐 <span class="en">Alignment</span></h4>
+    <p class="atom-def">每条隐形的对齐轴都是一次视觉承诺。<b>一屏里的对齐轴越少越整齐</b> —— 通常两条足够（一条主轴 + 一条缩进轴）。新手界面常有四五条互不相干的左边界，说不出哪乱，但就是乱。</p>
+    <div class="demo demo-2" style="border:0">
+      <div class="d17">
+        <div class="tag tag-bad">四条轴</div>
+        <div style="position:relative">
+          <div class="row"><div class="dot"></div><div class="t" style="width:64%"></div></div>
+          <div class="row" style="padding-left:14px"><div class="t" style="width:52%"></div></div>
+          <div class="row" style="padding-left:6px"><div class="dot"></div><div class="t" style="width:58%"></div></div>
+          <div class="row" style="padding-left:22px"><div class="t" style="width:44%"></div></div>
+        </div>
+      </div>
+      <div class="d17">
+        <div class="tag tag-ok">两条轴</div>
+        <div style="position:relative">
+          <div class="row"><div class="dot"></div><div class="t" style="width:64%"></div></div>
+          <div class="row" style="padding-left:30px"><div class="t" style="width:52%"></div></div>
+          <div class="row"><div class="dot"></div><div class="t" style="width:58%"></div></div>
+          <div class="row" style="padding-left:30px"><div class="t" style="width:44%"></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>把左对齐轴收敛到两条：主轴和一条 30px 缩进轴，去掉所有零散缩进。</q></p>
+  </div>
+</article>
+
+<!-- 18 -->
+<article class="atom" id="a18">
+  <div class="atom-id">18</div>
+  <div class="atom-body">
+    <h4 class="atom-name">一致性 / 重复 <span class="en">Consistency &amp; Repetition</span></h4>
+    <p class="atom-def">同一种东西必须<b>长得完全一样</b>。三张并排卡片，圆角一个 6 一个 8 一个 10，人眼察觉得到但意识不到 —— 结果是"这页面有点廉价"。一致性是设计系统存在的全部理由。</p>
+    <div class="demo">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px">
+        <div style="border:1px solid var(--flag);border-radius:5px;padding:11px 13px;font-size:12.5px;background:var(--flag-soft)">圆角 5 · pad 11/13</div>
+        <div style="border:2px solid var(--flag);border-radius:9px;padding:15px 10px;font-size:12.5px;background:var(--flag-soft)">圆角 9 · pad 15/10 · 边框 2</div>
+        <div style="border:1px solid var(--flag);border-radius:14px;padding:9px 16px;font-size:13.5px;background:var(--flag-soft)">圆角 14 · pad 9/16 · 字号 13.5</div>
+      </div>
+      <p class="note">↑ 这三张卡"内容一样、参数全不同"。看着别扭却说不出所以然 —— 这就是一致性缺失的典型症状。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>抽出一个统一的卡片组件，所有卡片共用同一套圆角/内边距/边框，不允许逐个微调。</q></p>
+  </div>
+</article>
+
+<!-- 19 -->
+<article class="atom" id="a19">
+  <div class="atom-id">19</div>
+  <div class="atom-body">
+    <h4 class="atom-name">视觉重量与平衡 <span class="en">Visual Weight</span></h4>
+    <p class="atom-def">每个元素都有"视觉重量"，由面积 × 明度 × 饱和度共同决定。<b>一小块高饱和的色，重量等于一大片灰</b>。所以主按钮不用做大，只要它是全屏唯一的实心色块就够。</p>
+    <div class="demo">
+      <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+        <div style="width:110px;height:56px;background:var(--rule);border-radius:var(--r-2);display:grid;place-items:center;font-size:11px;color:var(--muted)" class="mono">大 · 低饱和</div>
+        <div class="mono" style="font-size:16px;color:var(--muted)">≈</div>
+        <div style="width:34px;height:34px;background:var(--accent);border-radius:var(--r-2)"></div>
+        <div class="mono" style="font-size:11px;color:var(--muted)">小 · 高饱和</div>
+      </div>
+      <p class="note">↑ 面积差 5 倍，视觉重量却接近。推论：<b>整页只能有一个高饱和实色块</b>，那就是你要用户点的地方。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>整屏只允许一个高饱和实心按钮，其余动作用描边或纯文字按钮。</q></p>
+  </div>
+</article>
+
+<!-- 20 -->
+<article class="atom" id="a20">
+  <div class="atom-id">20</div>
+  <div class="atom-body">
+    <h4 class="atom-name">光学修正 <span class="en">Optical Adjustment</span></h4>
+    <p class="atom-def"><b>数学居中 ≠ 看着居中。</b>三角形、图标、引号、圆形都要手动补偿。经典案例是播放按钮 —— 三角形几何居中时永远看着偏左，必须右移约 8%。这条是"精致"的最后一公里。</p>
+    <div class="demo">
+      <div class="d20">
+        <figure>
+          <div class="circ"><div class="tri"></div></div>
+          <figcaption>数学居中<br><span style="color:var(--flag)">看着偏左</span></figcaption>
+        </figure>
+        <figure>
+          <div class="circ"><div class="tri" style="margin-left:5px"></div></div>
+          <figcaption>右移 5px<br><span style="color:var(--ok)">看着居中</span></figcaption>
+        </figure>
+      </div>
+      <p class="note">↑ 原理：三角形的<b>视觉重心</b>在几何中心偏左，因为右侧是个尖，面积在左边。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>播放三角、图标做光学居中补偿，不要只用 flex center。</q></p>
+  </div>
+</article>
+
+
+<!-- ---------- GROUP D ---------- -->
+<div class="group">
+  <div class="group-key">组 D</div>
+  <h3>布局 <span>LAYOUT · 21—25</span></h3>
+</div>
+
+<!-- 21 -->
+<article class="atom" id="a21">
+  <div class="atom-id">21</div>
+  <div class="atom-body">
+    <h4 class="atom-name">gap 而非 margin <span class="en">Spacing Ownership</span></h4>
+    <p class="atom-def">一条能消掉一半布局 bug 的规则：<b>间距属于容器，不属于元素</b>。子元素不该自带 margin 来决定"我离别人多远"，应该由父容器的 <span class="mono">gap</span> 统一决定。margin 会塌陷、会叠加、会在复用时打架。</p>
+    <div class="demo demo-2" style="border:0">
+      <div>
+        <div class="tag tag-bad">子元素自带 margin</div>
+        <div class="mono" style="font-size:11.5px;line-height:1.9;color:var(--muted)">.card { margin-bottom: 16px }<br>.card:last-child { margin-bottom: 0 }<br><span style="color:var(--flag)">← 永远要写这条补丁</span><br><span style="color:var(--flag)">← 换到横向布局就废了</span></div>
+      </div>
+      <div>
+        <div class="tag tag-ok">父容器 gap</div>
+        <div class="mono" style="font-size:11.5px;line-height:1.9;color:var(--muted)">.list {<br>&nbsp;&nbsp;display: flex;<br>&nbsp;&nbsp;flex-direction: column;<br>&nbsp;&nbsp;gap: 16px;<br>}<br><span style="color:var(--ok)">← 没有补丁，方向随便改</span></div>
+      </div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>用 flex/grid + gap 布局，禁止子元素自带 margin，也不要写 :last-child 清间距的补丁。</q></p>
+  </div>
+</article>
+
+<!-- 22 -->
+<article class="atom" id="a22">
+  <div class="atom-id">22</div>
+  <div class="atom-body">
+    <h4 class="atom-name">Flex 还是 Grid <span class="en">Flex vs Grid</span></h4>
+    <p class="atom-def">心智模型只有一句话：<b>Flex 管一维（一行或一列），Grid 管二维（行列同时管）</b>。工具栏、按钮组、列表项内部 → Flex。页面骨架、卡片墙、表单双列 → Grid。</p>
+    <div class="demo d22">
+      <div class="demo-2" style="border:0;background:transparent;gap:16px">
+        <div style="padding:0">
+          <div class="tag tag-n">Flex · 一维</div>
+          <div class="f"><div></div><div style="flex:2"></div><div></div><div></div></div>
+          <p class="note" style="margin-top:9px">元素排成一条线，各自决定占多宽。工具栏、导航、行内元素。</p>
+        </div>
+        <div style="padding:0">
+          <div class="tag tag-n">Grid · 二维</div>
+          <div class="g"><div class="span2"></div><div></div><div></div><div></div><div class="span2"></div><div></div></div>
+          <p class="note" style="margin-top:9px">先画出行列骨架，元素再往格子里放、可以跨格。页面布局、卡片墙。</p>
+        </div>
+      </div>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>页面骨架用 Grid，组件内部一行元素用 Flex，不要用 Flex 硬凑二维布局。</q></p>
+  </div>
+</article>
+
+<!-- 23 -->
+<article class="atom" id="a23">
+  <div class="atom-id">23</div>
+  <div class="atom-body">
+    <h4 class="atom-name">栅格 <span class="en">Grid System</span></h4>
+    <p class="atom-def">把内容区横向切成 12 等份（因为 12 能被 2/3/4/6 整除），所有元素的宽度都是<b>整数份</b>。加上一个容器最大宽度（常见 1120–1280），页面就不会在大屏上散架。</p>
+    <div class="demo">
+      <div class="d23">
+        <div class="cols"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="content">
+          <div style="grid-column:span 8">span 8 · 主内容</div>
+          <div style="grid-column:span 4">span 4 · 侧栏</div>
+          <div style="grid-column:span 4">span 4</div>
+          <div style="grid-column:span 4">span 4</div>
+          <div style="grid-column:span 4">span 4</div>
+          <div style="grid-column:span 6">span 6</div>
+          <div style="grid-column:span 6">span 6</div>
+        </div>
+      </div>
+      <p class="note">↑ 红色是栅格轨道。8+4、4+4+4、6+6 —— 常用组合就这几种，够用了。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>用 12 栏栅格，gutter 24，容器最大宽 1200；主内容 span 8、侧栏 span 4。</q></p>
+  </div>
+</article>
+
+<!-- 24 -->
+<article class="atom" id="a24">
+  <div class="atom-id">24</div>
+  <div class="atom-body">
+    <h4 class="atom-name">响应式 <span class="en">Responsive &amp; Container Query</span></h4>
+    <p class="atom-def">老做法是断点（看<b>屏幕</b>多宽）。新做法是容器查询（看<b>自己所在的容器</b>多宽）—— 同一个卡片放侧栏里是竖版、放主区里是横版，组件自己就知道，不用外面配合。</p>
+    <div class="demo">
+      <p class="note" style="margin:0 0 12px">↓ <b>拖右下角改变宽度</b>。断点在 420px，卡片自己会切换布局。</p>
+      <div class="d24-wrap">
+        <div class="d24-state mono"></div>
+        <div class="d24-card">
+          <div class="thumb"></div>
+          <div>
+            <h5>容器查询演示卡</h5>
+            <p>它不关心屏幕多宽，只关心自己被塞进了多宽的盒子。</p>
+          </div>
+        </div>
+      </div>
+      <p class="note">断点还是要的（页面骨架级），但组件级一律用 container query，复用性完全不同。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>页面骨架用媒体查询断点，组件内部改用 container query，让组件自适应容器而不是屏幕。</q></p>
+  </div>
+</article>
+
+<!-- 25 -->
+<article class="atom" id="a25">
+  <div class="atom-id">25</div>
+  <div class="atom-body">
+    <h4 class="atom-name">密度 <span class="en">Density</span></h4>
+    <p class="atom-def">同样的信息，可以铺得紧也可以铺得松。<b>密度由使用场景决定</b>：专业工具（金融终端、后台表格）要紧，让人一屏看到更多；消费产品要松，让人放松。一个产品里密度必须统一。</p>
+    <div class="demo">
+      <div class="ctl">
+        <span>密度</span>
+        <span class="seg" id="seg25">
+          <button data-d="compact">紧凑 / 专业工具</button>
+          <button data-d="cozy" aria-pressed="true">适中 / 通用后台</button>
+          <button data-d="roomy">宽松 / 消费产品</button>
+        </span>
+      </div>
+      <div class="d25" id="d25" data-den="cozy">
+        <table>
+          <thead><tr><th>任务</th><th>负责人</th><th>状态</th><th>耗时</th></tr></thead>
+          <tbody>
+            <tr><td>重写 IR 映射层</td><td>Liang</td><td>进行中</td><td>4.2h</td></tr>
+            <tr><td>沙箱策略对齐 Codex</td><td>Liang</td><td>已完成</td><td>11.0h</td></tr>
+            <tr><td>模型调用退避重试</td><td>Liang</td><td>已完成</td><td>2.5h</td></tr>
+            <tr><td>环境上下文注入</td><td>Liang</td><td>待评审</td><td>6.8h</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">↑ 内容一个字没变，只改了行内边距（5 / 10 / 17）。密度是一个 token，不是逐处硬编码。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>把密度抽成 token（compact/cozy/roomy），全站统一用一档，不要逐个组件调 padding。</q></p>
+  </div>
+</article>
+
+
+<!-- ---------- GROUP E ---------- -->
+<div class="group">
+  <div class="group-key">组 E</div>
+  <h3>组件与交互 <span>COMPONENTS &amp; INTERACTION · 26—30</span></h3>
+</div>
+
+<!-- 26 -->
+<article class="atom" id="a26">
+  <div class="atom-id">26</div>
+  <div class="atom-body">
+    <h4 class="atom-name">组件解剖 <span class="en">Anatomy</span></h4>
+    <p class="atom-def">每个组件都能拆成有名字的部位。学会这套黑话，你就能<b>精确指到某一块</b>：不是"右边那个小东西"，而是"trailing 区的 badge"。几乎所有组件都是这四段结构。</p>
+    <div class="demo">
+      <div class="d26">
+        <div class="d26-row">
+          <div class="lead"></div>
+          <div class="lab"><b>主标签 Label</b><span>辅助说明 Supporting text</span></div>
+          <span class="badge badge-a">3</span>
+          <div class="trail">→</div>
+        </div>
+        <div class="d26-pins">
+          <span style="width:42px">leading</span>
+          <span style="flex:1">label + supporting</span>
+          <span style="width:44px">badge</span>
+          <span style="width:26px">trailing</span>
+        </div>
+      </div>
+      <p class="note">↑ 按钮、列表项、输入框、菜单项、卡片头 —— 全是这个结构。<b>container / leading / label / trailing</b>。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>在 trailing 区加一个计数 badge，leading 保持头像，label 两行不变。</q></p>
+  </div>
+</article>
+
+<!-- 27 -->
+<article class="atom" id="a27">
+  <div class="atom-id">27</div>
+  <div class="atom-body">
+    <h4 class="atom-name">状态 <span class="en">States</span></h4>
+    <p class="atom-def">一个可交互元素<b>不是一个样子，是九个样子</b>。模型默认只给你 default 和 hover —— 剩下七个要你主动要。其中 <span class="mono">focus-visible</span> 最常被漏，而它是键盘用户唯一的方向感。</p>
+    <div class="demo">
+      <div class="d27">
+        <figure><button class="btn">默认</button><figcaption>default</figcaption></figure>
+        <figure><button class="btn btn-hover">悬停</button><figcaption>hover</figcaption></figure>
+        <figure><button class="btn btn-active">按下</button><figcaption>active</figcaption></figure>
+        <figure><button class="btn btn-focus">聚焦</button><figcaption>focus-visible ←最常漏</figcaption></figure>
+        <figure><button class="btn btn-disabled" disabled>禁用</button><figcaption>disabled</figcaption></figure>
+        <figure><button class="btn btn-load"><span class="spin"></span>处理中</button><figcaption>loading</figcaption></figure>
+        <figure><button class="btn" style="background:var(--accent);box-shadow:inset 0 0 0 2px var(--accent-on),0 0 0 2px var(--accent)">已选</button><figcaption>selected</figcaption></figure>
+        <figure><button class="btn btn-danger">删除</button><figcaption>danger</figcaption></figure>
+        <figure><button class="btn btn-ghost">次要</button><figcaption>ghost / 次级</figcaption></figure>
+      </div>
+      <p class="note">↑ 上面第一个按钮是真的，可以 hover、点击、按 Tab 聚焦试试。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>给每个可交互元素补齐九态：default/hover/active/focus-visible/disabled/loading/selected/error/empty。</q></p>
+  </div>
+</article>
+
+<!-- 28 -->
+<article class="atom" id="a28">
+  <div class="atom-id">28</div>
+  <div class="atom-body">
+    <h4 class="atom-name">变体矩阵 <span class="en">Variant Matrix</span></h4>
+    <p class="atom-def">定义一个组件 = <b>填一张二维表</b>：变体（primary / secondary / ghost / danger）× 尺寸（sm / md / lg）。把表填完，组件就定义完了 —— 这是最容易交给模型的一类活。</p>
+    <div class="demo scroll-x">
+      <table class="d28">
+        <thead><tr><th></th><th>sm</th><th>md</th><th>lg</th></tr></thead>
+        <tbody>
+          <tr><td class="mono" style="font-size:11px;color:var(--muted)">primary</td>
+            <td><button class="btn btn-sm">操作</button></td>
+            <td><button class="btn btn-md">操作</button></td>
+            <td><button class="btn btn-lg">操作</button></td></tr>
+          <tr><td class="mono" style="font-size:11px;color:var(--muted)">ghost</td>
+            <td><button class="btn btn-ghost btn-sm">操作</button></td>
+            <td><button class="btn btn-ghost btn-md">操作</button></td>
+            <td><button class="btn btn-ghost btn-lg">操作</button></td></tr>
+          <tr><td class="mono" style="font-size:11px;color:var(--muted)">danger</td>
+            <td><button class="btn btn-danger btn-sm">删除</button></td>
+            <td><button class="btn btn-danger btn-md">删除</button></td>
+            <td><button class="btn btn-danger btn-lg">删除</button></td></tr>
+        </tbody>
+      </table>
+      <p class="note">↑ 再叠上 <a href="#a27">27 号</a>的九种状态，就是 3×3×9 = 81 个格子。<b>系统就是这么长出来的。</b></p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>按 variant×size 矩阵实现按钮：primary/secondary/ghost/danger × sm/md/lg，每格都要有完整九态。</q></p>
+  </div>
+</article>
+
+<!-- 29 -->
+<article class="atom" id="a29">
+  <div class="atom-id">29</div>
+  <div class="atom-body">
+    <h4 class="atom-name">界面的五种状态 <span class="en">The Five States</span></h4>
+    <p class="atom-def"><b>这条对你和模型协作最值钱。</b>任何一块展示数据的区域都有五种状态，而模型默认只做第五种（理想态）。把这五个字当验收清单用，一次能拦下大半返工。</p>
+    <div class="demo" style="padding:0">
+      <div class="tabs" id="tabs29" role="tablist">
+        <button role="tab" aria-selected="true" data-s="empty">① 空 EMPTY</button>
+        <button role="tab" aria-selected="false" data-s="loading">② 加载 LOADING</button>
+        <button role="tab" aria-selected="false" data-s="partial">③ 部分 PARTIAL</button>
+        <button role="tab" aria-selected="false" data-s="error">④ 错误 ERROR</button>
+        <button role="tab" aria-selected="false" data-s="ideal">⑤ 理想 IDEAL</button>
+      </div>
+      <div class="d29-stage" id="stage29"></div>
+    </div>
+    <p class="note" style="padding:0 2px">↑ 点标签切换。注意<b>空态不是一片空白</b> —— 它是引导用户迈出第一步的地方，是新手最重要的一屏。</p>
+    <p class="say"><span class="say-k">怎么说出口</span><q>这个模块把五态都做出来：空、加载、部分、错误、理想。空态要有引导文案和主行动按钮。</q></p>
+  </div>
+</article>
+
+<!-- 30 -->
+<article class="atom" id="a30">
+  <div class="atom-id">30</div>
+  <div class="atom-body">
+    <h4 class="atom-name">动效 <span class="en">Motion</span></h4>
+    <p class="atom-def">两个参数：<b>时长</b>（UI 动效 120–300ms，超过 400ms 就觉得卡）和<b>缓动曲线</b>（进场用 ease-out 快起慢停，出场用 ease-in）。<span class="mono">linear</span> 是机器人的动法，几乎永远是错的。</p>
+    <div class="demo">
+      <div class="d30" id="d30">
+        <div><div class="lb">120ms · ease-out ←UI 默认</div><div class="track"><div class="ball" data-dur="120" data-ease="cubic-bezier(0,0,.2,1)"></div></div></div>
+        <div><div class="lb">300ms · ease-out</div><div class="track"><div class="ball" data-dur="300" data-ease="cubic-bezier(0,0,.2,1)"></div></div></div>
+        <div><div class="lb">300ms · linear ←像机器人</div><div class="track"><div class="ball" data-dur="300" data-ease="linear"></div></div></div>
+        <div><div class="lb">700ms · ease-out ←太慢</div><div class="track"><div class="ball" data-dur="700" data-ease="cubic-bezier(0,0,.2,1)"></div></div></div>
+      </div>
+      <p class="note">↑ <b>点任意轨道重播</b>。第三条是 linear —— 匀速启动、匀速刹停，现实世界没有东西这么动。</p>
+    </div>
+    <p class="say"><span class="say-k">怎么说出口</span><q>过渡统一 150ms ease-out，进场 ease-out、出场 ease-in，禁止 linear，并加 prefers-reduced-motion 兜底。</q></p>
+  </div>
+</article>
+
+
+<!-- ============================================================
+     PART 2 — COMBINATIONS
+     ============================================================ -->
+<section class="part" id="part2">
+  <div class="part-no">第二部 / PART TWO</div>
+  <h2>组合 —— 原子拼成的东西</h2>
+  <p>上面 30 个原子，在真实产品里翻来覆去就拼成下面这些。每张卡底部标注了它用到哪几号，点编号跳回定义。看到眼熟的先看，那说明你正在做它。</p>
+</section>
+
+<div class="group">
+  <div class="group-key">组 F</div>
+  <h3>组件组合 <span>COMPONENTS · 21 种，覆盖 90% 的界面元素</span></h3>
+</div>
+
+<div class="grid-combo">
+
+  <!-- 按钮组 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>按钮组 <span>Button Group</span></h4>
+      <p>一组动作里只能有一个主按钮 —— 那是你想让人点的。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-md" style="width:auto">保存并发布</button>
+        <button class="btn btn-ghost btn-md" style="width:auto">存草稿</button>
+        <button class="btn btn-md" style="width:auto;background:transparent;color:var(--muted);border-color:transparent">取消</button>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a19">19 重量</a><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a28">28 变体</a><a class="ref" href="#a01">01 间距</a>
+    </div>
+  </div>
+
+  <!-- 表单字段 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>表单字段 <span>Form Field</span></h4>
+      <p>标签 + 输入 + 帮助文字 + 错误。四段结构缺一不可。</p>
+    </div>
+    <div class="combo-body">
+      <div>
+        <div class="fld">
+          <label for="f1">工作邮箱</label>
+          <input id="f1" type="text" value="liang@studio.dev">
+          <div class="help">用于接收部署通知</div>
+        </div>
+        <div class="fld bad">
+          <label for="f2">子域名</label>
+          <input id="f2" type="text" value="My Site">
+          <div class="err">只能用小写字母、数字和连字符。试试 my-site。</div>
+        </div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a02">02 亲密性</a><a class="ref" href="#a26">26 解剖</a><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a12">12 对比度</a>
+    </div>
+  </div>
+
+  <!-- 卡片 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>内容卡片 <span>Card</span></h4>
+      <p>整个 Web 最泛用的容器。缩略图 + 标题 + 描述 + 页脚。</p>
+    </div>
+    <div class="combo-body">
+      <div class="card-x">
+        <div class="th"></div>
+        <h5>Agent Harness 第 23 章</h5>
+        <p>把 IR 层做成 provider-neutral，用 Anthropic Messages 映射层验证。</p>
+        <div class="foot">
+          <span class="badge badge-a">已发布</span>
+          <span class="mono" style="font-size:11px;color:var(--muted)">7 月 24 日</span>
+        </div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a08">08 圆角</a><a class="ref" href="#a13">13 海拔</a><a class="ref" href="#a16">16 留白</a><a class="ref" href="#a18">18 一致性</a>
+    </div>
+  </div>
+
+  <!-- 列表行 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>列表行 <span>List Row</span></h4>
+      <p>头像 + 双行文字 + 状态 + 箭头。移动端的主力结构。</p>
+    </div>
+    <div class="combo-body">
+      <div>
+        <div class="d29-item"><div class="av"></div><div class="gr"><b>skills-hub 部署</b><span>154 runner · 转发式 CI</span></div><span class="badge badge-o">成功</span></div>
+        <div class="d29-item"><div class="av"></div><div class="gr"><b>liangai.org 统计</b><span>Umami · 五站点</span></div><span class="badge badge-n">排队</span></div>
+        <div class="d29-item"><div class="av"></div><div class="gr"><b>沙箱策略同步</b><span>sandbox-exec + bwrap</span></div><span class="badge badge-f">失败</span></div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a26">26 解剖</a><a class="ref" href="#a02">02 亲密性</a><a class="ref" href="#a25">25 密度</a><a class="ref" href="#a17">17 对齐</a>
+    </div>
+  </div>
+
+  <!-- 数据表 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>数据表 <span>Data Table</span></h4>
+      <p>数字必须右对齐 + 等宽数字，否则位数对不齐没法比较。</p>
+    </div>
+    <div class="combo-body">
+      <table class="tbl">
+        <thead><tr><th>服务</th><th>区域</th><th>月成本</th></tr></thead>
+        <tbody>
+          <tr><td>Oracle VPS</td><td>ap-tokyo</td><td>0.00</td></tr>
+          <tr><td>Cloudflare Pages</td><td>global</td><td>0.00</td></tr>
+          <tr><td>Runner 154</td><td>self-host</td><td>42.50</td></tr>
+          <tr><td>域名续费</td><td>—</td><td>9.87</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a25">25 密度</a><a class="ref" href="#a17">17 对齐</a><a class="ref" href="#a11">11 中性色</a><a class="ref" href="#a04">04 字重</a>
+    </div>
+  </div>
+
+  <!-- 徽章 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>徽章与标签 <span>Badge / Tag / Chip</span></h4>
+      <p>状态不能只靠颜色 —— 色盲用户看不见，必须配文字。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <span class="badge badge-o">● 运行中</span>
+        <span class="badge badge-f">● 已失败</span>
+        <span class="badge badge-n">● 已归档</span>
+        <span class="badge badge-a">Beta</span>
+        <span class="badge badge-n">v2.4.1</span>
+        <span class="badge badge-a">12</span>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a07">07 字距</a><a class="ref" href="#a09">09 色阶</a><a class="ref" href="#a12">12 对比度</a><a class="ref" href="#a08">08 圆角</a>
+    </div>
+  </div>
+
+  <!-- 统计块 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>指标块 <span>Stat Tile</span></h4>
+      <p>先给结论（大数字），再给上下文（变化率）。含迷你趋势线。</p>
+    </div>
+    <div class="combo-body">
+      <div class="stat-row">
+        <div class="stat">
+          <div class="k">今日访问</div>
+          <div class="v">2,481</div>
+          <div class="d">↑ 12.4%</div>
+        </div>
+        <div class="stat">
+          <div class="k">部署耗时</div>
+          <div class="v">38<span style="font-size:15px;font-weight:400;color:var(--muted)">s</span></div>
+          <div class="d" style="color:var(--flag)">↑ 6s</div>
+        </div>
+      </div>
+      <svg class="spark" viewBox="0 0 200 38" preserveAspectRatio="none" aria-label="七日趋势">
+        <polyline points="0,30 28,26 56,29 84,18 112,21 140,11 168,14 196,5"
+          fill="none" stroke="var(--accent)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+        <circle cx="196" cy="5" r="2.5" fill="var(--accent)"/>
+      </svg>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a15">15 层级</a><a class="ref" href="#a03">03 字号</a><a class="ref" href="#a09">09 色阶</a><a class="ref" href="#a19">19 重量</a>
+    </div>
+  </div>
+
+  <!-- 标签页 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>标签导航 <span>Tabs / Nav</span></h4>
+      <p>当前位置必须比其他项更重、更深、带下划线。</p>
+    </div>
+    <div class="combo-body">
+      <nav class="navx">
+        <a href="#part2" class="on">概览</a>
+        <a href="#part2">部署</a>
+        <a href="#part2">日志</a>
+        <a href="#part2">设置</a>
+      </nav>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a15">15 层级</a><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a17">17 对齐</a>
+    </div>
+  </div>
+
+  <!-- 对话框 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>对话框 <span>Modal / Dialog</span></h4>
+      <p>危险动作：按钮文案写清楚会发生什么，不要写"确定"。</p>
+    </div>
+    <div class="combo-body">
+      <div class="modal-mock">
+        <h5>删除 3 个部署记录？</h5>
+        <p>这些记录会永久移除，关联的构建日志也会一并清除。此操作不可撤销。</p>
+        <div class="acts">
+          <button class="btn btn-ghost btn-md">保留</button>
+          <button class="btn btn-danger btn-md">永久删除</button>
+        </div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a13">13 海拔</a><a class="ref" href="#a19">19 重量</a><a class="ref" href="#a16">16 留白</a><a class="ref" href="#a30">30 动效</a>
+    </div>
+  </div>
+
+  <!-- 通知 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>提示条 <span>Toast / Alert</span></h4>
+      <p>错误信息要说清"哪错了 + 怎么办"，不要只说"出错了"。</p>
+    </div>
+    <div class="combo-body">
+      <div>
+        <div class="toast" style="border-color:var(--ok);background:var(--ok-soft)">
+          <div class="ic" style="background:var(--ok)"></div>
+          <div><b>已发布到 liangai.org</b><span>耗时 38 秒 · 查看部署日志</span></div>
+        </div>
+        <div class="toast" style="border-color:var(--flag);background:var(--flag-soft)">
+          <div class="ic" style="background:var(--flag)"></div>
+          <div><b>SSH 密钥被拒绝</b><span>runner 154 上的 forced-command 不匹配。检查 authorized_keys 第 2 行。</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a10">10 语义色</a><a class="ref" href="#a12">12 对比度</a><a class="ref" href="#a26">26 解剖</a><a class="ref" href="#a30">30 动效</a>
+    </div>
+  </div>
+
+  <!-- 头像组 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>头像组 <span>Avatar Group</span></h4>
+      <p>负边距叠压 + 描边分隔 + 超出计数。协作产品的标配。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="avg">
+          <span>LZ</span><span>WY</span><span>QM</span><span>HR</span><span class="more">+7</span>
+        </div>
+        <span style="font-size:12.5px;color:var(--muted)">11 人有访问权限</span>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a20">20 光学</a><a class="ref" href="#a18">18 一致性</a><a class="ref" href="#a11">11 中性色</a>
+    </div>
+  </div>
+
+  <!-- 空态 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>空态 <span>Empty State</span></h4>
+      <p>新用户见到的第一屏。必须有一个明确的下一步动作。</p>
+    </div>
+    <div class="combo-body">
+      <div class="d29-empty" style="text-align:center;width:100%">
+        <div class="ic"></div>
+        <b>还没有任何部署</b>
+        <span>连接一个仓库后，每次 push 都会自动上线。</span>
+        <button class="btn btn-md" style="width:auto">连接仓库</button>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a29">29 五态</a><a class="ref" href="#a16">16 留白</a><a class="ref" href="#a15">15 层级</a>
+    </div>
+  </div>
+
+  <!-- 骨架屏 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>骨架屏 <span>Skeleton</span></h4>
+      <p>形状要贴近真实内容，否则加载完会"跳一下"。</p>
+    </div>
+    <div class="combo-body">
+      <div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 0">
+          <div class="sk" style="width:26px;height:26px;border-radius:50%"></div>
+          <div style="flex:1"><div class="sk" style="height:10px;width:46%;margin-bottom:6px"></div><div class="sk" style="height:8px;width:66%"></div></div>
+        </div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 0">
+          <div class="sk" style="width:26px;height:26px;border-radius:50%"></div>
+          <div style="flex:1"><div class="sk" style="height:10px;width:38%;margin-bottom:6px"></div><div class="sk" style="height:8px;width:58%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a29">29 五态</a><a class="ref" href="#a30">30 动效</a><a class="ref" href="#a26">26 解剖</a>
+    </div>
+  </div>
+
+  <!-- 分段控件 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>分段控件 <span>Segmented Control</span></h4>
+      <p>2–4 个互斥选项用它，超过就该换下拉了（Hick 定律）。</p>
+    </div>
+    <div class="combo-body">
+      <span class="seg">
+        <button aria-pressed="true">全部</button>
+        <button>成功</button>
+        <button>失败</button>
+      </span>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a27">27 状态</a><a class="ref" href="#a08">08 圆角</a><a class="ref" href="#a18">18 一致性</a>
+    </div>
+  </div>
+
+  <!-- 搜索 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>搜索框 <span>Search Input</span></h4>
+      <p>leading 放图标，trailing 放清除 —— 典型的 26 号结构。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;align-items:center;gap:9px;border:1px solid var(--rule-2);border-radius:var(--r-2);padding:8px 11px;background:var(--panel)">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--muted)" stroke-width="1.5" aria-hidden="true">
+          <circle cx="6" cy="6" r="4.5"/><path d="M9.5 9.5 L13 13"/>
+        </svg>
+        <span style="flex:1;font-size:13.5px;color:var(--ink)">部署失败</span>
+        <span class="mono" style="font-size:10px;color:var(--muted);border:1px solid var(--rule-2);border-radius:3px;padding:1px 5px">⌘K</span>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a26">26 解剖</a><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a20">20 光学</a>
+    </div>
+  </div>
+
+  <!-- 进度 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>进度与步骤 <span>Progress / Stepper</span></h4>
+      <p>超过 1 秒的操作必须给进度，超过 10 秒必须能取消。</p>
+    </div>
+    <div class="combo-body">
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px">
+          <span>构建中 · 步骤 2 / 4</span>
+          <span class="mono" style="color:var(--muted)">48%</span>
+        </div>
+        <div style="height:5px;background:var(--rule);border-radius:99px;overflow:hidden">
+          <div style="width:48%;height:100%;background:var(--accent);border-radius:99px"></div>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:13px;font-size:11.5px" class="mono">
+          <span style="color:var(--ok)">✓ 拉取</span>
+          <span style="color:var(--accent)">● 构建</span>
+          <span style="color:var(--muted)">○ 测试</span>
+          <span style="color:var(--muted)">○ 发布</span>
+        </div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a29">29 五态</a><a class="ref" href="#a30">30 动效</a><a class="ref" href="#a10">10 语义色</a>
+    </div>
+  </div>
+
+  <!-- 下拉选择器 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>下拉选择器 <span>Select / Dropdown</span></h4>
+      <p>选项超过 4 个用它，4 个以内用分段控件 —— 下拉多一次点击才能看到选项。</p>
+    </div>
+    <div class="combo-body">
+      <div>
+        <label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">评测模型</label>
+        <div style="display:flex;align-items:center;gap:9px;border:1px solid var(--rule-2);border-radius:var(--r-2);padding:8px 11px;background:var(--panel)">
+          <span style="flex:1;font-size:13.5px;color:var(--ink)">gpt-4o-mini</span>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="var(--muted)" stroke-width="1.6" aria-hidden="true"><path d="M2.5 4.5 L6 8 L9.5 4.5"/></svg>
+        </div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:5px">默认值要是最常用的那个，不是列表第一个</div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a26">26 解剖</a><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a08">08 圆角</a><a class="ref" href="#a02">02 亲密性</a>
+    </div>
+  </div>
+
+  <!-- 开关 / 复选 / 单选 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>开关 · 复选框 · 单选 <span>Switch · Checkbox · Radio</span></h4>
+      <p>三个长得像，规则完全不同：<b>开关立即生效</b>，复选和单选要等提交。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="width:32px;height:19px;border-radius:99px;background:var(--accent);position:relative;flex:none">
+            <span style="position:absolute;top:2px;right:2px;width:15px;height:15px;border-radius:50%;background:var(--panel)"></span>
+          </span>
+          <span style="font-size:13.5px;color:var(--ink);flex:1">失败时发邮件通知</span>
+          <span class="mono" style="font-size:10px;color:var(--muted)">立即生效</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="width:15px;height:15px;border-radius:3px;background:var(--accent);flex:none;display:grid;place-items:center">
+            <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="var(--accent-on)" stroke-width="2" aria-hidden="true"><path d="M2 5.2 L4 7.2 L8 2.8"/></svg>
+          </span>
+          <span style="font-size:13.5px;color:var(--ink);flex:1">包含已归档的测试集</span>
+          <span class="mono" style="font-size:10px;color:var(--muted)">可多选</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="width:15px;height:15px;border-radius:50%;border:1.5px solid var(--accent);flex:none;display:grid;place-items:center">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></span>
+          </span>
+          <span style="font-size:13.5px;color:var(--ink);flex:1">只跑失败过的用例</span>
+          <span class="mono" style="font-size:10px;color:var(--muted)">互斥</span>
+        </div>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a27">27 状态</a><a class="ref" href="#a18">18 一致性</a><a class="ref" href="#a12">12 对比度</a><a class="ref" href="#a20">20 光学修正</a>
+    </div>
+  </div>
+
+  <!-- 面包屑 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>面包屑 <span>Breadcrumb</span></h4>
+      <p>回答"我在哪"。<b>最后一级是当前位置，不可点</b>，而且要比前面几级重。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px">
+        <span style="color:var(--muted)">空间</span>
+        <span style="color:var(--rule-2)">/</span>
+        <span style="color:var(--muted)">skills-hub</span>
+        <span style="color:var(--rule-2)">/</span>
+        <span style="color:var(--muted)">测试集</span>
+        <span style="color:var(--rule-2)">/</span>
+        <span style="color:var(--ink);font-weight:600">回归集 v3</span>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a15">15 视觉层级</a><a class="ref" href="#a02">02 亲密性</a><a class="ref" href="#a18">18 一致性</a>
+    </div>
+  </div>
+
+  <!-- 分页器 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>分页器 <span>Pagination</span></h4>
+      <p>当前页必须明显更重（19 号）。省略号两侧要留首尾页，否则用户跳不到最后。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+        <span class="mono" style="font-size:12px;color:var(--rule-2);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">‹</span>
+        <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">1</span>
+        <span class="mono" style="font-size:12px;color:var(--accent-on);background:var(--accent);padding:5px 9px;border:1px solid var(--accent);border-radius:var(--r-2);font-weight:600">2</span>
+        <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">3</span>
+        <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 4px">…</span>
+        <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">12</span>
+        <span class="mono" style="font-size:12px;color:var(--muted);padding:5px 9px;border:1px solid var(--rule);border-radius:var(--r-2)">›</span>
+        <span style="font-size:11.5px;color:var(--muted);margin-left:8px">共 238 条</span>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a19">19 视觉重量</a><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a01">01 间距</a>
+    </div>
+  </div>
+
+  <!-- 工具提示 -->
+  <div class="combo">
+    <div class="combo-hd">
+      <h4>工具提示 <span>Tooltip</span></h4>
+      <p>只放<b>补充信息</b>。关键信息不能藏在 tooltip 里 —— 触屏设备根本悬停不了。</p>
+    </div>
+    <div class="combo-body">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0;padding-top:4px">
+        <div style="background:var(--ink);color:var(--paper);font-size:12px;padding:6px 10px;border-radius:var(--r-2);max-width:230px;line-height:1.5">
+          按空间 ID 哈希分流，同一空间始终进同一组
+        </div>
+        <div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--ink)"></div>
+        <span style="margin-top:7px;font-size:13px;color:var(--muted);border-bottom:1px dashed var(--rule-2);cursor:help">分流方式</span>
+      </div>
+    </div>
+    <div class="combo-ft"><span class="k">原子</span>
+      <a class="ref" href="#a13">13 海拔</a><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a30">30 动效</a><a class="ref" href="#a12">12 对比度</a>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ---------- LAYOUTS ---------- -->
+<div class="group">
+  <div class="group-key">组 G</div>
+  <h3>页面布局 <span>LAYOUTS · 你需要的几乎都在这 12 种里</span></h3>
+</div>
+
+<p style="max-width:66ch;color:var(--ink-2);margin:0 0 4px;font-size:14.5px">
+下面是骨架平面图，青色块是<b>视觉焦点</b>所在。选布局的方法只有一条：<b>看用户来这一屏是要干什么</b>，不是看它好不好看。
+</p>
+
+<div class="grid-combo">
+
+  <div class="combo">
+    <div class="combo-hd"><h4>应用外壳 <span>App Shell</span></h4><p>侧边导航 + 顶栏 + 内容区。后台系统的默认答案。</p></div>
+    <div class="combo-body"><div class="plan p-shell"><div class="side">侧导航</div><div class="mut">顶栏 · 面包屑 · 用户</div><div class="hl">内容区</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a22">22 Grid</a><a class="ref" href="#a23">23 栅格</a><a class="ref" href="#a24">24 响应式</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>仪表盘 <span>Dashboard</span></h4><p>先给结论指标，再给明细图表。<b>结论在上，证据在下</b>。</p></div>
+    <div class="combo-body"><div class="plan p-dash"><div class="top mut">筛选器 · 时间范围</div><div class="hl">指标</div><div class="hl">指标</div><div class="hl">指标</div><div class="hl">指标</div><div class="wide">主图表</div><div>排行榜</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a15">15 层级</a><a class="ref" href="#a25">25 密度</a><a class="ref" href="#a09">09 色阶</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>列表-详情 <span>List / Detail</span></h4><p>左选右看。邮箱、聊天、工单、日志，全是这个。</p></div>
+    <div class="combo-body"><div class="plan p-detail"><div class="top mut">搜索 · 筛选</div><div>列表</div><div class="hl">详情</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a27">27 状态</a><a class="ref" href="#a25">25 密度</a><a class="ref" href="#a24">24 响应式</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>设置页 <span>Settings</span></h4><p>左侧分类 + 右侧分组表单。每组之间要有明确的分隔。</p></div>
+    <div class="combo-body"><div class="plan p-settings"><div class="nav">分类</div><div class="hl">账户组</div><div>通知组</div><div>危险区</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a02">02 亲密性</a><a class="ref" href="#a16">16 留白</a><a class="ref" href="#a17">17 对齐</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>数据表页 <span>Table View</span></h4><p>标题 → 工具栏 → 表格 → 分页。密度和对齐决定成败。</p></div>
+    <div class="combo-body"><div class="plan p-table"><div class="mut">页头 · 标题 + 主动作</div><div class="mut">工具栏 · 搜索 筛选 批量</div><div class="hl">表格主体</div><div class="mut">分页 · 共 248 条</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a25">25 密度</a><a class="ref" href="#a17">17 对齐</a><a class="ref" href="#a29">29 五态</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>落地页 <span>Landing</span></h4><p>Hero → 价值点 → 社会证明 → CTA。垂直叙事，全宽分段。</p></div>
+    <div class="combo-body"><div class="plan p-landing"><div class="full mut">导航</div><div class="full hl">Hero · 一句话说清楚是什么</div><div>特性</div><div>特性</div><div>特性</div><div class="full mut">CTA · 页脚</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a03">03 字号</a><a class="ref" href="#a06">06 行长</a><a class="ref" href="#a16">16 留白</a><a class="ref" href="#a19">19 重量</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>居中表单 <span>Centered Form</span></h4><p>登录、注册、单一任务。<b>屏幕上不该有第二个焦点</b>。</p></div>
+    <div class="combo-body"><div class="plan p-auth"><div class="mut" style="border:0;background:transparent"></div><div class="hl">表单卡片<br>360–420px</div><div class="mut" style="border:0;background:transparent"></div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a19">19 重量</a><a class="ref" href="#a16">16 留白</a><a class="ref" href="#a27">27 状态</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>文档页 <span>Docs</span></h4><p>左导航 + 中正文（限宽！）+ 右目录。三栏经典。</p></div>
+    <div class="combo-body"><div class="plan p-docs"><div class="top mut">顶栏 · 搜索 版本</div><div>章节导航</div><div class="hl">正文 65ch</div><div>本页目录</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a06">06 行长</a><a class="ref" href="#a05">05 行高</a><a class="ref" href="#a03">03 字号</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>信息流 <span>Feed</span></h4><p>单列卡片流 + 右侧辅助栏。移动端直接砍掉右栏。</p></div>
+    <div class="combo-body"><div class="plan p-feed"><div class="top mut">顶栏</div><div class="hl">帖子卡</div><div>推荐</div><div class="hl">帖子卡</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a18">18 一致性</a><a class="ref" href="#a24">24 响应式</a><a class="ref" href="#a02">02 亲密性</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>对开编辑 <span>Split Editor</span></h4><p>左编辑右预览。代码、Markdown、设计工具的标配。</p></div>
+    <div class="combo-body"><div class="plan p-split"><div class="top mut">工具栏</div><div>编辑区</div><div class="hl">实时预览</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a22">22 Flex/Grid</a><a class="ref" href="#a25">25 密度</a><a class="ref" href="#a30">30 动效</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>分步向导 <span>Wizard</span></h4><p>把长表单切成几步。每步只问一件事，永远能退回。</p></div>
+    <div class="combo-body"><div class="plan p-wizard"><div class="mut">① ━━ ② ━━ ③ 进度条</div><div class="hl">当前步骤的字段</div><div class="mut">上一步 ← → 下一步</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a29">29 五态</a><a class="ref" href="#a02">02 亲密性</a><a class="ref" href="#a19">19 重量</a></div>
+  </div>
+
+  <div class="combo">
+    <div class="combo-hd"><h4>看板 <span>Kanban</span></h4><p>横向列 + 纵向卡。横向滚动，列头要吸顶。</p></div>
+    <div class="combo-body"><div class="plan" style="grid-template-columns:repeat(4,1fr);grid-template-rows:20px 1fr"><div class="mut" style="grid-column:1/-1">看板头 · 筛选</div><div class="hl">待办</div><div>进行中</div><div>评审</div><div>完成</div></div></div>
+    <div class="combo-ft"><span class="k">原子</span><a class="ref" href="#a22">22 Flex/Grid</a><a class="ref" href="#a18">18 一致性</a><a class="ref" href="#a30">30 动效</a></div>
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     PART 3 — TOOLS
+     ============================================================ -->
+<section class="part" id="part3">
+  <div class="part-no">第三部 / PART THREE</div>
+  <h2>现成工具 —— 别造轮子</h2>
+  <p>上面每一层都有成熟得不能再成熟的实现。你要做的不是造，是<b>选一套然后指名让模型用它</b>。下面按层给，每层选一个就够。</p>
+</section>
+
+<div class="scroll-x" style="margin-top:26px">
+<table class="tools">
+  <thead><tr><th>负责哪层</th><th>工具</th><th>为什么是它</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>标度 01·03·08</td>
+      <td><span class="nm">Tailwind CSS <code>tailwindcss</code></span></td>
+      <td class="ds">它的间距/字号/圆角/色阶标度<b>本身就是一套经过千万次验证的设计系统</b>。就算你不用它的类名，也该抄它的数值。用它 = 你和模型从此有共同语言（<span class="mono">p-4</span> 就是 16px，不用解释）。</td>
+    </tr>
+    <tr>
+      <td>组件 26·27·28</td>
+      <td><span class="nm">shadcn/ui <code>npx shadcn add</code></span></td>
+      <td class="ds">不是依赖包，是<b>把源码复制进你项目</b>。所以模型能直接读能直接改。九态齐全、a11y 正确、Tailwind 风格。React 项目的默认答案。</td>
+    </tr>
+    <tr>
+      <td>行为 27·29</td>
+      <td><span class="nm">Radix UI / React Aria</span></td>
+      <td class="ds">shadcn 底下就是 Radix。<b>无样式，只管行为</b>：焦点陷阱、键盘导航、ARIA、滚动锁定。下拉菜单和对话框的这些坑，自己踩要一周。</td>
+    </tr>
+    <tr>
+      <td>色彩 09·12·14</td>
+      <td><span class="nm">Radix Colors / OKLCH</span></td>
+      <td class="ds">每个色阶都<b>预先验算过对比度</b>，明暗模式一一对应。省掉 12 号那一整套算比值的活。</td>
+    </tr>
+    <tr>
+      <td>图标</td>
+      <td><span class="nm">Lucide <code>lucide-react</code></span></td>
+      <td class="ds">1500+ 图标，线宽统一，可调粗细。图标风格不统一是"廉价感"的隐形来源之一。</td>
+    </tr>
+    <tr>
+      <td>动效 30</td>
+      <td><span class="nm">Motion（原 Framer Motion）</span></td>
+      <td class="ds">进出场动画、布局动画、手势。CSS transition 做不了的那部分。<b>但先问自己是不是真需要</b>。</td>
+    </tr>
+    <tr>
+      <td>整套参考</td>
+      <td><span class="nm">Material Design 3 / Apple HIG</span></td>
+      <td class="ds">两套免费、完整、写得极清楚的设计系统文档。<b>当字典查</b>，不用通读。想知道某个组件该有哪些状态，去查它。</td>
+    </tr>
+    <tr>
+      <td>数据可视化</td>
+      <td><span class="nm">Recharts / Observable Plot</span></td>
+      <td class="ds">图表别手搓 SVG。前者 React 友好，后者语法更简洁、默认审美更好。</td>
+    </tr>
+    <tr>
+      <td>校验</td>
+      <td><span class="nm">axe DevTools / Lighthouse</span></td>
+      <td class="ds">浏览器扩展，一键扫出对比度不足、缺 label、焦点不可见。<b>让模型改完你跑一遍</b>，比肉眼靠谱。</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="two-col">
+  <div class="mini">
+    <h4>技术栈选完就这么开场</h4>
+    <ul>
+      <li>用 <b>Tailwind + shadcn/ui</b>，所有间距字号走 Tailwind 标度，组件从 shadcn 装、不要自己写</li>
+      <li>颜色用 <b>Radix Colors</b> 的语义层，图标用 <b>Lucide</b></li>
+      <li>不要引入任何其他 UI 库，不要自定义标度外的数值</li>
+    </ul>
+  </div>
+  <div class="mini">
+    <h4>别自己造的东西</h4>
+    <ul>
+      <li><b>下拉菜单 / 对话框 / 日期选择器</b> —— 焦点管理和键盘导航是深坑</li>
+      <li><b>色阶</b> —— 手调的色阶在暗色模式一定翻车</li>
+      <li><b>图标</b> —— 风格统一比好看重要</li>
+      <li><b>虚拟滚动 / 表格</b> —— TanStack Table 已经做完了</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ---------- 资源地图 ---------- -->
+<div style="margin-top:44px">
+  <h4 style="font-family:var(--f-display);font-size:15px;font-weight:700;margin:0 0 8px;letter-spacing:-.01em;border-top:2px solid var(--ink);padding-top:14px">规范与文档 —— 什么时候该去读哪个</h4>
+  <p style="max-width:66ch;color:var(--ink-2);margin:0 0 16px;font-size:14px">上面那张表是<b>库和工具</b>（装进项目里跑的）。这张是<b>规范和文档</b>（拿来读、拿来抄的）—— 全部免费公开。你不需要通读任何一份，需要的是知道遇到什么问题该翻哪一本。</p>
+  <div class="scroll-x">
+    <table class="tools">
+      <thead><tr><th>管哪一层</th><th>资源</th><th>什么时候去读它</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>L4 的载体</td>
+          <td><span class="nm">DESIGN.md <code>google-labs-code/design.md</code></span></td>
+          <td class="ds">Google Labs 维护的<b>开源格式规范</b>（Apache-2.0）：YAML 前言放机器读的 token，markdown 正文放人读的理由，放仓库根目录。<b>项目一开始就该写</b>，写完 L4 就不用每次重讲。第四部有一份可直接抄的完整示例。</td>
+        </tr>
+        <tr>
+          <td>找参照物</td>
+          <td><span class="nm">awesome-design-md <code>VoltAgent/awesome-design-md</code></span></td>
+          <td class="ds">按知名品牌做好的 DESIGN.md 现成文件集合。<b>想要某种风格时，先去这儿找一份最接近的再改</b>，比从零调色快得多。</td>
+        </tr>
+        <tr>
+          <td>默认审美</td>
+          <td><span class="nm">Frontend Aesthetics Cookbook <code>Anthropic</code></span></td>
+          <td class="ds">讲模型为什么默认产出"平均水平"的界面。<b>当你觉得"每条规则都遵守了，但就是没记忆点"时读它</b> —— 那不是 30 个原子能解决的问题。</td>
+        </tr>
+        <tr>
+          <td>L3 组件字典</td>
+          <td><span class="nm">Material Design 3 / Apple HIG</span></td>
+          <td class="ds">想知道某个组件该有哪些状态、边界情况怎么处理，去查。<b>当字典用，永远不要通读</b>。</td>
+        </tr>
+        <tr>
+          <td>L1 视觉直觉</td>
+          <td><span class="nm">Refactoring UI</span></td>
+          <td class="ds">Tailwind 作者写的。这份表给你<b>名字</b>，它给你<b>直觉</b>。想系统补一轮层级和留白的判断力时读它。</td>
+        </tr>
+        <tr>
+          <td>L5 校验标准</td>
+          <td><span class="nm">WCAG 2.2</span></td>
+          <td class="ds">12 号对比度那些数字的出处。<b>不用读原文</b>，用 axe 扫一遍就等于查过了。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     PART 4 — WORKING WITH THE MODEL
+     ============================================================ -->
+<section class="part" id="part4">
+  <div class="part-no">第四部 / PART FOUR</div>
+  <h2>怎么把这些说给模型听</h2>
+  <p>形容词的歧义空间几乎是无限的，编号和数值的歧义空间是有限的。这一部给的是<b>把话说清楚的方式</b> —— 至于模型怎么响应，取决于模型本身、上下文和你提的其他要求，这份表不做承诺。</p>
+</section>
+
+<div class="prompt-card">
+  <div class="hd">项目开场 · 一次性设定，之后不用重复</div>
+  <pre><b>技术栈</b>：Tailwind + shadcn/ui + Radix Colors + Lucide。不引入其他 UI 库。
+
+<b>标度约束</b>
+· 间距只用 4/8/12/16/24/32/48/64
+· 字号只用 12/14/16/20/25/31，字重只用 400/500/700
+· 圆角只用 2/4/8/12，嵌套时外圆角 = 内圆角 + padding
+· 正文 line-height 1.65、max-width 65ch；标题 1.15、letter-spacing -0.03em
+
+<b>硬性要求</b>
+· 布局一律 flex/grid + gap，禁止子元素自带 margin
+· 每个可交互元素补齐九态，focus-visible 必须可见
+· 每个数据区域给出五态：空/加载/部分/错误/理想
+· 所有文字过 WCAG AA（正文 4.5:1、UI 元件 3:1）
+· 明暗双主题，暗色用提亮代替阴影表达层级
+· 过渡 150ms ease-out，禁止 linear，带 prefers-reduced-motion 兜底
+
+<b>工作方式</b>：动手前先列设计决策清单（用了哪几档间距、几级层级、
+对比度多少），我确认后再写代码。</pre>
+</div>
+
+<div class="prompt-card">
+  <div class="hd">但别每次都贴 · 把约束写进项目</div>
+  <pre>上面那段有个弱点：<b>它靠你记得贴，而且模型在长对话里会忘</b>。
+可靠性排序是 —— <b>机器强制 &gt; 文件约定 &gt; 口头提醒</b>。三层都做，别只做第三层。
+
+<b>① 机器强制 · 把标度写进 @theme</b>（Tailwind 4，globals.css）
+
+   @theme {
+     --spacing: 4px;          <span style="opacity:.6">/* p-1=4 p-2=8 p-4=16… 整套自动落在 4pt 网格 */</span>
+
+     --text-*: initial;       <span style="opacity:.6">/* 先清空默认字阶 */</span>
+     --text-xs: 12px;  --text-sm: 14px;  --text-base: 16px;
+     --text-lg: 20px;  --text-xl: 25px;  --text-2xl: 31px;
+
+     --radius-*: initial;
+     --radius-xs: 2px; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+   }
+
+   <b>清空默认那两行是关键</b>：标度外的值连类名都不存在，
+   模型想违反也写不出来 —— 这比任何叮嘱都有效。01 03 08 从此不用再说。
+
+<b>② 文件约定 · 写进 CLAUDE.md / AGENTS.md</b>
+
+   放机器管不了的那部分：九态、五态、决策清单、一次只改一层、
+   禁止子元素自带 margin。每个会话自动加载，不用你贴。
+
+<b>③ 口头提醒 · 上面那段 prompt</b>
+
+   降级为临时用途：只在这次要偏离约定时说。
+
+<b>验收也要机器化</b>
+
+   npx @axe-core/cli http://localhost:3000     <span style="opacity:.6"># 12 号对比度 / 焦点 / label</span>
+
+   让模型改完自己跑一遍，比肉眼和比「你检查一下」都靠谱。</pre>
+</div>
+
+<div class="prompt-card">
+  <div class="hd">写成 DESIGN.md · 开源格式，放进仓库就行</div>
+  <pre>上一张卡说的「<b>② 文件约定</b>」，现在有标准答案了：<b>DESIGN.md</b> —— Google Labs
+维护的开源格式规范（Apache-2.0）。YAML 前言放<b>机器读的 token</b>，markdown 正文
+放<b>人读的理由</b>，文件丢在仓库根目录。
+
+<b>它的字段和这张表几乎一一对应：</b>
+
+   前言 colors        ←  09 色阶 · 10 语义色 · 11 中性色
+   前言 typography    ←  03 字号 · 04 字重 · 05 行高 · 07 字距
+   前言 spacing       ←  01 间距标度
+   前言 rounded       ←  08 圆角标度
+   ## Layout          ←  21 gap · 22 Flex/Grid · 23 栅格 · 24 响应式 · 25 密度
+   ## Elevation       ←  13 海拔
+   ## Components      ←  26 解剖 · 27 状态 · 28 变体矩阵 · 29 五态
+   ## Do's and Don'ts ←  你自己的取舍
+
+换句话说：<b>前言就是 L4，正文就是 L2 / L3 / L5</b>。
+<b>L0 意图那一层它不管 —— 那一层永远是你的。</b>
+
+<span style="color:var(--muted)">──── 以下整段可直接抄，数值就是这张表用的那套 ────</span>
+
+---
+version: alpha
+name: 你的项目名
+description: 一句话说清给谁用、解决什么
+
+colors:
+  primary:    "#0C6A72"   <span style="color:var(--muted)"># 主色：按钮 / 链接 / 焦点环</span>
+  background: "#F5F5F2"   <span style="color:var(--muted)"># 页面底</span>
+  surface:    "#FFFFFF"   <span style="color:var(--muted)"># 卡片 / 面板底</span>
+  text:       "#14181A"   <span style="color:var(--muted)"># 正文，不用纯黑（11）</span>
+  muted:      "#606A6E"   <span style="color:var(--muted)"># 次要文字，对底 ≥ 4.5:1（12）</span>
+  border:     "#DFE0DB"
+  success:    "#2C7A52"
+  danger:     "#B4433B"
+
+typography:
+  h1:      { fontFamily: Inter, fontSize: 31px, fontWeight: 700, lineHeight: 1.15, letterSpacing: -0.03em }
+  h2:      { fontFamily: Inter, fontSize: 25px, fontWeight: 700, lineHeight: 1.2,  letterSpacing: -0.02em }
+  h3:      { fontFamily: Inter, fontSize: 20px, fontWeight: 600, lineHeight: 1.3 }
+  body:    { fontFamily: Inter, fontSize: 16px, fontWeight: 400, lineHeight: 1.65 }
+  small:   { fontFamily: Inter, fontSize: 14px, fontWeight: 400, lineHeight: 1.55 }
+  caption: { fontFamily: Inter, fontSize: 12px, fontWeight: 400, lineHeight: 1.5, letterSpacing: 0.04em }
+
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 16px
+  lg: 24px
+  xl: 32px
+  2xl: 48px
+  3xl: 64px
+
+rounded:
+  sm: 2px
+  md: 4px
+  lg: 8px
+  xl: 12px
+---
+
+## Overview
+给 &lt;谁&gt; 用的 &lt;什么&gt;。整体气质：&lt;两三个形容词 + 一个参照物，比如"接近 Linear 的密度"&gt;。
+
+## Colors
+只用上面的 token，不要临时凑色值（09）。正文用 {colors.text}，不要 #000（11）。
+任一对文字/背景 ≥ 4.5:1，UI 元件 ≥ 3:1（12）。
+暗色模式重新调，不要直接反转；用背景提亮代替阴影表达层级（14）。
+
+## Typography
+正文 {typography.body}，容器 max-width 65ch（06）。
+层级靠留白和明度，不靠加粗（15）。字重只用 400 / 500 / 700（04）。
+
+## Layout &amp; Spacing
+一律 flex / grid + gap，禁止子元素自带 margin（21）。
+间距只用 spacing 的档位（01）。组内 {spacing.sm}、组间 {spacing.lg} ——
+组间至少是组内的两倍（02）。密度取向：&lt;紧凑 / 舒适&gt;（25）。
+
+## Elevation &amp; Depth
+层级用阶梯表达，不要随手加阴影（13）。暗色下改用背景提亮。
+
+## Shapes
+圆角只用 rounded 的四档（08）。嵌套时外圆角 = 内圆角 + padding。
+
+## Components
+每个可交互元素补齐九态，focus-visible 必须可见（27）。
+每个数据区域给五态：空 / 加载 / 部分 / 错误 / 理想（29）。空态要有引导文案和一个主行动按钮。
+过渡 150ms ease-out，带 prefers-reduced-motion 兜底（30）。
+
+## Do's and Don'ts
+Do:    &lt;你的取舍&gt;
+Don't: 不要引入标度外的数值；不要新增 UI 库；不要用 emoji 当图标。
+
+<span style="color:var(--muted)">──── 抄到这里为止 ────</span>
+
+<b>两条要说明白的：</b>
+· 正文里引用 token 要用花括号，写成 {colors.primary}，这是规范定的。
+· 规范目前标的是 <b>alpha</b>，字段可能还会变 —— 抄之前扫一眼上游仓库。
+
+<b>还有一条更要紧的：</b>
+有这个文件<b>不等于</b>模型一定照做。它省掉的是「每开一个会话重新解释一遍」，
+不是「从此不用检查」。该跑的校验还是要跑（axe / Lighthouse）。</pre>
+</div>
+
+<div class="prompt-card">
+  <div class="hd">日常返工 · 把感觉翻译成指令</div>
+  <pre><span style="color:var(--flag)">✗ 这个卡片看起来不够精致，你再改改</span>
+
+<b>✓ 按 02 亲密性重排：标题和描述之间 8，卡片之间 24。
+   内边距提到 20（16 号留白）。标题字重 700 降到 500，
+   靠 15 号的留白和明度对比拉层级，不要靠加粗。
+   外圆角改 20 满足 08 号嵌套公式。</b></pre>
+</div>
+
+<h3 style="font-family:var(--f-display);font-size:17px;font-weight:700;letter-spacing:-.01em;margin:44px 0 6px">诊断表 —— 从"感觉"查到"编号"</h3>
+<p style="font-size:14px;color:var(--muted);margin:0 0 18px">界面不对劲时从左边找，右边就是可以直接发给模型的话。</p>
+
+<div class="scroll-x">
+<table class="dx">
+  <thead><tr><th>你的感觉</th><th>真实病因</th><th>怎么说出口</th></tr></thead>
+  <tbody>
+    <tr><td>乱、挤成一坨</td><td>亲密性错误 <span class="n">02</span></td><td>按关系分组重排间距：组内 8，组间 24，保证组间是组内的两倍</td></tr>
+    <tr><td>平、没有重点</td><td>层级只靠字号 <span class="n">15</span></td><td>改用留白和明度对比拉层级，字号收到 3 档，每屏只留一个焦点</td></tr>
+    <tr><td>全都在喊</td><td>高对比元素过多 <span class="n">19</span></td><td>整屏只留一个高饱和实心块，其余改描边或纯文字</td></tr>
+    <tr><td>廉价、刺眼</td><td>纯黑纯白 + 高饱和 <span class="n">11</span></td><td>正文换 gray-800 不用 #000，中性色向主色偏色相，整体降饱和</td></tr>
+    <tr><td>松散、不成体系</td><td>间距不在标度上 <span class="n">01</span></td><td>所有间距对齐 4pt 标度，删掉所有标度外数值</td></tr>
+    <tr><td>读着累</td><td>行长过长 / 行高过小 <span class="n">05 06</span></td><td>正文加 max-width 65ch，line-height 提到 1.65</td></tr>
+    <tr><td>歪、有说不出的别扭</td><td>对齐轴太多 <span class="n">17</span></td><td>把左对齐轴收敛到两条，去掉所有零散缩进</td></tr>
+    <tr><td>有点糙</td><td>参数各自为政 <span class="n">18</span></td><td>抽出统一组件，共用同一套圆角/内边距/边框，不允许逐个微调</td></tr>
+    <tr><td>死板、生硬</td><td>缺过渡和中间态 <span class="n">27 30</span></td><td>补 hover/focus/loading，过渡 150ms ease-out</td></tr>
+    <tr><td>不像成品</td><td>只做了理想态 <span class="n">29</span></td><td>补齐五态，空态要有引导文案和主行动按钮</td></tr>
+    <tr><td>暗色下发灰发闷</td><td>直接反转了明色 <span class="n">14</span></td><td>暗色重新调：降饱和，用背景提亮代替阴影，底色用近黑不用纯黑</td></tr>
+    <tr><td>小字看不清</td><td>对比度不达标 <span class="n">12</span></td><td>把每个色对的对比度算出来，正文低于 4.5:1 的一律加深</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="two-col">
+  <div class="mini">
+    <h4>四条能减少来回的习惯</h4>
+    <ul>
+      <li><b>给参照物，不给形容词。</b>"按 Linear 的密度和层级来"比"做得高级点"指向明确得多 —— 主流产品的视觉语言在训练数据里出现得足够多。</li>
+      <li><b>先要决策清单，再要代码。</b>让它把"用了哪档间距、几级层级、对比度多少"讲出来，你在写代码前就能拦下分歧。</li>
+      <li><b>用编号复盘。</b>"12 号没过、29 号只做了理想态" —— 具体到可执行。</li>
+      <li><b>一次只改一层。</b>让它单独改间距，别同时改颜色和布局，否则你分不清是哪一处让它变好或变坏。</li>
+    </ul>
+  </div>
+  <div class="mini">
+    <h4>你其实只需要记住五条</h4>
+    <ul>
+      <li><b>间距编码关系</b> —— 组间必须是组内的两倍 <span class="mono" style="color:var(--accent);font-size:11px">02</span></li>
+      <li><b>一切都要成档</b> —— 间距、字号、圆角、阴影 <span class="mono" style="color:var(--accent);font-size:11px">01 03 08 13</span></li>
+      <li><b>层级靠留白，不靠加粗</b> <span class="mono" style="color:var(--accent);font-size:11px">15</span></li>
+      <li><b>整屏只有一个焦点</b> <span class="mono" style="color:var(--accent);font-size:11px">19</span></li>
+      <li><b>永远问五态和九态</b> <span class="mono" style="color:var(--accent);font-size:11px">27 29</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer class="foot">
+  <span>前端设计原子表 · 6 层 / 30 原子 / 21 组件 / 12 布局 / 24 工具与规范 / 1 份可抄的 DESIGN.md</span>
+  <span>本页自身即是一份样本：它遵守它讲的每一条</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- 02 proximity ---- */
+  var c02 = document.getElementById('c02'),
+      o02 = document.getElementById('o02'),
+      d02 = document.getElementById('d02');
+  if (c02 && d02) {
+    var inner02 = d02.querySelectorAll('.d02-stack');
+    c02.addEventListener('input', function(){
+      var v = c02.value;
+      o02.textContent = v + 'px';
+      for (var i = 0; i < inner02.length; i++) inner02[i].style.gap = v + 'px';
+    });
+  }
+
+  /* ---- 05 line-height ---- */
+  var c05 = document.getElementById('c05'),
+      o05 = document.getElementById('o05'),
+      d05 = document.getElementById('d05');
+  if (c05 && d05) {
+    c05.addEventListener('input', function(){
+      var v = (c05.value / 100).toFixed(2);
+      o05.textContent = v;
+      d05.style.lineHeight = v;
+    });
+  }
+
+  /* ---- 06 measure ---- */
+  var c06 = document.getElementById('c06'),
+      o06 = document.getElementById('o06'),
+      d06 = document.getElementById('d06');
+  if (c06 && d06) {
+    c06.addEventListener('input', function(){
+      o06.textContent = c06.value + 'ch';
+      d06.style.maxWidth = c06.value + 'ch';
+    });
+  }
+
+  /* ---- 25 density ---- */
+  var seg25 = document.getElementById('seg25'),
+      d25 = document.getElementById('d25');
+  if (seg25 && d25) {
+    seg25.addEventListener('click', function(e){
+      var b = e.target.closest('button');
+      if (!b) return;
+      var all = seg25.querySelectorAll('button');
+      for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', 'false');
+      b.setAttribute('aria-pressed', 'true');
+      d25.setAttribute('data-den', b.getAttribute('data-d'));
+    });
+  }
+
+  /* ---- 29 five states ---- */
+  var tabs29 = document.getElementById('tabs29'),
+      stage29 = document.getElementById('stage29');
+
+  var views = {
+    empty:
+      '<div class="d29-empty">' +
+        '<div class="ic"></div>' +
+        '<b>还没有任何部署</b>' +
+        '<span>连接一个仓库后，每次 push 都会自动上线。</span>' +
+        '<button class="btn btn-md" style="width:auto">连接仓库</button>' +
+      '</div>',
+    loading:
+      '<div class="d29-list">' +
+        '<div class="d29-item"><div class="sk" style="width:26px;height:26px;border-radius:50%"></div>' +
+        '<div class="gr"><div class="sk" style="height:10px;width:44%;margin-bottom:6px"></div>' +
+        '<div class="sk" style="height:8px;width:62%"></div></div></div>' +
+        '<div class="d29-item"><div class="sk" style="width:26px;height:26px;border-radius:50%"></div>' +
+        '<div class="gr"><div class="sk" style="height:10px;width:36%;margin-bottom:6px"></div>' +
+        '<div class="sk" style="height:8px;width:54%"></div></div></div>' +
+        '<div class="d29-item"><div class="sk" style="width:26px;height:26px;border-radius:50%"></div>' +
+        '<div class="gr"><div class="sk" style="height:10px;width:48%;margin-bottom:6px"></div>' +
+        '<div class="sk" style="height:8px;width:58%"></div></div></div>' +
+      '</div>',
+    partial:
+      '<div class="d29-list">' +
+        '<div class="d29-item"><div class="av"></div><div class="gr"><b>skills-hub</b>' +
+        '<span>2 分钟前 · 成功</span></div><span class="badge badge-o">已上线</span></div>' +
+        '<div class="d29-item"><div class="av"></div><div class="gr"><b>liangai.org</b>' +
+        '<span>18 分钟前 · 成功</span></div><span class="badge badge-o">已上线</span></div>' +
+        '<div style="text-align:center;padding-top:14px">' +
+        '<button class="btn btn-ghost btn-sm" style="width:auto">加载更多（还有 12 条）</button></div>' +
+      '</div>',
+    error:
+      '<div class="d29-err">' +
+        '<b>无法加载部署记录</b>' +
+        '<span>runner 154 连接超时。检查 VPS 是否在线，或稍后重试。</span>' +
+        '<button class="btn btn-md" style="width:auto">重试</button>' +
+      '</div>',
+    ideal:
+      '<div class="d29-list">' +
+        '<div class="d29-item"><div class="av"></div><div class="gr"><b>skills-hub</b>' +
+        '<span>2 分钟前 · 38s</span></div><span class="badge badge-o">已上线</span></div>' +
+        '<div class="d29-item"><div class="av"></div><div class="gr"><b>liangai.org</b>' +
+        '<span>18 分钟前 · 41s</span></div><span class="badge badge-o">已上线</span></div>' +
+        '<div class="d29-item"><div class="av"></div><div class="gr"><b>agent-harness</b>' +
+        '<span>1 小时前 · 构建中</span></div><span class="badge badge-a">运行中</span></div>' +
+        '<div class="d29-item"><div class="av"></div><div class="gr"><b>flomo-agent</b>' +
+        '<span>3 小时前 · 测试未通过</span></div><span class="badge badge-f">失败</span></div>' +
+      '</div>'
+  };
+
+  if (tabs29 && stage29) {
+    stage29.innerHTML = views.empty;
+    tabs29.addEventListener('click', function(e){
+      var b = e.target.closest('button');
+      if (!b) return;
+      var all = tabs29.querySelectorAll('button');
+      for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-selected', 'false');
+      b.setAttribute('aria-selected', 'true');
+      stage29.innerHTML = views[b.getAttribute('data-s')] || '';
+    });
+  }
+
+  /* ---- 30 motion ---- */
+  var d30 = document.getElementById('d30');
+  if (d30) {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function play(ball){
+      if (reduce) return;
+      var track = ball.parentElement;
+      var dist = track.clientWidth - ball.offsetWidth - 10;
+      ball.style.transition = 'none';
+      ball.style.transform = 'translateX(0)';
+      // force reflow so the reset takes effect before the new transition
+      void ball.offsetWidth;
+      ball.style.transition = 'transform ' + ball.getAttribute('data-dur') + 'ms ' + ball.getAttribute('data-ease');
+      ball.style.transform = 'translateX(' + dist + 'px)';
+    }
+
+    function playAll(){
+      var balls = d30.querySelectorAll('.ball');
+      for (var i = 0; i < balls.length; i++) play(balls[i]);
+    }
+
+    d30.addEventListener('click', function(e){
+      var track = e.target.closest('.track');
+      if (!track) return;
+      var ball = track.querySelector('.ball');
+      if (ball) play(ball);
+    });
+
+    // auto-play once when the demo scrolls into view
+    if ('IntersectionObserver' in window) {
+      var seen = false;
+      var io = new IntersectionObserver(function(entries){
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting && !seen) {
+            seen = true;
+            playAll();
+            io.disconnect();
+          }
+        }
+      }, { threshold: 0.4 });
+      io.observe(d30);
+    }
+  }
+})();
+</script>
+
+</body>
+</html>
