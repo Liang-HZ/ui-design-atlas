@@ -80,10 +80,11 @@ Cloudflare 面板 → Workers & Pages → 本项目 → Deployments 可看到每
 
 ```bash
 # 落地页
-curl -s https://ui.liangai.org/ | grep -q '把「感觉不对」' && echo "landing OK" || echo "landing FAIL"
+curl -sL https://ui.liangai.org/ | grep -q '把「感觉不对」' && echo "landing OK" || echo "landing FAIL"
 
 # 表本体
-curl -s https://ui.liangai.org/atlas | grep -q '30 个可以指名道姓的东西' && echo "atlas OK" || echo "atlas FAIL"
+# 注意 -L：/atlas 会 308 跳到 /atlas/，不跟随重定向会误报失败
+curl -sL https://ui.liangai.org/atlas | grep -q '30 个可以指名道姓的东西' && echo "atlas OK" || echo "atlas FAIL"
 ```
 
 判断"是不是压根没配记录"：编一个不存在的子域名去 curl，如果它返回的东西和你的域名一样，说明你的域名也只是没绑定。
