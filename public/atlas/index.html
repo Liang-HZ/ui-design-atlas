@@ -780,6 +780,9 @@ body, .atlas{
 .fld input:focus{ outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
 .fld .help{ font-size: 11.5px; color: var(--muted); margin-top: 5px; }
 .fld .err{ font-size: 11.5px; color: var(--flag); margin-top: 5px; }
+.fld .req{ color: var(--flag); font-weight: 700; }
+.fld-legend{ font-size: 11.5px; color: var(--muted); margin-bottom: 12px; }
+.fld-legend .req{ color: var(--flag); font-weight: 700; }
 .fld.bad input{ border-color: var(--flag); }
 .fld + .fld{ margin-top: 16px; }
 
@@ -1976,7 +1979,7 @@ body, .atlas{
           <span style="width:26px">trailing</span>
         </div>
       </div>
-      <p class="note">↑ 按钮、列表项、输入框、菜单项、卡片头 —— 全是这个结构。<b>container / leading / label / trailing</b>。</p>
+      <p class="note">↑ 按钮、列表项、输入框、菜单项、卡片头 —— 全是这个结构。<b>container / leading / label / trailing</b>。<br>label 段自己还能再分：必填标记、字数计数器、帮助图标都挂在 label 的 leading/trailing 位，不是独立的第五段。</p>
     </div>
     <p class="say"><span class="say-k">照抄这句</span><q>在 trailing 区加一个计数 badge，leading 保持头像，label 两行不变。</q></p>
   </div>
@@ -2115,19 +2118,21 @@ body, .atlas{
   <div class="combo">
     <div class="combo-hd">
       <h4>表单字段 <span>Form Field</span></h4>
-      <p>标签 + 输入 + 帮助文字 + 错误。四段结构缺一不可。</p>
+      <p>标签 + 输入 + 帮助文字 + 错误。四段结构缺一不可。错误落在<strong>它自己那个输入框下面</strong>，别把整表的错误汇总到提交按钮旁——用户得知道是哪一项出了问题。必填还是可选，标在<strong>字段自身</strong>（挂在 label 的 leading/trailing 位），并配 <code>required</code>/<code>aria-required</code>：纯符号对读屏是哑的。</p>
     </div>
     <div class="combo-body">
       <div>
+        <div class="fld-legend">带 <span class="req">*</span> 的为必填项。</div>
         <div class="fld">
-          <label for="f1">工作邮箱</label>
-          <input id="f1" type="text" value="liang@studio.dev">
-          <div class="help">用于接收部署通知</div>
+          <label for="f1">工作邮箱 <span class="req" aria-hidden="true">*</span></label>
+          <input id="f1" type="text" value="liang@studio.dev" required aria-required="true" aria-describedby="f1h">
+          <div class="help" id="f1h">用于接收部署通知</div>
         </div>
         <div class="fld bad">
-          <label for="f2">子域名</label>
-          <input id="f2" type="text" value="My Site">
-          <div class="err">只能用小写字母、数字和连字符。试试 my-site。</div>
+          <label for="f2">子域名 <span class="req" aria-hidden="true">*</span></label>
+          <input id="f2" type="text" value="My Site" required aria-required="true" aria-invalid="true" aria-describedby="f2h f2e">
+          <div class="help" id="f2h">会成为 my-site.example.com 的前缀</div>
+          <div class="err" id="f2e">只能用小写字母、数字和连字符。试试 my-site。</div>
         </div>
       </div>
     </div>
