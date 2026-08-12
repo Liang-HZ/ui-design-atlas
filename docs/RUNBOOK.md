@@ -80,7 +80,9 @@ Cloudflare 面板 → Workers & Pages → 本项目 → Deployments 可看到每
 
 ```bash
 # 落地页
-curl -sL https://ui.liangai.org/ | grep -q '把「感觉不对」' && echo "landing OK" || echo "landing FAIL"
+# 断言串要跟着页面文案走：0.3.0 删掉了旧的那句，这里一度失效，白报了一轮 FAIL。
+# 改文案时记得回来同步这一行。
+curl -sL https://ui.liangai.org/ | grep -q '你缺的不是审美' && echo "landing OK" || echo "landing FAIL"
 
 # 表本体
 # 注意 -L：/atlas 会 308 跳到 /atlas/，不跟随重定向会误报失败
